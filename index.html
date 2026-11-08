@@ -70,75 +70,57 @@
   <div class="max-w-6xl mx-auto space-y-6">
 
     <!-- TOP COMMAND HEADER -->
-    <header class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm">
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <div class="flex flex-wrap items-center gap-2 mb-1">
-            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              🎨 Track: UI/UX Designer (UI/UXデザイナー)
-            </span>
-            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              🎤 Mic Speech Check + ⚡ Gemini Flash/Pro AI
-            </span>
-          </div>
-          <h1 class="text-xl md:text-2xl font-bold tracking-tight text-[var(--foreground)]">
-            Nihongo Sprint 2027: UI/UX Designer Edition
+    <header class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <h1 class="text-lg md:text-xl font-bold tracking-tight text-[var(--foreground)]">
+            🇯🇵 Nihongo Sprint 2027
           </h1>
-          <p class="text-sm text-[var(--muted-foreground)] mt-0.5">
-            Dari kosakata pasif anime menuju Daily Conversation (30 Jan 2027) & Networking UI/UX di Jepang (Mei 2027).
-          </p>
+          <span class="px-2 py-0.5 text-xs font-semibold rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+            UI/UX Edition
+          </span>
         </div>
 
         <!-- COUNTDOWN CARDS -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0">
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 text-center">
-            <div class="text-xs text-[var(--muted-foreground)] font-medium">Target Daily Conv</div>
-            <div id="countdown-jan" class="text-lg md:text-xl font-bold text-[var(--foreground)] mt-0.5">83 Hari</div>
-            <div class="text-xs text-[var(--muted-foreground)]">30 Jan 2027</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 shrink-0">
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2 text-center">
+            <div class="text-xs text-[var(--muted-foreground)]">Target 30 Jan</div>
+            <div id="countdown-jan" class="text-base font-bold text-[var(--foreground)]">83 Hari</div>
           </div>
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 text-center">
-            <div class="text-xs text-[var(--muted-foreground)] font-medium">Flight ke Jepang</div>
-            <div id="countdown-may" class="text-lg md:text-xl font-bold text-[var(--foreground)] mt-0.5">174 Hari</div>
-            <div class="text-xs text-[var(--muted-foreground)]">Mei 2027 (N3)</div>
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2 text-center">
+            <div class="text-xs text-[var(--muted-foreground)]">Trip Mei 2027</div>
+            <div id="countdown-may" class="text-base font-bold text-[var(--foreground)]">174 Hari</div>
           </div>
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 text-center">
-            <div class="text-xs text-[var(--muted-foreground)] font-medium">Level & XP</div>
-            <div id="user-xp-display" class="text-lg md:text-xl font-bold text-[var(--foreground)] mt-0.5">Lv.1 (0 XP)</div>
-            <div id="user-rank-title" class="text-xs text-[var(--muted-foreground)]">Anime Listener</div>
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2 text-center">
+            <div id="user-rank-title" class="text-xs text-[var(--muted-foreground)]">Level</div>
+            <div id="user-xp-display" class="text-base font-bold text-[var(--foreground)]">Lv.1 (0 XP)</div>
           </div>
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 text-center">
-            <div class="text-xs text-[var(--muted-foreground)] font-medium">Streak Belajar</div>
-            <div class="flex items-center justify-center gap-1 mt-0.5">
-              <span id="streak-display" class="text-lg md:text-xl font-bold text-[var(--foreground)]">1 Hari</span>
-              <button onclick="incrementStreak()" title="Catat hadir hari ini" class="text-xs px-1.5 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80">+1</button>
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2 text-center">
+            <div class="text-xs text-[var(--muted-foreground)]">Streak</div>
+            <div class="flex items-center justify-center gap-1">
+              <span id="streak-display" class="text-base font-bold text-[var(--foreground)]">1 Hari</span>
+              <button onclick="incrementStreak()" title="Tambah streak" class="text-xs px-1.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80">+1</button>
             </div>
-            <div class="text-xs text-[var(--muted-foreground)]">Konsistensi</div>
           </div>
         </div>
       </div>
 
       <!-- XP PROGRESS BAR & QUICK CONTROLS -->
-      <div class="mt-4 pt-3 border-t border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div class="flex-1">
-          <div class="flex justify-between text-xs mb-1">
-            <span class="font-medium text-[var(--foreground)]">Progres menuju Milestone 30 Januari 2027</span>
-            <span id="overall-progress-label" class="text-[var(--muted-foreground)]">0% Selesai</span>
-          </div>
-          <div class="w-full h-2 bg-[var(--background)] rounded-full overflow-hidden border border-[var(--border)]">
+      <div class="mt-3 pt-2.5 border-t border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex-1 flex items-center gap-3">
+          <div class="flex-1 h-2 bg-[var(--background)] rounded-full overflow-hidden border border-[var(--border)]">
             <div id="overall-progress-bar" class="h-full bg-[var(--primary)] transition-all duration-300" style="width: 5%"></div>
           </div>
+          <span id="overall-progress-label" class="text-xs text-[var(--muted-foreground)] shrink-0">0%</span>
         </div>
-        <div class="flex flex-wrap items-center gap-2 shrink-0">
-          <button onclick="toggleAppTheme()" id="theme-toggle-btn" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 font-medium">
-            ☀️/🌙 Tema
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button onclick="toggleAppTheme()" id="theme-toggle-btn" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90">
+            ☀️/🌙
           </button>
-          <button onclick="testJapaneseVoice()" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 font-medium">
-            🔊 Tes Suara Jepang
+          <button onclick="testJapaneseVoice()" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90">
+            🔊 Tes Audio
           </button>
-          <button onclick="switchTab('ai')" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 font-semibold">
-            🤖 Konfigurasi Gemini Flash / Pro
-          </button>
-          <button onclick="resetAllProgress()" class="text-xs px-2 py-1.5 rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+          <button onclick="resetAllProgress()" class="text-xs px-2 py-1 rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
             Reset
           </button>
         </div>
@@ -147,55 +129,52 @@
 
     <!-- MAIN NAVIGATION TABS (5 TABS) -->
     <nav class="flex flex-wrap gap-1.5 bg-[var(--card)] border border-[var(--border)] p-1.5 rounded-xl">
-      <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="tab-btn-active flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium transition-all text-center">
-        🎯 1. Rutinitas & Target
+      <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="tab-btn-active flex-1 min-w-[100px] py-2 px-3 rounded-lg text-xs md:text-sm font-medium transition-all text-center">
+        🎯 Target
       </button>
-      <button onclick="switchTab('lego')" id="tab-btn-lego" class="flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
-        🧱 2. Sentence Lego & Konjugasi (20+)
+      <button onclick="switchTab('lego')" id="tab-btn-lego" class="flex-1 min-w-[100px] py-2 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
+        🧱 Kalimat
       </button>
-      <button onclick="switchTab('islands')" id="tab-btn-islands" class="flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
-        🗣️ 3. Islands + 🎤 Mic Check
+      <button onclick="switchTab('islands')" id="tab-btn-islands" class="flex-1 min-w-[100px] py-2 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
+        🗣️ Dialog
       </button>
-      <button onclick="switchTab('kana')" id="tab-btn-kana" class="flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
-        ⚡ 4. Kana UX & SRS Deck
+      <button onclick="switchTab('kana')" id="tab-btn-kana" class="flex-1 min-w-[100px] py-2 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
+        ⚡ Kana & SRS
       </button>
-      <button onclick="switchTab('ai')" id="tab-btn-ai" class="flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
-        🤖 5. AI Sensei (Gemini Flash/Pro)
+      <button onclick="switchTab('ai')" id="tab-btn-ai" class="flex-1 min-w-[100px] py-2 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
+        🤖 AI Sensei
       </button>
     </nav>
 
     <!-- ========================================== -->
     <!-- TAB 1: DASHBOARD, DAILY ROUTINE & ROADMAP  -->
     <!-- ========================================== -->
-    <section id="tab-dashboard" class="space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <section id="tab-dashboard" class="space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
 
-        <!-- LEFT: DAILY QUEST ROUTINE (WEEKDAY VS WEEKEND) -->
-        <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+        <!-- LEFT: DAILY QUEST ROUTINE -->
+        <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
           <div class="flex items-center justify-between gap-2">
-            <div>
-              <h2 class="text-base font-bold text-[var(--foreground)]">⚡ Rutinitas Fleksibel</h2>
-              <p class="text-xs text-[var(--muted-foreground)]">Mode Hari Kerja (25m) vs Akhir Pekan (90m)</p>
-            </div>
-            <div class="flex bg-[var(--background)] p-1 rounded-lg border border-[var(--border)]">
+            <h2 class="text-sm font-bold text-[var(--foreground)]">⚡ Quest Harian</h2>
+            <div class="flex bg-[var(--background)] p-0.5 rounded-lg border border-[var(--border)]">
               <button onclick="setRoutineMode('weekday')" id="mode-btn-weekday" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
-                Hari Kerja (25m)
+                25m
               </button>
               <button onclick="setRoutineMode('weekend')" id="mode-btn-weekend" class="px-2.5 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">
-                Weekend (90m)
+                90m
               </button>
             </div>
           </div>
 
           <!-- POMODORO / SPRINT TIMER -->
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 flex items-center justify-between">
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 flex items-center justify-between">
             <div>
-              <div class="text-xs text-[var(--muted-foreground)] font-medium" id="timer-mode-label">Sprint Fokus Hari Kerja (25 Menit)</div>
-              <div id="sprint-timer-display" class="text-2xl font-bold font-mono text-[var(--foreground)]">25:00</div>
+              <div class="text-xs text-[var(--muted-foreground)]" id="timer-mode-label">Timer Fokus</div>
+              <div id="sprint-timer-display" class="text-xl font-bold font-mono text-[var(--foreground)]">25:00</div>
             </div>
-            <div class="flex gap-2">
-              <button onclick="toggleSprintTimer()" id="timer-start-btn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
-                Mulai Sprint
+            <div class="flex gap-1.5">
+              <button onclick="toggleSprintTimer()" id="timer-start-btn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+                Mulai
               </button>
               <button onclick="resetSprintTimer()" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
                 Reset
@@ -204,231 +183,149 @@
           </div>
 
           <!-- DAILY CHECKLIST -->
-          <div id="daily-quests-container" class="space-y-2.5"></div>
+          <div id="daily-quests-container" class="space-y-2"></div>
 
           <div class="pt-2 border-t border-[var(--border)] flex items-center justify-between text-xs text-[var(--muted-foreground)]">
-            <span id="daily-quest-status">0/4 Quest Harian Selesai</span>
-            <button onclick="resetDailyQuests()" class="underline hover:text-[var(--foreground)]">Reset Quest Hari Ini</button>
+            <span id="daily-quest-status">0/4 Selesai</span>
+            <button onclick="resetDailyQuests()" class="underline hover:text-[var(--foreground)]">Reset</button>
           </div>
         </div>
 
-        <!-- RIGHT: 12-WEEK MILESTONE TRACKER (NOV 2026 - MEI 2027) -->
-        <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <h2 class="text-base font-bold text-[var(--foreground)]">🗺️ Peta Target Mingguan (KPI Checklist)</h2>
-              <p class="text-xs text-[var(--muted-foreground)]">Centang setiap milestone mingguan yang berhasil Anda capai (+100 XP)</p>
-            </div>
+        <!-- RIGHT: 12-WEEK MILESTONE TRACKER -->
+        <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="text-sm font-bold text-[var(--foreground)]">🗺️ Target Mingguan</h2>
             <div class="flex gap-1.5">
               <button onclick="filterRoadmap('phase1')" id="roadmap-btn-phase1" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
-                Fase 1: 30 Jan 2027
+                Fase 1 (30 Jan)
               </button>
               <button onclick="filterRoadmap('phase2')" id="roadmap-btn-phase2" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-                Fase 2: Mei 2027 (UX Career)
+                Fase 2 (Mei)
               </button>
             </div>
           </div>
 
-          <div id="roadmap-list-container" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1"></div>
+          <div id="roadmap-list-container" class="space-y-2 max-h-[340px] overflow-y-auto pr-1"></div>
         </div>
 
-      </div>
-
-      <!-- UI/UX DESIGNER JAPAN CHEATSHEET BANNER -->
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5">
-        <h3 class="text-sm font-bold text-[var(--foreground)] mb-3">
-          🎨 Senjata Rahasia UI/UX Designer di Jepang: "3 Kata Kunci + Komunitas Desain Tokyo"
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
-            <div class="font-semibold text-[var(--foreground)] mb-1">1. Kata Sifat Emas UX: 使いやすい & わかりやすい</div>
-            <p class="text-[var(--muted-foreground)] leading-relaxed">
-              Orang Jepang jarang mengatakan "UX-nya bagus". Mereka selalu mengatakan <strong class="text-[var(--foreground)]">使いやすい (tsukaiyasui = mudah dipakai)</strong> dan <strong class="text-[var(--foreground)]">わかりやすい (wakariyasui = mudah dipahami/intuitif)</strong>. Gunakan 2 kata ini saat menjelaskan desain Anda!
-            </p>
-          </div>
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
-            <div class="font-semibold text-[var(--foreground)] mb-1">2. Kosakata Katakana UI/UX (Langsung Paham!)</div>
-            <p class="text-[var(--muted-foreground)] leading-relaxed">
-              Istilah sehari-hari tim produk Jepang: <code class="px-1 py-0.5 rounded bg-[var(--card)]">ユーザーリサーチ (User Research)</code>, <code class="px-1 py-0.5 rounded bg-[var(--card)]">プロトタイプ (Prototype)</code>, <code class="px-1 py-0.5 rounded bg-[var(--card)]">デザインシステム (Design System)</code>, <code class="px-1 py-0.5 rounded bg-[var(--card)]">画面 / がめん (Layar/Screen UI)</code>, dan <code class="px-1 py-0.5 rounded bg-[var(--card)]">課題 / かだい (Pain point/Masalah user)</code>.
-            </p>
-          </div>
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
-            <div class="font-semibold text-[var(--foreground)] mb-1">3. Spot Networking UI/UX Saat Liburan Mei 2027</div>
-            <p class="text-[var(--muted-foreground)] leading-relaxed">
-              Saat di Tokyo nanti, cek event bulanan <strong class="text-[var(--foreground)]">Spectrum Tokyo</strong> (komunitas desain bilingual terbesar di Tokyo), <strong class="text-[var(--foreground)]">Friends of Figma Tokyo</strong>, dan <strong class="text-[var(--foreground)]">TokyoDev</strong>. Banyak perusahaan Jepang (Mercari, LINE Yahoo, SmartHR, Goodpatch, Woven by Toyota) mencari UI/UX Designer!
-            </p>
-          </div>
-        </div>
       </div>
     </section>
 
     <!-- ========================================================== -->
     <!-- TAB 2: SENTENCE LEGO (20 SOAL N5-N3) & CONJUGATION DRILL   -->
     <!-- ========================================================== -->
-    <section id="tab-lego" class="hidden space-y-6">
+    <section id="tab-lego" class="hidden space-y-4">
 
-      <!-- SUB-MODE SWITCHER: SENTENCE LEGO VS CONJUGATION REFLEX DRILL -->
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h2 class="text-base font-bold text-[var(--foreground)]">🧱 Latihan Struktur Kalimat & Mesin Konjugasi (N5 → N3)</h2>
-          <p class="text-xs text-[var(--muted-foreground)]">
-            Latih cara menyusun kalimat utuh dari kosakata pasif anime & mengubah akhiran kata kerja dalam < 2 detik.
-          </p>
-        </div>
-        <div class="flex gap-2 shrink-0">
+      <!-- SUB-MODE SWITCHER -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex gap-1.5">
           <button onclick="setGrammarSubMode('lego')" id="submode-btn-lego" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
-            🧱 Sentence Lego (20 Soal)
+            🧱 Susun Kalimat
           </button>
           <button onclick="setGrammarSubMode('conj')" id="submode-btn-conj" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-            ⚡ Drill Konjugasi Cepat (Anime → Sopan)
-          </button>
-          <button onclick="toggleGrammarCheatSheet()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-            📖 Rumus
+            ⚡ Drill Konjugasi
           </button>
         </div>
+        <button onclick="toggleGrammarCheatSheet()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+          📖 Rumus Partikel
+        </button>
       </div>
 
       <!-- COLLAPSIBLE PARTICLE & CONJUGATION TABLE -->
-      <div id="grammar-cheatsheet" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 space-y-1.5">
-          <div class="font-bold text-[var(--foreground)] mb-1">7 Partikel Kunci ("Lem" Kalimat S-O-V):</div>
-          <div><strong class="text-[var(--foreground)]">は (wa):</strong> Topik kalimat (<code class="px-1 bg-[var(--card)]">私は UI/UXデザイナーです</code>).</div>
-          <div><strong class="text-[var(--foreground)]">が (ga):</strong> Subjek spesifik, kata sifat suka/bisa/paham (<code class="px-1 bg-[var(--card)]">日本語がわかります</code>, <code class="px-1 bg-[var(--card)]">デザインが好きです</code>).</div>
-          <div><strong class="text-[var(--foreground)]">を (o):</strong> Objek yang dikenai aksi (<code class="px-1 bg-[var(--card)]">アプリをデザインする</code> = mendesain aplikasi).</div>
-          <div><strong class="text-[var(--foreground)]">に (ni):</strong> Waktu spesifik (<code class="px-1 bg-[var(--card)]">五月に</code>), tujuan (<code class="px-1 bg-[var(--card)]">日本に行く</code>), atau target (<code class="px-1 bg-[var(--card)]">ユーザーに聞く</code> = bertanya ke user).</div>
-          <div><strong class="text-[var(--foreground)]">で (de):</strong> Tempat terjadinya aktivitas (<code class="px-1 bg-[var(--card)]">東京で働く</code>) atau alat/tools (<code class="px-1 bg-[var(--card)]">Figmaで作る</code> = membuat dengan Figma).</div>
-          <div><strong class="text-[var(--foreground)]">から / けど / ため(に):</strong> "Karena" (<code class="px-1 bg-[var(--card)]">~から</code>), "Tetapi" (<code class="px-1 bg-[var(--card)]">~けど</code>), "Demi/Untuk" (<code class="px-1 bg-[var(--card)]">ユーザーのために</code>).</div>
+      <div id="grammar-cheatsheet" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 space-y-1">
+          <div class="font-bold text-[var(--foreground)] mb-1">7 Partikel Inti:</div>
+          <div><strong>は (wa):</strong> Topik • <strong>が (ga):</strong> Subjek / Suka / Bisa</div>
+          <div><strong>を (o):</strong> Objek • <strong>に (ni):</strong> Waktu / Tujuan</div>
+          <div><strong>で (de):</strong> Tempat aksi / Alat (Figmaで)</div>
+          <div><strong>と (to):</strong> Dan / Bersama • <strong>から / けど:</strong> Karena / Tapi</div>
         </div>
-        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 space-y-1.5">
-          <div class="font-bold text-[var(--foreground)] mb-1">Rumus Cepat Konjugasi Kata Kerja:</div>
-          <div><strong class="text-[var(--foreground)]">Kelompok Ru-Verb (Ichidan):</strong> <code class="px-1 bg-[var(--card)]">見る (miru)</code>, <code class="px-1 bg-[var(--card)]">食べる (taberu)</code>, <code class="px-1 bg-[var(--card)]">考える (kangaeru - berpikir)</code> → Buang <code class="px-1 bg-[var(--card)]">る</code> lalu tambah <code class="px-1 bg-[var(--card)]">ます / たいです / て / られます (bisa)</code>.</div>
-          <div><strong class="text-[var(--foreground)]">Kelompok U-Verb (Godan):</strong> Ubah vokal akhir <code class="px-1 bg-[var(--card)]">-u</code> ke <code class="px-1 bg-[var(--card)]">-i + ます</code>:
-            <br>• <code class="px-1 bg-[var(--card)]">作る (tsukuru - membuat)</code> → <code class="px-1 bg-[var(--card)]">作ります</code> | Te-form: <code class="px-1 bg-[var(--card)]">作って</code> | Bisa: <code class="px-1 bg-[var(--card)]">作れます</code>
-            <br>• <code class="px-1 bg-[var(--card)]">使う (tsukau - memakai)</code> → <code class="px-1 bg-[var(--card)]">使います</code> | Te-form: <code class="px-1 bg-[var(--card)]">使って</code> | Bisa: <code class="px-1 bg-[var(--card)]">使えます</code>
-            <br>• <code class="px-1 bg-[var(--card)]">話す (hanasu - bicara)</code> → <code class="px-1 bg-[var(--card)]">話します</code> | Te-form: <code class="px-1 bg-[var(--card)]">話して</code> | Bisa: <code class="px-1 bg-[var(--card)]">話せます</code>
-          </div>
-          <div><strong class="text-[var(--foreground)]">Irregular (Hanya 2!):</strong> <code class="px-1 bg-[var(--card)]">する (melakukan)</code> → <code class="px-1 bg-[var(--card)]">します / して / できます (bisa)</code> | <code class="px-1 bg-[var(--card)]">来る (kuru - datang)</code> → <code class="px-1 bg-[var(--card)]">来ます (kimasu)</code>.</div>
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 space-y-1">
+          <div class="font-bold text-[var(--foreground)] mb-1">Konversi Cepat:</div>
+          <div><strong>Sopan:</strong> 行く → 行きます • <strong>Ingin:</strong> 行きたいです</div>
+          <div><strong>Sedang/Rutin:</strong> 使っています • <strong>Tolong:</strong> 見てください</div>
+          <div><strong>Bisa (N4):</strong> 話す → 話せます • 使う → 使えます</div>
         </div>
       </div>
 
-      <!-- SUB-VIEW A: SENTENCE LEGO BUILDER (20 QUESTIONS + LEVEL FILTER + MIC CHECK) -->
-      <div id="lego-subview-main" class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-5">
+      <!-- SUB-VIEW A: SENTENCE LEGO BUILDER -->
+      <div id="lego-subview-main" class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[var(--border)]">
           <div class="flex flex-wrap items-center gap-2">
-            <label class="text-xs font-semibold text-[var(--muted-foreground)]">Filter Level:</label>
             <select id="lego-category-select" onchange="filterLegoByCategory()" class="text-xs px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] font-medium">
-              <option value="all">Semua Level (20 Soal N5–N3)</option>
-              <option value="n5">Level 1: N5 Partikel & Sopan Dasar</option>
-              <option value="n4">Level 2: N4 Konjugasi & Konektor Kalimat</option>
-              <option value="ux">Level 3: N3 & UI/UX Designer Career Track</option>
+              <option value="all">Semua Level (20 Soal)</option>
+              <option value="n5">N5 Dasar</option>
+              <option value="n4">N4 Konjugasi</option>
+              <option value="ux">N3 & UI/UX</option>
             </select>
             <span id="lego-level-badge" class="text-xs font-semibold px-2.5 py-1 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              Soal 1 / 20
+              1 / 20
             </span>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="prevLegoQuestion()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              ← Sebelumnya
+          <div class="flex items-center gap-1.5">
+            <button onclick="prevLegoQuestion()" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              ←
             </button>
-            <button onclick="nextLegoQuestion()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              Berikutnya →
+            <button onclick="nextLegoQuestion()" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              →
             </button>
           </div>
         </div>
 
-        <div>
-          <div class="text-xs text-[var(--muted-foreground)] font-medium">Susun kalimat bahasa Jepang untuk arti berikut:</div>
-          <h3 id="lego-prompt-id" class="text-lg md:text-xl font-bold text-[var(--foreground)] mt-1">
-            "Saya bekerja sebagai UI/UX Designer di Indonesia."
-          </h3>
-        </div>
-
-        <!-- ANIME VOCAB CLUE BOX (HIDDEN BY DEFAULT WITH SHOW TOGGLE) -->
-        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 text-xs space-y-1.5">
-          <div class="flex items-center justify-between gap-2">
-            <span class="font-semibold text-[var(--foreground)]">💡 Petunjuk Kosakata Anime → Dunia Nyata:</span>
-            <button onclick="toggleLegoClue()" id="lego-clue-toggle-btn" class="px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-85 font-medium">
-              👁️ Tampilkan Petunjuk
-            </button>
-          </div>
-          <div id="lego-anime-clue" class="hidden text-[var(--muted-foreground)] pt-1 border-t border-[var(--border)]"></div>
-        </div>
+        <h3 id="lego-prompt-id" class="text-lg md:text-xl font-bold text-[var(--foreground)]"></h3>
 
         <!-- DROP ZONE -->
-        <div>
-          <div class="text-xs font-medium text-[var(--muted-foreground)] mb-1.5">
-            Klik blok kata di bawah sesuai urutan (klik blok di kotak ini untuk melepas):
-          </div>
-          <div id="lego-answer-zone" class="min-h-[68px] p-3.5 rounded-xl bg-[var(--background)] border-2 border-dashed border-[var(--border)] flex flex-wrap items-center gap-2"></div>
-        </div>
+        <div id="lego-answer-zone" class="min-h-[60px] p-3 rounded-xl bg-[var(--background)] border-2 border-dashed border-[var(--border)] flex flex-wrap items-center gap-2"></div>
 
         <!-- AVAILABLE WORD CHIPS -->
-        <div>
-          <div class="text-xs font-medium text-[var(--muted-foreground)] mb-1.5">Blok Kata & Partikel Tersedia:</div>
-          <div id="lego-bank-zone" class="flex flex-wrap gap-2"></div>
-        </div>
+        <div id="lego-bank-zone" class="flex flex-wrap gap-2"></div>
 
-        <!-- ACTION BUTTONS & MIC PRONUNCIATION CHECK -->
-        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[var(--border)]">
-          <div class="flex flex-wrap gap-2">
-            <button onclick="checkLegoAnswer()" class="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
-              ✅ Cek Susunan Kalimat
+        <!-- HIDDEN CLUE BOX -->
+        <div id="lego-anime-clue" class="hidden p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted-foreground)]"></div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[var(--border)]">
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="checkLegoAnswer()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
+              ✅ Cek
             </button>
             <button onclick="clearLegoAnswer()" class="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
               Ulangi
             </button>
             <button onclick="speakCurrentLegoAnswer()" class="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              🔊 Dengarkan Audio
+              🔊 Audio
             </button>
-            <button onclick="startMicCheckForLego()" id="lego-mic-btn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90">
-              🎤 Ucapkan ke Mic (Cek Lafal)
+            <button onclick="startMicCheckForLego()" id="lego-mic-btn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              🎤 Mic
+            </button>
+            <button onclick="toggleLegoClue()" id="lego-clue-toggle-btn" class="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--background)] text-[var(--muted-foreground)] border border-[var(--border)]">
+              👁️ Petunjuk
             </button>
           </div>
           <div id="lego-score-counter" class="text-xs font-medium text-[var(--muted-foreground)]">
-            Skor Lego: 0 / 20 Selesai
+            0 / 20
           </div>
         </div>
 
-        <!-- MIC RESULT BOX FOR LEGO -->
-        <div id="lego-mic-result" class="hidden rounded-xl p-3.5 border border-[var(--border)] bg-[var(--background)] text-xs space-y-1"></div>
-
-        <!-- EXPLANATION FEEDBACK BOX -->
-        <div id="lego-feedback-box" class="hidden rounded-xl p-4 border border-[var(--border)] bg-[var(--background)] space-y-2 text-xs"></div>
+        <div id="lego-mic-result" class="hidden rounded-xl p-3 border border-[var(--border)] bg-[var(--background)] text-xs"></div>
+        <div id="lego-feedback-box" class="hidden rounded-xl p-3.5 border border-[var(--border)] bg-[var(--background)] space-y-1 text-xs"></div>
       </div>
 
       <!-- SUB-VIEW B: FAST CONJUGATION DRILL ENGINE -->
-      <div id="conj-subview-main" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-5">
-        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[var(--border)]">
-          <div>
-            <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              ⚡ Latihan Refleks Otot Otak
-            </span>
-            <h3 class="text-lg font-bold text-[var(--foreground)] mt-1">
-              Mesin Konjugasi Cepat: Kata Kerja Anime (Kamus) → Bentuk Target
-            </h3>
-            <p class="text-xs text-[var(--muted-foreground)]">
-              Jangan menghafal rumus! Latih refleks mengubah kata kerja dasar ke bentuk sopan, keinginan (~たい), sambung (~て), atau kemampuan (Bisa).
-            </p>
-          </div>
-          <div class="text-xs font-bold px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)]" id="conj-streak-badge">
-            Streak Konjugasi: 0 🔥
-          </div>
+      <div id="conj-subview-main" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-bold text-[var(--foreground)]">⚡ Drill Konjugasi</span>
+          <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-[var(--background)] border border-[var(--border)]" id="conj-streak-badge">
+            Streak: 0 🔥
+          </span>
         </div>
 
-        <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 text-center space-y-4">
-          <div id="conj-target-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[var(--primary)] text-[var(--primary-foreground)]">
-            Ubah ke: Bentuk Ingin Sopan (~たいです)
-          </div>
-          <div id="conj-base-verb" class="text-3xl md:text-4xl font-bold text-[var(--foreground)]">
-            作る (tsukuru — membuat / mendesain)
-          </div>
-          <div id="conj-context-sentence" class="text-xs text-[var(--muted-foreground)]">
-            Konteks: "Saya ingin membuat aplikasi yang mudah digunakan (使いやすいアプリを...)"
-          </div>
-
-          <div id="conj-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto pt-2"></div>
-
-          <div id="conj-feedback-box" class="text-xs font-medium min-h-[28px] pt-2"></div>
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 text-center space-y-3">
+          <div id="conj-target-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[var(--primary)] text-[var(--primary-foreground)]"></div>
+          <div id="conj-base-verb" class="text-2xl md:text-3xl font-bold text-[var(--foreground)]"></div>
+          <div id="conj-context-sentence" class="text-xs text-[var(--muted-foreground)]"></div>
+          <div id="conj-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-xl mx-auto pt-2"></div>
+          <div id="conj-feedback-box" class="text-xs font-medium min-h-[24px] pt-1"></div>
         </div>
       </div>
 
@@ -437,180 +334,157 @@
     <!-- ========================================================== -->
     <!-- TAB 3: CONVERSATIONAL ISLANDS (UI/UX & TRAVEL) + MIC CHECK -->
     <!-- ========================================================== -->
-    <section id="tab-islands" class="hidden space-y-6">
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div>
-            <h2 class="text-base font-bold text-[var(--foreground)]">🏝️ 6 "Conversational Islands" (UI/UX Career Networking & Travel)</h2>
-            <p class="text-xs text-[var(--muted-foreground)]">
-              Klik <strong>🔊 Putar</strong> untuk mendengar intonasi Jepang, lalu klik <strong>🎤 Latihan Ucapkan</strong> untuk menguji pelafalan Anda lewat mikrofon!
-            </p>
-          </div>
-          <div class="flex flex-wrap items-center gap-2 shrink-0">
-            <button onclick="toggleIslandRomaji()" id="toggle-romaji-btn" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+    <section id="tab-islands" class="hidden space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h2 class="text-sm font-bold text-[var(--foreground)]">🏝️ Skenario Percakapan</h2>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button onclick="toggleIslandRomaji()" id="toggle-romaji-btn" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
               👁️ Romaji: ON
             </button>
-            <button onclick="toggleIslandTranslation()" id="toggle-trans-btn" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+            <button onclick="toggleIslandTranslation()" id="toggle-trans-btn" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
               🇮🇩 Arti: ON
             </button>
-            <button onclick="toggleSlowSpeech()" id="toggle-speed-btn" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              🐢 Kecepatan: Normal (1.0x)
+            <button onclick="toggleSlowSpeech()" id="toggle-speed-btn" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              🐢 1.0x
             </button>
           </div>
         </div>
 
-        <!-- ISLAND SELECTOR PILLS -->
-        <div id="island-selector-bar" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2"></div>
+        <div id="island-selector-bar" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2"></div>
       </div>
 
-      <!-- ACTIVE ISLAND DIALOGUE & SHADOWING DECK -->
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[var(--border)]">
-          <div>
-            <span id="island-category-tag" class="text-xs font-semibold px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              UI/UX Career & Networking
-            </span>
-            <h3 id="island-title" class="text-lg font-bold text-[var(--foreground)] mt-1"></h3>
-            <p id="island-context" class="text-xs text-[var(--muted-foreground)]"></p>
+      <!-- ACTIVE ISLAND DIALOGUE -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[var(--border)]">
+          <div class="flex items-center gap-2">
+            <span id="island-category-tag" class="text-xs font-semibold px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]"></span>
+            <h3 id="island-title" class="text-sm md:text-base font-bold text-[var(--foreground)]"></h3>
+            <span id="island-context" class="hidden"></span>
           </div>
-          <div class="flex gap-2 shrink-0">
-            <button onclick="playEntireIsland()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
-              ▶️ Putar Semua Dialog
+          <div class="flex gap-1.5">
+            <button onclick="playEntireIsland()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+              ▶️ Putar Semua
             </button>
-            <button onclick="markIslandMastered()" id="btn-master-island" class="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
-              ⭐ Tandai Hafal (+75 XP)
+            <button onclick="markIslandMastered()" id="btn-master-island" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              ⭐ Hafal
             </button>
           </div>
         </div>
 
-        <!-- DIALOGUE LINES WITH MIC CHECK -->
-        <div id="island-dialogue-container" class="space-y-3"></div>
+        <div id="island-dialogue-container" class="space-y-2.5"></div>
       </div>
     </section>
 
     <!-- ========================================================== -->
-    <!-- TAB 4: KANA SPEED-RECALL (UI/UX KATAKANA) & SRS FLASHCARDS -->
+    <!-- TAB 4: KANA SPEED-RECALL & SRS FLASHCARDS                  -->
     <!-- ========================================================== -->
-    <section id="tab-kana" class="hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <section id="tab-kana" class="hidden space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
 
         <!-- LEFT: KANA SPEED RECALL BLITZ -->
-        <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h2 class="text-base font-bold text-[var(--foreground)]">⚡ Kana Speed-Recall Blitz</h2>
-              <p class="text-xs text-[var(--muted-foreground)]">Kuasai Hiragana & Katakana Istilah UI/UX di bawah 2 detik!</p>
-            </div>
-            <div class="flex gap-1 bg-[var(--background)] p-1 rounded-lg border border-[var(--border)]">
+        <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="text-sm font-bold text-[var(--foreground)]">⚡ Kana Blitz</h2>
+            <div class="flex gap-1 bg-[var(--background)] p-0.5 rounded-lg border border-[var(--border)]">
               <button onclick="setKanaDeck('hiragana')" id="kana-deck-hiragana" class="px-2 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">Hiragana</button>
-              <button onclick="setKanaDeck('katakana')" id="kana-deck-katakana" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Katakana (UI/UX!)</button>
+              <button onclick="setKanaDeck('katakana')" id="kana-deck-katakana" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Katakana</button>
               <button onclick="setKanaDeck('mixed')" id="kana-deck-mixed" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Campur</button>
             </div>
           </div>
 
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 text-center space-y-4">
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 text-center space-y-3">
             <div class="flex justify-between items-center text-xs text-[var(--muted-foreground)]">
-              <span id="kana-streak-label">Streak Benar: 0 🔥</span>
-              <span id="kana-accuracy-label">Akurasi: 100%</span>
+              <span id="kana-streak-label">Streak: 0 🔥</span>
+              <span id="kana-accuracy-label">100%</span>
             </div>
 
-            <div class="py-4 space-y-2.5">
+            <div class="py-3 space-y-2">
               <div id="kana-char-display" class="text-6xl font-bold text-[var(--foreground)] select-none">あ</div>
               <div>
-                <button onclick="toggleKanaHint()" id="kana-hint-toggle-btn" class="text-xs px-3 py-1 rounded-lg bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)] transition-all">
-                  👁️ Tampilkan Contoh Istilah
+                <button onclick="toggleKanaHint()" id="kana-hint-toggle-btn" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)]">
+                  👁️ Contoh Kata
                 </button>
-                <div id="kana-hint-word" class="hidden text-xs font-medium text-[var(--muted-foreground)] mt-2"></div>
+                <div id="kana-hint-word" class="hidden text-xs font-medium text-[var(--muted-foreground)] mt-1.5"></div>
               </div>
             </div>
 
-            <div id="kana-options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
-            <div id="kana-feedback-msg" class="text-xs font-medium h-5"></div>
+            <div id="kana-options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+            <div id="kana-feedback-msg" class="text-xs font-medium h-4"></div>
           </div>
         </div>
 
-        <!-- RIGHT: SMART SRS SENTENCE & VOCAB DECK (WITH MIC CHECK) -->
-        <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h2 class="text-base font-bold text-[var(--foreground)]">🧠 Active Recall SRS Deck (N5–N3 & UI/UX)</h2>
-              <p class="text-xs text-[var(--muted-foreground)]">Ucapkan keras-keras atau tes lewat mikrofon sebelum membuka jawaban!</p>
-            </div>
-            <select id="srs-category-filter" onchange="filterSrsDeck()" class="text-xs px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)]">
-              <option value="all">Semua Kartu</option>
-              <option value="ux">UI/UX Designer & Career</option>
-              <option value="grammar">Pola Kalimat & Partikel</option>
-              <option value="travel">Travel & Izakaya</option>
-              <option value="custom">Kartu Anime Saya</option>
+        <!-- RIGHT: SMART SRS SENTENCE & VOCAB DECK -->
+        <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="text-sm font-bold text-[var(--foreground)]">🧠 Flashcard SRS</h2>
+            <select id="srs-category-filter" onchange="filterSrsDeck()" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)]">
+              <option value="all">Semua</option>
+              <option value="ux">UI/UX Career</option>
+              <option value="grammar">Pola Kalimat</option>
+              <option value="travel">Travel</option>
+              <option value="custom">Kartu Saya</option>
             </select>
           </div>
 
-          <!-- FLASHCARD BOX -->
-          <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 min-h-[250px] flex flex-col justify-between">
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-4 min-h-[220px] flex flex-col justify-between">
             <div class="flex justify-between items-center text-xs text-[var(--muted-foreground)]">
-              <span id="srs-card-index">Kartu 1 / 15</span>
+              <span id="srs-card-index">1 / 8</span>
               <div class="flex gap-1.5">
-                <button onclick="startMicCheckForSrs()" id="srs-mic-btn" class="px-2.5 py-1 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80 font-medium">
-                  🎤 Tes Ucapkan
+                <button onclick="startMicCheckForSrs()" id="srs-mic-btn" class="px-2.5 py-1 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] font-medium">
+                  🎤 Mic
                 </button>
-                <button onclick="speakCurrentSrsCard()" class="px-2.5 py-1 rounded bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:opacity-80">
+                <button onclick="speakCurrentSrsCard()" class="px-2.5 py-1 rounded bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)]">
                   🔊 Audio
                 </button>
               </div>
             </div>
 
-            <div class="my-4 text-center space-y-2">
-              <div class="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">Ucapkan dalam Bahasa Jepang:</div>
-              <div id="srs-front-text" class="text-lg font-bold text-[var(--foreground)]"></div>
-
+            <div class="my-3 text-center space-y-2">
+              <div id="srs-front-text" class="text-base md:text-lg font-bold text-[var(--foreground)]"></div>
               <div id="srs-mic-feedback" class="hidden text-xs p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]"></div>
 
-              <!-- ANSWER REVEAL -->
-              <div id="srs-back-answer" class="hidden pt-3 mt-3 border-t border-[var(--border)] space-y-1">
-                <div id="srs-jp-text" class="text-xl font-bold text-[var(--foreground)]"></div>
+              <div id="srs-back-answer" class="hidden pt-2.5 mt-2.5 border-t border-[var(--border)] space-y-1">
+                <div id="srs-jp-text" class="text-lg md:text-xl font-bold text-[var(--foreground)]"></div>
                 <div id="srs-romaji-text" class="text-xs font-medium text-[var(--muted-foreground)]"></div>
-                <div id="srs-note-text" class="text-xs text-[var(--muted-foreground)] italic mt-1"></div>
+                <div id="srs-note-text" class="text-xs text-[var(--muted-foreground)] italic"></div>
               </div>
             </div>
 
-            <!-- SRS CONTROLS -->
             <div id="srs-reveal-btn-wrap" class="text-center">
-              <button onclick="revealSrsCard()" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
-                Tampilkan Jawaban Jepang
+              <button onclick="revealSrsCard()" class="w-full py-2 rounded-xl text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+                Lihat Jawaban
               </button>
             </div>
 
             <div id="srs-rating-btns" class="hidden grid grid-cols-3 gap-2">
-              <button onclick="rateSrsCard('hard')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:opacity-80">
-                😓 Masih Bingung (+5 XP)
+              <button onclick="rateSrsCard('hard')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)]">
+                😓 Sulit
               </button>
-              <button onclick="rateSrsCard('good')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80">
-                👍 Lumayan Lancar (+10 XP)
+              <button onclick="rateSrsCard('good')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+                👍 Lumayan
               </button>
-              <button onclick="rateSrsCard('easy')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
-                ⚡ Refleks Cepat <2dtk (+15 XP)
+              <button onclick="rateSrsCard('easy')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+                ⚡ Mudah
               </button>
             </div>
           </div>
 
-          <!-- ADD ANIME SENTENCE MINING FORM -->
-          <div class="pt-2 border-t border-[var(--border)]">
-            <details class="text-xs">
-              <summary class="cursor-pointer font-semibold text-[var(--foreground)] hover:opacity-80">
-                ➕ Tambah Kalimat Baru dari Anime / Belajar Harian (Sentence Mining)
-              </summary>
-              <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input id="custom-srs-id" type="text" placeholder="Arti Indonesia" class="px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
-                <input id="custom-srs-jp" type="text" placeholder="Kalimat Jepang" class="px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
-                <div class="flex gap-2">
-                  <input id="custom-srs-romaji" type="text" placeholder="Romaji & Catatan" class="flex-1 px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
-                  <button onclick="addCustomSrsCard()" class="px-3 py-2 rounded-lg font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">
-                    Simpan
-                  </button>
-                </div>
+          <details class="text-xs pt-1">
+            <summary class="cursor-pointer font-semibold text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+              ➕ Tambah Kartu Sendiri
+            </summary>
+            <div class="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input id="custom-srs-id" type="text" placeholder="Arti Indonesia" class="px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+              <input id="custom-srs-jp" type="text" placeholder="Kalimat Jepang" class="px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+              <div class="flex gap-1.5">
+                <input id="custom-srs-romaji" type="text" placeholder="Romaji" class="flex-1 px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+                <button onclick="addCustomSrsCard()" class="px-3 py-1.5 rounded-lg font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">
+                  +
+                </button>
               </div>
-            </details>
-          </div>
+            </div>
+          </details>
         </div>
 
       </div>
@@ -619,84 +493,60 @@
     <!-- ========================================================== -->
     <!-- TAB 5: AI SENSEI & VOICE ROLEPLAY (GEMINI FLASH / PRO)     -->
     <!-- ========================================================== -->
-    <section id="tab-ai" class="hidden space-y-6">
-      <!-- API CONFIGURATION BAR -->
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div>
-            <h2 class="text-base font-bold text-[var(--foreground)]">🤖 AI Sensei & Simulasi Roleplay Interaktif (Gemini Flash / Pro)</h2>
-            <p class="text-xs text-[var(--muted-foreground)]">
-              Default menggunakan <strong>Gemini 2.5 Flash (Gratis & Cepat)</strong>, atau pindah ke <strong>Gemini 2.5 Pro</strong> untuk bedah nuansa N3 & review portofolio UI/UX mendalam. Tanpa API Key pun, <strong>Mode Simulasi Lokal Pintar</strong> tetap aktif 100%!
-            </p>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <select id="gemini-model-select" onchange="saveGeminiConfig()" class="text-xs px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] font-semibold">
-              <option value="gemini-2.5-flash">⚡ Gemini 2.5 Flash (Gratis / Cepat - Default)</option>
-              <option value="gemini-2.0-flash">⚡ Gemini 2.0 Flash (Gratis / Alternatif)</option>
-              <option value="gemini-2.5-pro">🧠 Gemini 2.5 Pro (Akun Pro / Deep N3 Coach)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center pt-2 border-t border-[var(--border)]">
-          <div class="md:col-span-8 flex gap-2">
-            <input id="gemini-api-key-input" type="password" placeholder="Masukkan Google AI Studio API Key (AIzaSy...) — Opsional, tersimpan aman di browser Anda" class="flex-1 px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
-            <button onclick="saveGeminiConfig()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">
-              Simpan Key
+    <section id="tab-ai" class="hidden space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <!-- LEFT: SCENARIO SELECTOR & SETTINGS -->
+        <div class="lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+          <h3 class="text-sm font-bold text-[var(--foreground)]">🎭 Mode AI Sensei</h3>
+          <div class="space-y-1.5">
+            <button onclick="setAiScenario('kenji_ux')" id="ai-scen-kenji_ux" class="w-full text-left p-2.5 rounded-xl border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-bold">
+              🎨 Kenji-san (Lead UX Tokyo)
             </button>
-          </div>
-          <div class="md:col-span-4 text-xs text-[var(--muted-foreground)] md:text-right" id="gemini-status-badge">
-            Status: Mode Simulasi Lokal Pintar Aktif (Masukkan API Key untuk Live Gemini API)
-          </div>
-        </div>
-      </div>
-
-      <!-- ROLEPLAY SCENARIO & CHAT + VOICE SIMULATOR -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- LEFT: SCENARIO SELECTOR & AI GENERATOR TOOLS -->
-        <div class="lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
-          <h3 class="text-sm font-bold text-[var(--foreground)]">🎭 Pilih Lawan Bicara Roleplay:</h3>
-          <div class="space-y-2">
-            <button onclick="setAiScenario('kenji_ux')" id="ai-scen-kenji_ux" class="w-full text-left p-3 rounded-xl border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] text-xs space-y-0.5">
-              <div class="font-bold">🎨 Kenji-san (Lead Product Designer di Tokyo)</div>
-              <div class="opacity-90">Ngobrol santai di acara Spectrum Tokyo Meetup tentang kerjaan UI/UX, Figma, & karir di Jepang.</div>
+            <button onclick="setAiScenario('izakaya')" id="ai-scen-izakaya" class="w-full text-left p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs font-bold">
+              🍻 Sato-san (Izakaya Shibuya)
             </button>
-            <button onclick="setAiScenario('izakaya')" id="ai-scen-izakaya" class="w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs space-y-0.5">
-              <div class="font-bold">🍻 Sato-san (Warga Lokal di Izakaya Shibuya)</div>
-              <div class="opacity-80">Latihan small talk liburan, pesan makanan, cerita tentang anime & Indonesia.</div>
-            </button>
-            <button onclick="setAiScenario('converter')" id="ai-scen-converter" class="w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs space-y-0.5">
-              <div class="font-bold">🔧 Klinik Kalimat: Anime/Indo → Jepang Natural</div>
-              <div class="opacity-80">Ketik kata-kata lepas yang Anda tahu (campur Indo/Jepang), Sensei akan merangkainya jadi kalimat sopan + bedah partikelnya!</div>
+            <button onclick="setAiScenario('converter')" id="ai-scen-converter" class="w-full text-left p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs font-bold">
+              🔧 Klinik Kalimat (Anime → Sopan)
             </button>
           </div>
 
-          <div class="pt-3 border-t border-[var(--border)] space-y-2">
-            <div class="text-xs font-bold text-[var(--foreground)]">✨ Generator Soal Baru (AI / Smart Local):</div>
-            <button onclick="generateNewLegoWithAi()" id="btn-gen-lego" class="w-full py-2.5 px-3 rounded-xl text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 text-left">
-              ➕ Generate Soal Sentence Lego UI/UX Baru ke Tab 2
-            </button>
-          </div>
+          <button onclick="generateNewLegoWithAi()" id="btn-gen-lego" class="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] text-left">
+            ➕ Tambah Soal UI/UX ke Tab 2
+          </button>
+
+          <details class="pt-2 border-t border-[var(--border)] text-xs">
+            <summary class="cursor-pointer font-semibold text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+              ⚙️ Model & API Key (<span id="gemini-status-badge">Lokal</span>)
+            </summary>
+            <div class="mt-2 space-y-2">
+              <select id="gemini-model-select" onchange="saveGeminiConfig()" class="w-full text-xs px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)]">
+                <option value="gemini-2.5-flash">⚡ Gemini 2.5 Flash (Gratis)</option>
+                <option value="gemini-2.0-flash">⚡ Gemini 2.0 Flash</option>
+                <option value="gemini-2.5-pro">🧠 Gemini 2.5 Pro</option>
+              </select>
+              <div class="flex gap-1.5">
+                <input id="gemini-api-key-input" type="password" placeholder="API Key (Opsional)" class="flex-1 px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+                <button onclick="saveGeminiConfig()" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+                  Simpan
+                </button>
+              </div>
+            </div>
+          </details>
         </div>
 
         <!-- RIGHT: CHAT & VOICE CONVERSATION WINDOW -->
-        <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 flex flex-col justify-between space-y-4">
-          <div id="ai-chat-history" class="space-y-3 max-h-[380px] overflow-y-auto pr-1">
-            <!-- Populated by JS -->
-          </div>
+        <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col justify-between space-y-3">
+          <div id="ai-chat-history" class="space-y-2.5 max-h-[360px] overflow-y-auto pr-1"></div>
 
-          <!-- INPUT & MICROPHONE SPEAK BAR -->
-          <div class="pt-3 border-t border-[var(--border)] space-y-2">
-            <div class="flex flex-wrap gap-1.5" id="ai-quick-replies">
-              <!-- Quick suggestion chips -->
-            </div>
-            <div class="flex gap-2">
-              <button onclick="startMicForAiChat()" id="ai-mic-btn" title="Bicara dalam bahasa Jepang" class="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 shrink-0">
-                🎤 Bicara (JP)
+          <div class="pt-2.5 border-t border-[var(--border)] space-y-2">
+            <div class="flex flex-wrap gap-1.5" id="ai-quick-replies"></div>
+            <div class="flex gap-1.5">
+              <button onclick="startMicForAiChat()" id="ai-mic-btn" class="px-3 py-2 rounded-xl text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] shrink-0">
+                🎤
               </button>
-              <input id="ai-user-input" type="text" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="Ketik atau bicara dalam bahasa Jepang / campur Indonesia..." class="flex-1 px-3.5 py-2.5 rounded-xl bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
-              <button onclick="sendAiMessage()" id="ai-send-btn" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 shrink-0">
-                Kirim →
+              <input id="ai-user-input" type="text" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="Ketik atau bicara bahasa Jepang..." class="flex-1 px-3 py-2 rounded-xl bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+              <button onclick="sendAiMessage()" id="ai-send-btn" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">
+                Kirim
               </button>
             </div>
           </div>
@@ -807,7 +657,7 @@
       const totalMilestones = roadmapData.length;
       const doneMilestones = Object.keys(appState.completedMilestones || {}).length;
       const pct = Math.min(100, Math.round((doneMilestones / totalMilestones) * 100));
-      document.getElementById('overall-progress-label').textContent = `${doneMilestones}/${totalMilestones} Milestone Mingguan (${pct}%)`;
+      document.getElementById('overall-progress-label').textContent = `${doneMilestones}/${totalMilestones} (${pct}%)`;
       document.getElementById('overall-progress-bar').style.width = `${Math.max(5, pct)}%`;
     }
 
@@ -819,7 +669,7 @@
     function toggleSlowSpeech() {
       slowSpeech = !slowSpeech;
       const btn = document.getElementById('toggle-speed-btn');
-      btn.textContent = slowSpeech ? '🐢 Kecepatan: Lambat (0.75x)' : '🐢 Kecepatan: Normal (1.0x)';
+      btn.textContent = slowSpeech ? '🐢 0.75x' : '🐢 1.0x';
     }
 
     function speakJapanese(text) {
@@ -1045,12 +895,12 @@
       if (mode === 'weekday') {
         btnWd.className = 'px-2.5 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
         btnWe.className = 'px-2.5 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]';
-        document.getElementById('timer-mode-label').textContent = 'Sprint Fokus Hari Kerja (25 Menit)';
+        document.getElementById('timer-mode-label').textContent = 'Hari Kerja (25m)';
         timerSecondsLeft = 25 * 60;
       } else {
         btnWe.className = 'px-2.5 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
         btnWd.className = 'px-2.5 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]';
-        document.getElementById('timer-mode-label').textContent = 'Deep Dive Akhir Pekan (45x2 Menit)';
+        document.getElementById('timer-mode-label').textContent = 'Akhir Pekan (45m)';
         timerSecondsLeft = 45 * 60;
       }
       stopSprintTimer();
@@ -1088,7 +938,7 @@
       timerRunning = false;
       if (timerInterval) clearInterval(timerInterval);
       const btn = document.getElementById('timer-start-btn');
-      if (btn) btn.textContent = 'Mulai Sprint';
+      if (btn) btn.textContent = 'Mulai';
     }
 
     function resetSprintTimer() {
@@ -1107,21 +957,20 @@
         const isDone = !!appState.completedDailyQuests[q.id];
         if (isDone) doneCount++;
         return `
-          <div class="p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] flex items-start gap-3 transition-all ${isDone ? 'opacity-65' : ''}">
-            <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleDailyQuest('${q.id}', ${q.xp})" class="mt-1 h-4 w-4 rounded cursor-pointer" />
-            <div class="flex-1 min-w-0">
-              <div class="flex flex-wrap items-center justify-between gap-1">
-                <span class="text-xs font-bold text-[var(--foreground)] ${isDone ? 'line-through' : ''}">${q.title}</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)] font-medium">${q.time} • +${q.xp} XP</span>
-              </div>
-              <p class="text-xs text-[var(--muted-foreground)] mt-1 leading-relaxed">${q.desc}</p>
-              ${q.actionTab ? `<button onclick="switchTab('${q.actionTab}')" class="mt-1.5 text-xs font-semibold text-[var(--foreground)] underline hover:opacity-80">Buka Modul →</button>` : ''}
+          <div class="p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] flex items-center justify-between gap-3 transition-all ${isDone ? 'opacity-60' : ''}">
+            <label class="flex items-center gap-2.5 flex-1 min-w-0 cursor-pointer">
+              <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleDailyQuest('${q.id}', ${q.xp})" class="h-4 w-4 rounded cursor-pointer shrink-0" />
+              <span class="text-xs font-bold text-[var(--foreground)] truncate ${isDone ? 'line-through' : ''}">${q.title}</span>
+            </label>
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-xs px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)] font-medium">${q.time} • +${q.xp} XP</span>
+              ${q.actionTab ? `<button onclick="switchTab('${q.actionTab}')" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] font-semibold hover:opacity-80">Buka →</button>` : ''}
             </div>
           </div>
         `;
       }).join('');
 
-      document.getElementById('daily-quest-status').textContent = `${doneCount}/${quests.length} Quest Harian Selesai`;
+      document.getElementById('daily-quest-status').textContent = `${doneCount}/${quests.length} Selesai`;
     }
 
     function toggleDailyQuest(id, xp) {
@@ -1234,17 +1083,16 @@
       container.innerHTML = items.map(item => {
         const done = !!appState.completedMilestones[item.id];
         return `
-          <div class="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)] flex items-start gap-3">
-            <input type="checkbox" ${done ? 'checked' : ''} onchange="toggleMilestone('${item.id}')" class="mt-1 h-4 w-4 rounded cursor-pointer" />
-            <div class="flex-1">
-              <div class="flex flex-wrap items-center justify-between gap-1">
-                <span class="text-xs font-semibold text-[var(--muted-foreground)]">${item.week}</span>
-                <span class="text-xs font-medium px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)]">${done ? '✅ Tercapai' : '+100 XP'}</span>
+          <label class="p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] flex items-center justify-between gap-3 cursor-pointer">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <input type="checkbox" ${done ? 'checked' : ''} onchange="toggleMilestone('${item.id}')" class="h-4 w-4 rounded cursor-pointer shrink-0" />
+              <div class="min-w-0">
+                <div class="text-xs text-[var(--muted-foreground)]">${item.week}</div>
+                <div class="text-xs font-bold text-[var(--foreground)] ${done ? 'line-through opacity-70' : ''}">${item.title}</div>
               </div>
-              <div class="text-sm font-bold text-[var(--foreground)] mt-0.5 ${done ? 'line-through opacity-70' : ''}">${item.title}</div>
-              <p class="text-xs text-[var(--muted-foreground)] mt-1"><strong>Target KPI:</strong> ${item.kpi}</p>
             </div>
-          </div>
+            <span class="text-xs font-medium px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] shrink-0">${done ? '✅' : '+100 XP'}</span>
+          </label>
         `;
       }).join('');
     }
@@ -1539,7 +1387,7 @@
       const btnEl = document.getElementById('lego-clue-toggle-btn');
       if (!clueEl || !btnEl) return;
       const isHidden = clueEl.classList.toggle('hidden');
-      btnEl.textContent = isHidden ? '👁️ Tampilkan Petunjuk' : '🙈 Sembunyikan Petunjuk';
+      btnEl.textContent = isHidden ? '👁️ Petunjuk' : '🙈 Tutup';
     }
 
     function initLegoQuestion() {
@@ -1556,7 +1404,7 @@
       const clueEl = document.getElementById('lego-anime-clue');
       const btnEl = document.getElementById('lego-clue-toggle-btn');
       if (clueEl) clueEl.classList.add('hidden');
-      if (btnEl) btnEl.textContent = '👁️ Tampilkan Petunjuk';
+      if (btnEl) btnEl.textContent = '👁️ Petunjuk';
       renderLegoQuestion();
     }
 
@@ -1564,13 +1412,13 @@
       const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
       const isCompleted = !!appState.completedLegoIds[q.id];
 
-      document.getElementById('lego-level-badge').textContent = `Soal ${(currentLegoIndex % filteredLegoList.length) + 1} / ${filteredLegoList.length} • ${q.level} ${isCompleted ? '✅' : ''}`;
+      document.getElementById('lego-level-badge').textContent = `${(currentLegoIndex % filteredLegoList.length) + 1} / ${filteredLegoList.length} • ${q.level.split('•')[0].trim()} ${isCompleted ? '✅' : ''}`;
       document.getElementById('lego-prompt-id').textContent = `"${q.promptId}"`;
       document.getElementById('lego-anime-clue').innerHTML = q.animeClue;
 
       const ansZone = document.getElementById('lego-answer-zone');
       if (currentSelectedBlocks.length === 0) {
-        ansZone.innerHTML = `<span class="text-xs text-[var(--muted-foreground)] italic">Klik potongan kata di bawah sesuai urutan S - Waktu - Tempat - O - Kata Kerja...</span>`;
+        ansZone.innerHTML = `<span class="text-xs text-[var(--muted-foreground)] italic">Klik kata di bawah untuk menyusun kalimat...</span>`;
       } else {
         ansZone.innerHTML = currentSelectedBlocks.map((b, i) => `
           <button onclick="removeBlockFromAnswer(${i})" class="lego-chip px-3 py-1.5 rounded-lg text-sm font-bold bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm">
@@ -1591,7 +1439,7 @@
 
       const allTotal = getAllLegoQuestions().length;
       const doneCount = Object.keys(appState.completedLegoIds || {}).length;
-      document.getElementById('lego-score-counter').textContent = `Total Skor Lego: ${doneCount} / ${allTotal} Selesai`;
+      document.getElementById('lego-score-counter').textContent = `${doneCount} / ${allTotal} Selesai`;
     }
 
     function selectBlockFromBank(bankIdx) {
@@ -1628,18 +1476,16 @@
         }
         speakJapanese(targetJoined);
         fb.innerHTML = `
-          <div class="font-bold text-sm text-[var(--foreground)]">🎉 Tepat Sekali! (+30 XP) — Sekarang coba klik "🎤 Ucapkan ke Mic"!</div>
+          <div class="font-bold text-sm text-[var(--foreground)]">🎉 Benar! (+30 XP)</div>
           <div class="text-sm font-bold mt-1">${q.correctBlocks.join(' ')}</div>
-          <div class="text-[var(--muted-foreground)] font-medium">${q.romaji}</div>
-          <div class="pt-1 text-[var(--muted-foreground)]"><strong>Penjelasan Struktur:</strong> ${q.explanation}</div>
+          <div class="text-[var(--muted-foreground)]">${q.romaji}</div>
         `;
         renderLegoQuestion();
       } else {
         fb.innerHTML = `
-          <div class="font-bold text-sm text-[var(--foreground)]">🤔 Belum Tepat — Perhatikan Urutan Partikel & Kata Kerja di Ujung</div>
-          <div class="text-[var(--muted-foreground)] mt-1">Susunan yang benar: <strong class="text-[var(--foreground)]">${q.correctBlocks.join(' • ')}</strong></div>
+          <div class="font-bold text-sm text-[var(--foreground)]">🤔 Belum Tepat</div>
+          <div class="text-[var(--muted-foreground)] mt-1">Jawaban: <strong class="text-[var(--foreground)]">${q.correctBlocks.join(' • ')}</strong></div>
           <div class="text-[var(--muted-foreground)]">${q.romaji}</div>
-          <div class="pt-1 text-[var(--muted-foreground)]">${q.explanation}</div>
         `;
       }
     }
@@ -1660,17 +1506,9 @@
         resBox.classList.remove('hidden');
         if (score >= 70) {
           addXp(25);
-          resBox.innerHTML = `
-            <div class="font-bold text-[var(--foreground)]">🎤 Skor Pelafalan: ${score}% — Mantap! (+25 XP)</div>
-            <div class="text-[var(--muted-foreground)]">Suara Anda terdengar: <strong class="text-[var(--foreground)]">「${transcript}」</strong></div>
-            <div class="text-[var(--muted-foreground)]">Target kalimat: 「${targetJp}」 (${q.romaji})</div>
-          `;
+          resBox.innerHTML = `<span class="font-bold text-[var(--foreground)]">🎤 ${score}% (+25 XP)</span> — 「${transcript}」`;
         } else {
-          resBox.innerHTML = `
-            <div class="font-bold text-[var(--foreground)]">🎤 Skor Pelafalan: ${score}% — Coba Dengarkan Audio & Ucapkan Lagi!</div>
-            <div class="text-[var(--muted-foreground)]">Terdeteksi: <strong class="text-[var(--foreground)]">「${transcript}」</strong></div>
-            <div class="text-[var(--muted-foreground)]">Target seharusnya: <strong class="text-[var(--foreground)]">「${targetJp}」</strong> (${q.romaji})</div>
-          `;
+          resBox.innerHTML = `<span class="font-bold text-[var(--foreground)]">🎤 ${score}%</span> — Terdeteksi: 「${transcript}」`;
         }
       }, btn);
     }
@@ -1746,7 +1584,7 @@
         rule: 'Kata kerja berakhiran く (kiku) berubah menjadi ~いて (聞いて + もいいですか).'
       },
       {
-        targetForm: 'Kata Sifat ~い → Menjadi (Perubahanの状態 ~くなりました)',
+        targetForm: 'Kata Sifat ~い → Menjadi (~くなりました)',
         baseVerb: '使いやすい (tsukaiyasui — mudah digunakan)',
         context: 'Setelah diperbaiki, aplikasinya menjadi mudah digunakan (改善して、アプリが...)',
         correct: '使いやすくなりました (tsukaiyasuku narimashita)',
@@ -1760,9 +1598,9 @@
 
     function nextConjDrill() {
       const d = conjDrills[currentConjIdx % conjDrills.length];
-      document.getElementById('conj-target-badge').textContent = `Ubah ke: ${d.targetForm}`;
+      document.getElementById('conj-target-badge').textContent = d.targetForm;
       document.getElementById('conj-base-verb').textContent = d.baseVerb;
-      document.getElementById('conj-context-sentence').textContent = `Konteks: "${d.context}"`;
+      document.getElementById('conj-context-sentence').textContent = d.context;
       document.getElementById('conj-feedback-box').textContent = '';
 
       const shuffled = [...d.options].sort(() => Math.random() - 0.5);
@@ -1781,14 +1619,14 @@
         addXp(15);
         const jpOnly = d.correct.split('(')[0].trim();
         speakJapanese(jpOnly);
-        fb.innerHTML = `<span class="text-[var(--foreground)] font-bold">✅ Benar! (+15 XP)</span> — ${d.rule}`;
-        document.getElementById('conj-streak-badge').textContent = `Streak Konjugasi: ${conjStreak} 🔥`;
+        fb.innerHTML = `<span class="text-[var(--foreground)] font-bold">✅ Benar! (+15 XP)</span>`;
+        document.getElementById('conj-streak-badge').textContent = `Streak: ${conjStreak} 🔥`;
         currentConjIdx++;
-        setTimeout(nextConjDrill, 1400);
+        setTimeout(nextConjDrill, 1000);
       } else {
         conjStreak = 0;
-        document.getElementById('conj-streak-badge').textContent = `Streak Konjugasi: 0 🔥`;
-        fb.innerHTML = `<span class="text-[var(--foreground)] font-bold">❌ Kurang tepat!</span> Jawaban yang benar: <strong>${d.correct}</strong> (${d.rule})`;
+        document.getElementById('conj-streak-badge').textContent = `Streak: 0 🔥`;
+        fb.innerHTML = `<span class="text-[var(--foreground)] font-bold">❌ Jawaban: ${d.correct}</span>`;
       }
     }
 
@@ -1998,7 +1836,7 @@
 
     function toggleIslandTranslation() {
       showIslandTranslation = !showIslandTranslation;
-      document.getElementById('toggle-trans-btn').textContent = showIslandTranslation ? '🇮🇩 Arti: ON' : '🔥 Arti: OFF (Mode Ujian)';
+      document.getElementById('toggle-trans-btn').textContent = showIslandTranslation ? '🇮🇩 Arti: ON' : '🔥 Arti: OFF';
       renderActiveIsland();
     }
 
@@ -2008,12 +1846,12 @@
         const isActive = idx === currentIslandIdx;
         const isMastered = !!appState.masteredIslands[isl.id];
         return `
-          <button onclick="selectIsland(${idx})" class="text-left p-3 rounded-xl border transition-all ${isActive ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]' : 'bg-[var(--background)] text-[var(--foreground)] border-[var(--border)] hover:opacity-90'}">
+          <button onclick="selectIsland(${idx})" class="text-left p-2.5 rounded-xl border transition-all ${isActive ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]' : 'bg-[var(--background)] text-[var(--foreground)] border-[var(--border)] hover:opacity-90'}">
             <div class="flex items-center justify-between text-xs opacity-85 mb-0.5">
-              <span>${isl.tag}</span>
-              <span>${isMastered ? '⭐ Hafal' : ''}</span>
+              <span class="truncate">${isl.tag}</span>
+              <span>${isMastered ? '⭐' : ''}</span>
             </div>
-            <div class="text-xs font-bold leading-snug">${isl.title}</div>
+            <div class="text-xs font-bold leading-snug line-clamp-2">${isl.title.replace(/^Pulau \d+:\s*/, '')}</div>
           </button>
         `;
       }).join('');
@@ -2029,40 +1867,38 @@
       const isl = islandsData[currentIslandIdx];
       document.getElementById('island-category-tag').textContent = isl.tag;
       document.getElementById('island-title').textContent = isl.title;
-      document.getElementById('island-context').textContent = isl.context;
+      const ctxEl = document.getElementById('island-context');
+      if (ctxEl) ctxEl.textContent = isl.context;
 
       const isMastered = !!appState.masteredIslands[isl.id];
-      document.getElementById('btn-master-island').textContent = isMastered ? '⭐ Sudah Dikuasai' : '⭐ Tandai Hafal (+75 XP)';
+      document.getElementById('btn-master-island').textContent = isMastered ? '⭐ Dikuasai' : '⭐ Hafal (+75 XP)';
 
       const container = document.getElementById('island-dialogue-container');
       container.innerHTML = isl.lines.map((line, lIdx) => {
         const isUser = line.speaker === 'Anda';
         return `
-          <div class="p-4 rounded-xl border border-[var(--border)] ${isUser ? 'bg-[var(--background)]' : 'bg-[var(--card)]'} space-y-1.5">
-            <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="p-3.5 rounded-xl border border-[var(--border)] ${isUser ? 'bg-[var(--background)]' : 'bg-[var(--card)]'} space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
               <span class="text-xs font-bold px-2 py-0.5 rounded ${isUser ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]'}">
-                ${isUser ? '🗣️ Anda (Shadowing & Mic Check)' : '👤 ' + line.speaker}
+                ${isUser ? '🗣️ Anda' : '👤 ' + line.speaker}
               </span>
               <div class="flex items-center gap-1.5">
                 <button onclick="speakIslandLine(${currentIslandIdx}, ${lIdx})" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80 font-medium">
-                  🔊 Putar
+                  🔊
                 </button>
                 <button onclick="micCheckIslandLine(${currentIslandIdx}, ${lIdx})" id="isl-mic-btn-${lIdx}" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:opacity-80 font-semibold">
-                  🎤 Latihan Ucapkan
+                  🎤 Mic
                 </button>
               </div>
             </div>
-            <div class="text-base md:text-lg font-bold text-[var(--foreground)] leading-relaxed pt-1">
+            <div class="text-base md:text-lg font-bold text-[var(--foreground)] leading-relaxed pt-0.5">
               ${line.jp}
             </div>
             ${showIslandRomaji ? `<div class="text-xs font-medium text-[var(--muted-foreground)]">${line.romaji}</div>` : ''}
-            <div id="isl-mic-res-${lIdx}" class="hidden text-xs p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)]"></div>
+            <div id="isl-mic-res-${lIdx}" class="hidden text-xs p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]"></div>
             ${showIslandTranslation ? `
-              <div class="text-xs text-[var(--foreground)] pt-1 border-t border-[var(--border)] mt-1">
-                <strong>Arti:</strong> "${line.id}"
-              </div>
-              <div class="text-xs text-[var(--muted-foreground)] italic">
-                💡 <strong>Bedah Pola:</strong> ${line.note}
+              <div class="text-xs text-[var(--muted-foreground)] pt-1 border-t border-[var(--border)] mt-1">
+                ${line.id}
               </div>
             ` : ''}
           </div>
@@ -2084,9 +1920,9 @@
         resEl.classList.remove('hidden');
         if (score >= 70) {
           addXp(20);
-          resEl.innerHTML = `<span class="font-bold">🎉 Akurasi Lafal: ${score}% (+20 XP)</span> — Terdengar: 「${transcript}」`;
+          resEl.innerHTML = `<span class="font-bold">🎉 ${score}% (+20 XP)</span> — 「${transcript}」`;
         } else {
-          resEl.innerHTML = `<span class="font-bold">🎤 Akurasi Lafal: ${score}%</span> — Terdeteksi: 「${transcript}」. Dengarkan tombol 🔊 lalu coba tirukan ritmenya lagi!`;
+          resEl.innerHTML = `<span class="font-bold">🎤 ${score}%</span> — 「${transcript}」`;
         }
       }, btn);
     }
@@ -2236,7 +2072,7 @@
       const btnEl = document.getElementById('kana-hint-toggle-btn');
       if (!hintEl || !btnEl) return;
       const isHidden = hintEl.classList.toggle('hidden');
-      btnEl.textContent = isHidden ? '👁️ Tampilkan Contoh Istilah' : '🙈 Sembunyikan Contoh Istilah';
+      btnEl.textContent = isHidden ? '👁️ Contoh Kata' : '🙈 Tutup';
     }
 
     function nextKanaCard() {
@@ -2246,9 +2082,9 @@
       document.getElementById('kana-char-display').textContent = currentKanaTarget.char;
       const hintEl = document.getElementById('kana-hint-word');
       const btnEl = document.getElementById('kana-hint-toggle-btn');
-      hintEl.textContent = `Istilah: ${currentKanaTarget.hint}`;
+      hintEl.textContent = currentKanaTarget.hint;
       hintEl.classList.add('hidden');
-      if (btnEl) btnEl.textContent = '👁️ Tampilkan Contoh Istilah';
+      if (btnEl) btnEl.textContent = '👁️ Contoh Kata';
 
       const wrongPool = pool.filter(k => k.romaji !== currentKanaTarget.romaji);
       const shuffledWrong = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3);
@@ -2271,16 +2107,16 @@
         kanaStreak++;
         addXp(5);
         speakJapanese(currentKanaTarget.char);
-        msgEl.textContent = `✅ Benar! ${currentKanaTarget.char} = ${currentKanaTarget.romaji} (+5 XP)`;
+        msgEl.textContent = `✅ ${currentKanaTarget.char} = ${currentKanaTarget.romaji} (+5 XP)`;
         nextKanaCard();
       } else {
         kanaStreak = 0;
-        msgEl.textContent = `❌ Kurang tepat! ${currentKanaTarget.char} dibaca "${currentKanaTarget.romaji}" (${currentKanaTarget.hint})`;
+        msgEl.textContent = `❌ ${currentKanaTarget.char} = "${currentKanaTarget.romaji}"`;
       }
 
       const acc = Math.round((kanaCorrectAttempts / kanaTotalAttempts) * 100);
-      document.getElementById('kana-streak-label').textContent = `Streak Benar: ${kanaStreak} 🔥`;
-      document.getElementById('kana-accuracy-label').textContent = `Akurasi: ${acc}%`;
+      document.getElementById('kana-streak-label').textContent = `Streak: ${kanaStreak} 🔥`;
+      document.getElementById('kana-accuracy-label').textContent = `${acc}%`;
     }
 
     // =====================================================
@@ -2292,56 +2128,56 @@
         idText: 'Saya bekerja sebagai UI/UX Designer di Indonesia.',
         jpText: 'インドネシアでUI・UXデザイナーとして働いています。',
         romaji: 'Indoneshia de UI/UX dezainaa toshite hataraite imasu.',
-        note: 'Pola kunci: [Tempat] で [Profesi] として (sebagai) 働いています.'
+        note: '[Tempat] で [Profesi] として 働いています'
       },
       {
         category: 'ux',
         idText: 'Saya selalu berusaha membuat desain yang mudah dipakai dan mudah dipahami.',
         jpText: '使いやすくて、わかりやすいデザインを作るようにしています。',
         romaji: 'Tsukaiyasukute, wakariyasui dezain o tsukuru youni shite imasu.',
-        note: '使いやすい (mudah dipakai / good UX) + わかりやすい (intuitif/mudah dipahami).'
+        note: '使いやすい (mudah dipakai) + わかりやすい (intuitif)'
       },
       {
         category: 'ux',
-        idText: 'Melalui riset user, saya menemukan masalah (pain point) dan memperbaiki layar aplikasi.',
+        idText: 'Melalui riset user, saya menemukan masalah dan memperbaiki layar aplikasi.',
         jpText: 'ユーザーリサーチで課題を見つけて、アプリの画面を改善しました。',
         romaji: 'Yuuzaa risaachi de kadai o mitsukete, apuri no gamen o kaizen shimashita.',
-        note: '課題 (kadai = masalah/pain point), 画面 (gamen = screen UI), 改善 (kaizen = iterasi/perbaikan).'
+        note: '課題 (masalah), 画面 (layar), 改善 (perbaikan)'
       },
       {
         category: 'ux',
-        idText: 'Ini adalah portofolio saya di Figma. Bolehkah saya meminta pendapat Anda?',
+        idText: 'Ini adalah portofolio saya. Bolehkah saya meminta pendapat Anda?',
         jpText: 'こちらは私のポートフォリオです。ご意見をいただけますか？',
         romaji: 'Kochira wa watashi no pootoforio desu. Go-iken o itadakemasu ka?',
-        note: 'ご意見をいただけますか (bolehkah saya menerima pendapat Anda - sopan bisnis/N3).'
+        note: 'ご意見をいただけますか (minta pendapat dengan sopan)'
       },
       {
         category: 'ux',
         idText: 'Saya sedang mencari peluang untuk berkarir sebagai Product Designer di Jepang.',
         jpText: '日本でプロダクトデザイナーとして働くチャンスを探しています。',
         romaji: 'Nihon de purodakuto dezainaa toshite hataraku chansu o sagashite imasu.',
-        note: 'チャンスを探しています (sedang mencari peluang).'
+        note: 'チャンスを探しています (mencari peluang)'
       },
       {
         category: 'grammar',
         idText: 'Saya bisa berbicara bahasa Jepang sedikit, tetapi belum lancar.',
         jpText: '日本語が少し話せますが、まだペラペラではありません。',
         romaji: 'Nihongo ga sukoshi hanasemasu ga, mada perapera dewa arimasen.',
-        note: '話せます (hanasemasu = bisa bicara - Potential form).'
+        note: '話せます (bisa bicara - Potential form)'
       },
       {
         category: 'grammar',
         idText: 'Bagaimana cara mengatakan X dalam bahasa Jepang?',
         jpText: '「X」は日本語で何と言いますか？',
         romaji: '"X" wa Nihongo de nan to iimasu ka?',
-        note: 'Kalimat penyelamat saat Anda lupa satu istilah ketika sedang ngobrol.'
+        note: 'Kalimat penyelamat saat lupa kosakata'
       },
       {
         category: 'travel',
         idText: 'Permisi, boleh minta bon/bill-nya?',
         jpText: 'すみません、お会計をお願いします。',
         romaji: 'Sumimasen, okaikei o onegaishimasu.',
-        note: 'お会計 (okaikei = pembayaran/bill).'
+        note: 'お会計 (bill/pembayaran)'
       }
     ];
 
@@ -2354,7 +2190,7 @@
         idText: c.idText,
         jpText: c.jpText,
         romaji: c.romaji,
-        note: 'Kartu Sentence Mining Anime / Kustom Anda'
+        note: ''
       }));
       return [...baseSrsCards, ...custom];
     }
@@ -2372,7 +2208,7 @@
       if (currentSrsPool.length === 0) currentSrsPool = getCombinedSrsCards();
       const card = currentSrsPool[currentSrsIdx % currentSrsPool.length];
 
-      document.getElementById('srs-card-index').textContent = `Kartu ${(currentSrsIdx % currentSrsPool.length) + 1} / ${currentSrsPool.length}`;
+      document.getElementById('srs-card-index').textContent = `${(currentSrsIdx % currentSrsPool.length) + 1} / ${currentSrsPool.length}`;
       document.getElementById('srs-front-text').textContent = `"${card.idText}"`;
       document.getElementById('srs-jp-text').textContent = card.jpText;
       document.getElementById('srs-romaji-text').textContent = card.romaji;
@@ -2407,9 +2243,9 @@
         revealSrsCard();
         if (score >= 70) {
           addXp(20);
-          fb.innerHTML = `<span class="font-bold">🎉 Skor Mic: ${score}% (+20 XP)</span> — Terdengar: 「${transcript}」`;
+          fb.innerHTML = `<span class="font-bold">🎉 ${score}% (+20 XP)</span> — 「${transcript}」`;
         } else {
-          fb.innerHTML = `<span class="font-bold">🎤 Skor Mic: ${score}%</span> — Terdeteksi: 「${transcript}」. Bandingkan dengan jawaban di bawah!`;
+          fb.innerHTML = `<span class="font-bold">🎤 ${score}%</span> — 「${transcript}」`;
         }
       }, btn);
     }
@@ -2444,7 +2280,7 @@
       romEl.value = '';
 
       filterSrsDeck();
-      alert('Kartu baru berhasil ditambahkan ke SRS Deck (+20 XP)!');
+      alert('Kartu baru berhasil ditambahkan (+20 XP)!');
     }
 
     // =====================================================
@@ -2455,10 +2291,10 @@
 
     const scenarioConfigs = {
       kenji_ux: {
-        name: 'Kenji-san (Lead Product Designer di Tokyo)',
-        greetingJp: 'こんにちは！Spectrum Tokyoのデザインミートアップへようこそ！インドネシアから来られたんですね。普段はどんなUI・UXのデザインをされていますか？',
-        greetingRomaji: 'Konnichiwa! Spectrum Tokyo no dezain miitoappu e youkoso! Indoneshia kara korareta n desu ne. Fudan wa donna UI/UX no dezain o sarete imasu ka?',
-        greetingId: 'Halo! Selamat datang di design meetup Spectrum Tokyo! Anda datang dari Indonesia ya. Sehari-hari mengerjakan desain UI/UX seperti apa?',
+        name: 'Kenji-san (Lead UX Tokyo)',
+        greetingJp: 'こんにちは！Spectrum Tokyoのデザインミートアップへようこそ！普段はどんなUI・UXのデザインをされていますか？',
+        greetingRomaji: 'Konnichiwa! Spectrum Tokyo no dezain miitoappu e youkoso! Fudan wa donna UI/UX no dezain o sarete imasu ka?',
+        greetingId: 'Halo! Selamat datang di Spectrum Tokyo! Sehari-hari mengerjakan desain UI/UX seperti apa?',
         quickReplies: [
           '普段はFigmaでモバイルアプリをデザインしています。',
           'ユーザーにとって使いやすい画面を作るようにしています。',
@@ -2468,10 +2304,10 @@
 Tugasmu:
 1. Balas dalam bahasa Jepang sopan natural (Desu/Masu) sebanyak 1-2 kalimat yang relevan dengan dunia UI/UX Design di Jepang.
 2. Sertakan cara baca Romaji dan terjemahan bahasa Indonesia.
-3. Jika kalimat user masih kaku, campur bahasa Indonesia, atau terlalu gaya anime (kasual), berikan koreksi lembut "💡 Tips Sensei (Versi Natural Sopan):" beserta penjelasan singkat partikelnya.`
+3. Jika kalimat user masih kaku, campur bahasa Indonesia, atau terlalu gaya anime (kasual), berikan koreksi singkat.`
       },
       izakaya: {
-        name: 'Sato-san (Warga Lokal di Izakaya Shibuya)',
+        name: 'Sato-san (Izakaya Shibuya)',
         greetingJp: 'いらっしゃい！隣いいですか？どこから旅行に来たの？日本語上手だね！',
         greetingRomaji: 'Irasshai! Tonari ii desu ka? Doko kara ryokou ni kita no? Nihongo jouzu da ne!',
         greetingId: 'Selamat datang! Boleh duduk di sebelah? Datang liburan dari mana? Bahasa Jepangnya jago ya!',
@@ -2481,13 +2317,13 @@ Tugasmu:
           '東京で地元の人がよく行く場所はどこですか？'
         ],
         systemPrompt: `Kamu adalah Sato, warga lokal ramah di Izakaya Shibuya yang mengobrol dengan turis asal Indonesia yang berprofesi sebagai UI/UX Designer.
-Balas dengan bahasa Jepang percakapan natural, berikan Romaji, Arti Indonesia, dan koreksi kalimat user ("💡 Tips Sensei") jika ada partikel atau konjugasi yang bisa dibuat lebih alami.`
+Balas dengan bahasa Jepang percakapan natural, berikan Romaji, Arti Indonesia, dan koreksi singkat jika diperlukan.`
       },
       converter: {
-        name: 'Klinik Kalimat Sensei (Anime/Indo → Jepang Sopan & UI/UX)',
-        greetingJp: 'ようこそ！知っている単語（アニメの言葉やインドネシア語でもOK）を並べて送ってください。自然な丁寧語（です・ます）とN3表現に組み立てます！',
-        greetingRomaji: 'Youkoso! Shitte iru tango o narabete okutte kudasai. Shizen na teineigo to N3 hyougen ni kumitatemasu!',
-        greetingId: 'Selamat datang! Ketik kosakata lepas yang Anda tahu (boleh campur kata anime + bahasa Indonesia, misal: "watashi, iku, Tokyo, belajar UI UX, ingin kerja"). Saya akan merangkainya menjadi kalimat Jepang sopan natural + membedah partikelnya!',
+        name: 'Klinik Kalimat (Anime → Sopan)',
+        greetingJp: '知っている単語を並べて送ってください。自然な丁寧語に組み立てます！',
+        greetingRomaji: 'Shitte iru tango o narabete okutte kudasai. Shizen na teineigo ni kumitatemasu!',
+        greetingId: 'Ketik kata-kata lepas yang Anda tahu (boleh campur Indo/Jepang). Saya akan merangkainya menjadi kalimat sopan!',
         quickReplies: [
           'watashi, UI UX designer, Figma, tsukuru, aplikasi mudah dipakai',
           'dari kecil nonton anime, sekarang ingin kerja di Jepang',
@@ -2497,7 +2333,7 @@ Balas dengan bahasa Jepang percakapan natural, berikan Romaji, Arti Indonesia, d
 Tugasmu:
 1. Rangkai menjadi Kalimat Bahasa Jepang Sopan (Desu/Masu) & versi N3 Profesional.
 2. Tulis Romaji.
-3. Bedah fungsi setiap partikel (は, が, を, に, で) dan perubahan kata kerjanya secara ringkas agar user paham cara merangkainya.`
+3. Bedah fungsi partikelnya secara singkat.`
       }
     };
 
@@ -2521,9 +2357,9 @@ Tugasmu:
       const badge = document.getElementById('gemini-status-badge');
       const model = appState.geminiModel || 'gemini-2.5-flash';
       if (appState.geminiApiKey) {
-        badge.innerHTML = `<span class="font-semibold text-[var(--foreground)]">✅ Terhubung ke ${model}</span>`;
+        badge.textContent = model;
       } else {
-        badge.innerHTML = `Status: <strong>Simulasi Pintar Aktif</strong> (Isi API Key jika ingin panggil ${model} langsung)`;
+        badge.textContent = 'Lokal';
       }
     }
 
@@ -2532,9 +2368,9 @@ Tugasmu:
       ['kenji_ux', 'izakaya', 'converter'].forEach(k => {
         const btn = document.getElementById('ai-scen-' + k);
         if (k === scenKey) {
-          btn.className = 'w-full text-left p-3 rounded-xl border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] text-xs space-y-0.5';
+          btn.className = 'w-full text-left p-2.5 rounded-xl border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-bold';
         } else {
-          btn.className = 'w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs space-y-0.5';
+          btn.className = 'w-full text-left p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs font-bold';
         }
       });
 
@@ -2545,7 +2381,7 @@ Tugasmu:
           jp: cfg.greetingJp,
           romaji: cfg.greetingRomaji,
           id: cfg.greetingId,
-          tip: 'Klik salah satu contoh balasan di bawah, bicara lewat tombol 🎤 Bicara (JP), atau ketik kalimat Anda sendiri!'
+          tip: ''
         }
       ];
       renderAiChat();
@@ -2572,8 +2408,7 @@ Tugasmu:
         if (m.role === 'user') {
           return `
             <div class="flex justify-end">
-              <div class="max-w-[85%] rounded-2xl p-3.5 bg-[var(--primary)] text-[var(--primary-foreground)] text-xs space-y-1">
-                <div class="font-bold">Anda:</div>
+              <div class="max-w-[85%] rounded-2xl px-3.5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] text-xs">
                 <div class="text-sm font-semibold">${m.text}</div>
               </div>
             </div>
@@ -2581,15 +2416,15 @@ Tugasmu:
         } else {
           return `
             <div class="flex justify-start">
-              <div class="max-w-[90%] rounded-2xl p-4 bg-[var(--background)] border border-[var(--border)] text-xs space-y-1.5">
+              <div class="max-w-[90%] rounded-2xl p-3.5 bg-[var(--background)] border border-[var(--border)] text-xs space-y-1">
                 <div class="flex items-center justify-between gap-2">
                   <span class="font-bold text-[var(--foreground)]">🤖 ${scenarioConfigs[currentAiScenario].name}</span>
-                  ${m.jp ? `<button onclick="speakJapanese('${m.jp.replace(/'/g, "\\'")}')" class="px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)]">🔊 Putar</button>` : ''}
+                  ${m.jp ? `<button onclick="speakJapanese('${m.jp.replace(/'/g, "\\'")}')" class="px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)]">🔊</button>` : ''}
                 </div>
                 ${m.jp ? `<div class="text-base font-bold text-[var(--foreground)] leading-relaxed">${m.jp}</div>` : ''}
                 ${m.romaji ? `<div class="text-[var(--muted-foreground)] font-medium">${m.romaji}</div>` : ''}
-                ${m.id ? `<div class="text-[var(--foreground)] pt-1 border-t border-[var(--border)]"><strong>Arti:</strong> ${m.id}</div>` : ''}
-                ${m.tip ? `<div class="p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)] leading-relaxed mt-1">💡 <strong>Feedback & Bedah Kalimat:</strong><br/>${m.tip}</div>` : ''}
+                ${m.id ? `<div class="text-[var(--muted-foreground)] pt-1 border-t border-[var(--border)]">${m.id}</div>` : ''}
+                ${m.tip ? `<div class="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)] mt-1">💡 ${m.tip}</div>` : ''}
               </div>
             </div>
           `;
