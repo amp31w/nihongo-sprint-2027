@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nihongo-sprint-2027-v2';
+const CACHE_NAME = 'nihongo-sprint-2027-v3';
 const ASSETS = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', (event) => {

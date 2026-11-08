@@ -343,10 +343,15 @@
           </h3>
         </div>
 
-        <!-- ANIME VOCAB CLUE BOX -->
-        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 text-xs space-y-1">
-          <div class="font-semibold text-[var(--foreground)]">💡 Jembatan Kosakata Anime → Dunia Nyata:</div>
-          <div id="lego-anime-clue" class="text-[var(--muted-foreground)]"></div>
+        <!-- ANIME VOCAB CLUE BOX (HIDDEN BY DEFAULT WITH SHOW TOGGLE) -->
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 text-xs space-y-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-semibold text-[var(--foreground)]">💡 Petunjuk Kosakata Anime → Dunia Nyata:</span>
+            <button onclick="toggleLegoClue()" id="lego-clue-toggle-btn" class="px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-85 font-medium">
+              👁️ Tampilkan Petunjuk
+            </button>
+          </div>
+          <div id="lego-anime-clue" class="hidden text-[var(--muted-foreground)] pt-1 border-t border-[var(--border)]"></div>
         </div>
 
         <!-- DROP ZONE -->
@@ -509,9 +514,14 @@
               <span id="kana-accuracy-label">Akurasi: 100%</span>
             </div>
 
-            <div class="py-4">
+            <div class="py-4 space-y-2.5">
               <div id="kana-char-display" class="text-6xl font-bold text-[var(--foreground)] select-none">あ</div>
-              <div id="kana-hint-word" class="text-xs text-[var(--muted-foreground)] mt-2">Klik pilihan bunyi yang tepat:</div>
+              <div>
+                <button onclick="toggleKanaHint()" id="kana-hint-toggle-btn" class="text-xs px-3 py-1 rounded-lg bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)] transition-all">
+                  👁️ Tampilkan Contoh Istilah
+                </button>
+                <div id="kana-hint-word" class="hidden text-xs font-medium text-[var(--muted-foreground)] mt-2"></div>
+              </div>
             </div>
 
             <div id="kana-options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
@@ -1524,6 +1534,14 @@
       initLegoQuestion();
     }
 
+    function toggleLegoClue() {
+      const clueEl = document.getElementById('lego-anime-clue');
+      const btnEl = document.getElementById('lego-clue-toggle-btn');
+      if (!clueEl || !btnEl) return;
+      const isHidden = clueEl.classList.toggle('hidden');
+      btnEl.textContent = isHidden ? '👁️ Tampilkan Petunjuk' : '🙈 Sembunyikan Petunjuk';
+    }
+
     function initLegoQuestion() {
       if (filteredLegoList.length === 0) filteredLegoList = getAllLegoQuestions();
       const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
@@ -1535,6 +1553,10 @@
 
       document.getElementById('lego-feedback-box').classList.add('hidden');
       document.getElementById('lego-mic-result').classList.add('hidden');
+      const clueEl = document.getElementById('lego-anime-clue');
+      const btnEl = document.getElementById('lego-clue-toggle-btn');
+      if (clueEl) clueEl.classList.add('hidden');
+      if (btnEl) btnEl.textContent = '👁️ Tampilkan Petunjuk';
       renderLegoQuestion();
     }
 
@@ -2209,12 +2231,24 @@
       return [...kanaData.hiragana, ...kanaData.katakana];
     }
 
+    function toggleKanaHint() {
+      const hintEl = document.getElementById('kana-hint-word');
+      const btnEl = document.getElementById('kana-hint-toggle-btn');
+      if (!hintEl || !btnEl) return;
+      const isHidden = hintEl.classList.toggle('hidden');
+      btnEl.textContent = isHidden ? '👁️ Tampilkan Contoh Istilah' : '🙈 Sembunyikan Contoh Istilah';
+    }
+
     function nextKanaCard() {
       const pool = getActiveKanaPool();
       currentKanaTarget = pool[Math.floor(Math.random() * pool.length)];
 
       document.getElementById('kana-char-display').textContent = currentKanaTarget.char;
-      document.getElementById('kana-hint-word').textContent = `Istilah: ${currentKanaTarget.hint}`;
+      const hintEl = document.getElementById('kana-hint-word');
+      const btnEl = document.getElementById('kana-hint-toggle-btn');
+      hintEl.textContent = `Istilah: ${currentKanaTarget.hint}`;
+      hintEl.classList.add('hidden');
+      if (btnEl) btnEl.textContent = '👁️ Tampilkan Contoh Istilah';
 
       const wrongPool = pool.filter(k => k.romaji !== currentKanaTarget.romaji);
       const shuffledWrong = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3);
