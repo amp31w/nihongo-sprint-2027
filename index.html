@@ -384,12 +384,14 @@
 
         <!-- LEFT: KANA SPEED RECALL BLITZ -->
         <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
-          <div class="flex items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
             <h2 class="text-sm font-bold text-[var(--foreground)]">⚡ Kana Blitz</h2>
-            <div class="flex gap-1 bg-[var(--background)] p-0.5 rounded-lg border border-[var(--border)]">
+            <div class="flex flex-wrap gap-1 bg-[var(--background)] p-0.5 rounded-lg border border-[var(--border)]">
               <button onclick="setKanaDeck('hiragana')" id="kana-deck-hiragana" class="px-2 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">Hiragana</button>
               <button onclick="setKanaDeck('katakana')" id="kana-deck-katakana" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Katakana</button>
               <button onclick="setKanaDeck('mixed')" id="kana-deck-mixed" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Campur</button>
+              <button onclick="setKanaDeck('words')" id="kana-deck-words" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Kata</button>
+              <button onclick="setKanaDeck('sentences')" id="kana-deck-sentences" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Kalimat</button>
             </div>
           </div>
 
@@ -399,18 +401,21 @@
               <span id="kana-accuracy-label">100%</span>
             </div>
 
-            <div class="py-3 space-y-2">
-              <div id="kana-char-display" class="text-6xl font-bold text-[var(--foreground)] select-none">あ</div>
-              <div>
+            <div class="py-3 space-y-2.5">
+              <div id="kana-char-display" class="text-6xl font-bold text-[var(--foreground)] select-none leading-tight">あ</div>
+              <div class="flex items-center justify-center gap-1.5">
                 <button onclick="toggleKanaHint()" id="kana-hint-toggle-btn" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)]">
                   👁️ Contoh Kata
                 </button>
-                <div id="kana-hint-word" class="hidden text-xs font-medium text-[var(--muted-foreground)] mt-1.5"></div>
+                <button onclick="speakCurrentKanaCard()" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)]" title="Putar suara">
+                  🔊
+                </button>
               </div>
+              <div id="kana-hint-word" class="hidden text-xs font-medium text-[var(--muted-foreground)]"></div>
             </div>
 
             <div id="kana-options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
-            <div id="kana-feedback-msg" class="text-xs font-medium h-4"></div>
+            <div id="kana-feedback-msg" class="text-xs font-medium min-h-[1rem]"></div>
           </div>
         </div>
 
@@ -2039,6 +2044,54 @@
         { char: 'ロ', romaji: 'ro', hint: 'ログイン画面 (Login Screen)' },
         { char: 'ワ', romaji: 'wa', hint: 'ワイヤーフレーム (Wireframe)' },
         { char: 'ン', romaji: 'n', hint: 'デザイン (Design)' }
+      ],
+      words: [
+        { char: 'つかいやすい', romaji: 'tsukaiyasui', hint: 'Mudah digunakan (Good UX)' },
+        { char: 'わかりやすい', romaji: 'wakariyasui', hint: 'Mudah dipahami (Intuitif)' },
+        { char: 'がめん', romaji: 'gamen', hint: 'Layar / Screen UI (画面)' },
+        { char: 'かだい', romaji: 'kadai', hint: 'Masalah / Pain point (課題)' },
+        { char: 'かいぜん', romaji: 'kaizen', hint: 'Perbaikan / Iterasi (改善)' },
+        { char: 'せってい', romaji: 'settei', hint: 'Pengaturan / Settings (設定)' },
+        { char: 'けんさく', romaji: 'kensaku', hint: 'Pencarian / Search (検索)' },
+        { char: 'しごと', romaji: 'shigoto', hint: 'Pekerjaan (仕事)' },
+        { char: 'りょこう', romaji: 'ryokou', hint: 'Liburan / Travel (旅行)' },
+        { char: 'おすすめ', romaji: 'osusume', hint: 'Rekomendasi' },
+        { char: 'すみません', romaji: 'sumimasen', hint: 'Permisi / Maaf' },
+        { char: 'ありがとう', romaji: 'arigatou', hint: 'Terima kasih' },
+        { char: 'おいしい', romaji: 'oishii', hint: 'Enak / Lezat' },
+        { char: 'たのしみ', romaji: 'tanoshimi', hint: 'Menantikan / Excited' },
+        { char: 'すこし', romaji: 'sukoshi', hint: 'Sedikit' },
+        { char: 'まいにち', romaji: 'mainichi', hint: 'Setiap hari' },
+        { char: 'デザイン', romaji: 'dezain', hint: 'Desain (Design)' },
+        { char: 'アプリ', romaji: 'apuri', hint: 'Aplikasi (App)' },
+        { char: 'プロトタイプ', romaji: 'purototaipu', hint: 'Prototipe (Prototype)' },
+        { char: 'リサーチ', romaji: 'risaachi', hint: 'Riset (Research)' },
+        { char: 'ユーザー', romaji: 'yuuzaa', hint: 'Pengguna (User)' },
+        { char: 'コンポーネント', romaji: 'konpoonento', hint: 'Komponen (Component)' },
+        { char: 'レイアウト', romaji: 'reiauto', hint: 'Tata letak (Layout)' },
+        { char: 'ポートフォリオ', romaji: 'pootoforio', hint: 'Portofolio (Portfolio)' },
+        { char: 'フィードバック', romaji: 'fiidobakku', hint: 'Masukan (Feedback)' },
+        { char: 'ミートアップ', romaji: 'miitoappu', hint: 'Acara komunitas (Meetup)' },
+        { char: 'エンジニア', romaji: 'enjinia', hint: 'Engineer / Developer' },
+        { char: 'メニュー', romaji: 'menyuu', hint: 'Menu restoran / UI' },
+        { char: 'コーヒー', romaji: 'koohii', hint: 'Kopi (Coffee)' },
+        { char: 'ホテル', romaji: 'hoteru', hint: 'Hotel' }
+      ],
+      sentences: [
+        { char: 'にほんへいきます', romaji: 'nihon e ikimasu', hint: 'Pergi ke Jepang' },
+        { char: 'インドネシアからきました', romaji: 'indoneshia kara kimashita', hint: 'Datang dari Indonesia' },
+        { char: 'デザイナーをしています', romaji: 'dezainaa o shite imasu', hint: 'Bekerja sebagai Designer' },
+        { char: 'アプリをつくっています', romaji: 'apuri o tsukutte imasu', hint: 'Sedang membuat aplikasi' },
+        { char: 'にほんごがすこしわかります', romaji: 'nihongo ga sukoshi wakarimasu', hint: 'Paham sedikit bahasa Jepang' },
+        { char: 'アニメがよくすきです', romaji: 'anime ga yoku suki desu', hint: 'Sangat suka anime' },
+        { char: 'とてもつかいやすいです', romaji: 'totemo tsukaiyasui desu', hint: 'Sangat mudah digunakan' },
+        { char: 'コーヒーをおねがいします', romaji: 'koohii o onegaishimasu', hint: 'Tolong minta kopi' },
+        { char: 'おかいけいをおねがいします', romaji: 'okaikei o onegaishimasu', hint: 'Tolong minta bon/bill-nya' },
+        { char: 'これはいくらですか', romaji: 'kore wa ikura desu ka', hint: 'Ini harganya berapa?' },
+        { char: 'おすすめはなんですか', romaji: 'osusume wa nan desu ka', hint: 'Rekomendasinya apa?' },
+        { char: 'ゆっくりはなしてください', romaji: 'yukkuri hanashite kudasai', hint: 'Tolong bicara pelan-pelan' },
+        { char: 'にほんで はたらきたいです', romaji: 'nihon de hatarakitai desu', hint: 'Ingin bekerja di Jepang' },
+        { char: 'とてもたのしみにしています', romaji: 'totemo tanoshimi ni shite imasu', hint: 'Sangat menantikannya' }
       ]
     };
 
@@ -2050,8 +2103,9 @@
 
     function setKanaDeck(mode) {
       currentKanaMode = mode;
-      ['hiragana', 'katakana', 'mixed'].forEach(m => {
+      ['hiragana', 'katakana', 'mixed', 'words', 'sentences'].forEach(m => {
         const btn = document.getElementById('kana-deck-' + m);
+        if (!btn) return;
         if (m === mode) {
           btn.className = 'px-2 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
         } else {
@@ -2064,7 +2118,15 @@
     function getActiveKanaPool() {
       if (currentKanaMode === 'hiragana') return kanaData.hiragana;
       if (currentKanaMode === 'katakana') return kanaData.katakana;
+      if (currentKanaMode === 'words') return kanaData.words;
+      if (currentKanaMode === 'sentences') return kanaData.sentences;
       return [...kanaData.hiragana, ...kanaData.katakana];
+    }
+
+    function getKanaHintButtonLabel(isHidden) {
+      if (!isHidden) return '🙈 Tutup';
+      if (currentKanaMode === 'words' || currentKanaMode === 'sentences') return '👁️ Arti';
+      return '👁️ Contoh Kata';
     }
 
     function toggleKanaHint() {
@@ -2072,27 +2134,43 @@
       const btnEl = document.getElementById('kana-hint-toggle-btn');
       if (!hintEl || !btnEl) return;
       const isHidden = hintEl.classList.toggle('hidden');
-      btnEl.textContent = isHidden ? '👁️ Contoh Kata' : '🙈 Tutup';
+      btnEl.textContent = getKanaHintButtonLabel(isHidden);
+    }
+
+    function speakCurrentKanaCard() {
+      if (currentKanaTarget) speakJapanese(currentKanaTarget.char);
     }
 
     function nextKanaCard() {
       const pool = getActiveKanaPool();
       currentKanaTarget = pool[Math.floor(Math.random() * pool.length)];
 
-      document.getElementById('kana-char-display').textContent = currentKanaTarget.char;
+      const charEl = document.getElementById('kana-char-display');
+      charEl.textContent = currentKanaTarget.char;
+      if (currentKanaMode === 'sentences') {
+        charEl.className = 'text-2xl sm:text-3xl font-bold text-[var(--foreground)] select-none leading-snug py-2';
+      } else if (currentKanaMode === 'words') {
+        charEl.className = 'text-3xl sm:text-4xl font-bold text-[var(--foreground)] select-none leading-tight py-1';
+      } else {
+        charEl.className = 'text-6xl font-bold text-[var(--foreground)] select-none leading-tight';
+      }
+
       const hintEl = document.getElementById('kana-hint-word');
       const btnEl = document.getElementById('kana-hint-toggle-btn');
       hintEl.textContent = currentKanaTarget.hint;
       hintEl.classList.add('hidden');
-      if (btnEl) btnEl.textContent = '👁️ Contoh Kata';
+      if (btnEl) btnEl.textContent = getKanaHintButtonLabel(true);
 
       const wrongPool = pool.filter(k => k.romaji !== currentKanaTarget.romaji);
       const shuffledWrong = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3);
       const options = [currentKanaTarget, ...shuffledWrong].sort(() => Math.random() - 0.5);
 
       const grid = document.getElementById('kana-options-grid');
+      const isLongText = currentKanaMode === 'words' || currentKanaMode === 'sentences';
+      grid.className = isLongText ? 'grid grid-cols-1 sm:grid-cols-2 gap-2' : 'grid grid-cols-2 sm:grid-cols-4 gap-2';
+
       grid.innerHTML = options.map(opt => `
-        <button onclick="answerKana('${opt.romaji}')" class="py-2.5 px-3 rounded-xl font-bold text-sm bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:border-[var(--foreground)] transition-all">
+        <button onclick="answerKana('${opt.romaji.replace(/'/g, "\\'")}')" class="py-2.5 px-3 rounded-xl font-bold ${currentKanaMode === 'sentences' ? 'text-xs sm:text-sm' : 'text-sm'} bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:border-[var(--foreground)] transition-all">
           ${opt.romaji}
         </button>
       `).join('');
@@ -2101,13 +2179,17 @@
     function answerKana(selectedRomaji) {
       kanaTotalAttempts++;
       const msgEl = document.getElementById('kana-feedback-msg');
+      const isWordOrSent = currentKanaMode === 'words' || currentKanaMode === 'sentences';
+      const xpGain = currentKanaMode === 'sentences' ? 15 : (currentKanaMode === 'words' ? 10 : 5);
 
       if (selectedRomaji === currentKanaTarget.romaji) {
         kanaCorrectAttempts++;
         kanaStreak++;
-        addXp(5);
+        addXp(xpGain);
         speakJapanese(currentKanaTarget.char);
-        msgEl.textContent = `✅ ${currentKanaTarget.char} = ${currentKanaTarget.romaji} (+5 XP)`;
+        msgEl.textContent = isWordOrSent
+          ? `✅ ${currentKanaTarget.char} = ${currentKanaTarget.romaji} — "${currentKanaTarget.hint}" (+${xpGain} XP)`
+          : `✅ ${currentKanaTarget.char} = ${currentKanaTarget.romaji} (+${xpGain} XP)`;
         nextKanaCard();
       } else {
         kanaStreak = 0;
