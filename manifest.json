@@ -1,0 +1,17 @@
+{
+  "name": "Nihongo Sprint 2027 — UI/UX Designer Edition",
+  "short_name": "Nihongo2027",
+  "description": "Aplikasi belajar bahasa Jepang interaktif dari kosakata pasif anime menuju Daily Conversation (30 Jan 2027) & Networking UI/UX di Jepang (Mei 2027).",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#0b1120",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

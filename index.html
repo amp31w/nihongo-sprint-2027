@@ -1,0 +1,2787 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="Nihongo Sprint 2027 — Interactive Japanese Learning & Goal Tracker Web App (UI/UX Designer Edition)" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+  <title>Nihongo Sprint 2027 — UI/UX Designer Edition (Anime to N3 & Japan Career)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --background: #0b1120;
+      --card: #151f32;
+      --border: #28354f;
+      --foreground: #f8fafc;
+      --muted-foreground: #94a3b8;
+      --primary: #38bdf8;
+      --primary-foreground: #0b1120;
+      --secondary: #1e293b;
+      --secondary-foreground: #e2e8f0;
+    }
+    html.theme-light {
+      --background: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --foreground: #0f172a;
+      --muted-foreground: #64748b;
+      --primary: #0284c7;
+      --primary-foreground: #ffffff;
+      --secondary: #f1f5f9;
+      --secondary-foreground: #0f172a;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+    }
+    .tab-btn-active {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      font-weight: 600;
+    }
+    .lego-chip {
+      transition: transform 0.12s ease, opacity 0.12s ease;
+      user-select: none;
+    }
+    .lego-chip:hover {
+      transform: translateY(-2px);
+    }
+    .lego-chip:active {
+      transform: translateY(0px);
+    }
+    @keyframes pulse-mic {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.06); }
+    }
+    .mic-recording {
+      animation: pulse-mic 1.2s infinite ease-in-out;
+      background-color: var(--primary) !important;
+      color: var(--primary-foreground) !important;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6">
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- TOP COMMAND HEADER -->
+    <header class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-1">
+            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              🎨 Track: UI/UX Designer (UI/UXデザイナー)
+            </span>
+            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              🎤 Mic Speech Check + ⚡ Gemini Flash/Pro AI
+            </span>
+          </div>
+          <h1 class="text-xl md:text-2xl font-bold tracking-tight text-[var(--foreground)]">
+            Nihongo Sprint 2027: UI/UX Designer Edition
+          </h1>
+          <p class="text-sm text-[var(--muted-foreground)] mt-0.5">
+            Dari kosakata pasif anime menuju Daily Conversation (30 Jan 2027) & Networking UI/UX di Jepang (Mei 2027).
+          </p>
+        </div>
+
+        <!-- COUNTDOWN CARDS -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0">
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 text-center">
+            <div class="text-xs text-[var(--muted-foreground)] font-medium">Target Daily Conv</div>
+            <div id="countdown-jan" class="text-lg md:text-xl font-bold text-[var(--foreground)] mt-0.5">83 Hari</div>
+            <div class="text-xs text-[var(--muted-foreground)]">30 Jan 2027</div>
+          </div>
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 text-center">
+            <div class="text-xs text-[var(--muted-foreground)] font-medium">Flight ke Jepang</div>
+            <div id="countdown-may" class="text-lg md:text-xl font-bold text-[var(--foreground)] mt-0.5">174 Hari</div>
+            <div class="text-xs text-[var(--muted-foreground)]">Mei 2027 (N3)</div>
+          </div>
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 text-center">
+            <div class="text-xs text-[var(--muted-foreground)] font-medium">Level & XP</div>
+            <div id="user-xp-display" class="text-lg md:text-xl font-bold text-[var(--foreground)] mt-0.5">Lv.1 (0 XP)</div>
+            <div id="user-rank-title" class="text-xs text-[var(--muted-foreground)]">Anime Listener</div>
+          </div>
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3 text-center">
+            <div class="text-xs text-[var(--muted-foreground)] font-medium">Streak Belajar</div>
+            <div class="flex items-center justify-center gap-1 mt-0.5">
+              <span id="streak-display" class="text-lg md:text-xl font-bold text-[var(--foreground)]">1 Hari</span>
+              <button onclick="incrementStreak()" title="Catat hadir hari ini" class="text-xs px-1.5 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80">+1</button>
+            </div>
+            <div class="text-xs text-[var(--muted-foreground)]">Konsistensi</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- XP PROGRESS BAR & QUICK CONTROLS -->
+      <div class="mt-4 pt-3 border-t border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex-1">
+          <div class="flex justify-between text-xs mb-1">
+            <span class="font-medium text-[var(--foreground)]">Progres menuju Milestone 30 Januari 2027</span>
+            <span id="overall-progress-label" class="text-[var(--muted-foreground)]">0% Selesai</span>
+          </div>
+          <div class="w-full h-2 bg-[var(--background)] rounded-full overflow-hidden border border-[var(--border)]">
+            <div id="overall-progress-bar" class="h-full bg-[var(--primary)] transition-all duration-300" style="width: 5%"></div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button onclick="toggleAppTheme()" id="theme-toggle-btn" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 font-medium">
+            ☀️/🌙 Tema
+          </button>
+          <button onclick="testJapaneseVoice()" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 font-medium">
+            🔊 Tes Suara Jepang
+          </button>
+          <button onclick="switchTab('ai')" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 font-semibold">
+            🤖 Konfigurasi Gemini Flash / Pro
+          </button>
+          <button onclick="resetAllProgress()" class="text-xs px-2 py-1.5 rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+            Reset
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN NAVIGATION TABS (5 TABS) -->
+    <nav class="flex flex-wrap gap-1.5 bg-[var(--card)] border border-[var(--border)] p-1.5 rounded-xl">
+      <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="tab-btn-active flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium transition-all text-center">
+        🎯 1. Rutinitas & Target
+      </button>
+      <button onclick="switchTab('lego')" id="tab-btn-lego" class="flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
+        🧱 2. Sentence Lego & Konjugasi (20+)
+      </button>
+      <button onclick="switchTab('islands')" id="tab-btn-islands" class="flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
+        🗣️ 3. Islands + 🎤 Mic Check
+      </button>
+      <button onclick="switchTab('kana')" id="tab-btn-kana" class="flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
+        ⚡ 4. Kana UX & SRS Deck
+      </button>
+      <button onclick="switchTab('ai')" id="tab-btn-ai" class="flex-1 min-w-[130px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all text-center">
+        🤖 5. AI Sensei (Gemini Flash/Pro)
+      </button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: DASHBOARD, DAILY ROUTINE & ROADMAP  -->
+    <!-- ========================================== -->
+    <section id="tab-dashboard" class="space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT: DAILY QUEST ROUTINE (WEEKDAY VS WEEKEND) -->
+        <div class="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-[var(--foreground)]">⚡ Rutinitas Fleksibel</h2>
+              <p class="text-xs text-[var(--muted-foreground)]">Mode Hari Kerja (25m) vs Akhir Pekan (90m)</p>
+            </div>
+            <div class="flex bg-[var(--background)] p-1 rounded-lg border border-[var(--border)]">
+              <button onclick="setRoutineMode('weekday')" id="mode-btn-weekday" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+                Hari Kerja (25m)
+              </button>
+              <button onclick="setRoutineMode('weekend')" id="mode-btn-weekend" class="px-2.5 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">
+                Weekend (90m)
+              </button>
+            </div>
+          </div>
+
+          <!-- POMODORO / SPRINT TIMER -->
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <div class="text-xs text-[var(--muted-foreground)] font-medium" id="timer-mode-label">Sprint Fokus Hari Kerja (25 Menit)</div>
+              <div id="sprint-timer-display" class="text-2xl font-bold font-mono text-[var(--foreground)]">25:00</div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="toggleSprintTimer()" id="timer-start-btn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
+                Mulai Sprint
+              </button>
+              <button onclick="resetSprintTimer()" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- DAILY CHECKLIST -->
+          <div id="daily-quests-container" class="space-y-2.5"></div>
+
+          <div class="pt-2 border-t border-[var(--border)] flex items-center justify-between text-xs text-[var(--muted-foreground)]">
+            <span id="daily-quest-status">0/4 Quest Harian Selesai</span>
+            <button onclick="resetDailyQuests()" class="underline hover:text-[var(--foreground)]">Reset Quest Hari Ini</button>
+          </div>
+        </div>
+
+        <!-- RIGHT: 12-WEEK MILESTONE TRACKER (NOV 2026 - MEI 2027) -->
+        <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-[var(--foreground)]">🗺️ Peta Target Mingguan (KPI Checklist)</h2>
+              <p class="text-xs text-[var(--muted-foreground)]">Centang setiap milestone mingguan yang berhasil Anda capai (+100 XP)</p>
+            </div>
+            <div class="flex gap-1.5">
+              <button onclick="filterRoadmap('phase1')" id="roadmap-btn-phase1" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+                Fase 1: 30 Jan 2027
+              </button>
+              <button onclick="filterRoadmap('phase2')" id="roadmap-btn-phase2" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+                Fase 2: Mei 2027 (UX Career)
+              </button>
+            </div>
+          </div>
+
+          <div id="roadmap-list-container" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1"></div>
+        </div>
+
+      </div>
+
+      <!-- UI/UX DESIGNER JAPAN CHEATSHEET BANNER -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5">
+        <h3 class="text-sm font-bold text-[var(--foreground)] mb-3">
+          🎨 Senjata Rahasia UI/UX Designer di Jepang: "3 Kata Kunci + Komunitas Desain Tokyo"
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+            <div class="font-semibold text-[var(--foreground)] mb-1">1. Kata Sifat Emas UX: 使いやすい & わかりやすい</div>
+            <p class="text-[var(--muted-foreground)] leading-relaxed">
+              Orang Jepang jarang mengatakan "UX-nya bagus". Mereka selalu mengatakan <strong class="text-[var(--foreground)]">使いやすい (tsukaiyasui = mudah dipakai)</strong> dan <strong class="text-[var(--foreground)]">わかりやすい (wakariyasui = mudah dipahami/intuitif)</strong>. Gunakan 2 kata ini saat menjelaskan desain Anda!
+            </p>
+          </div>
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+            <div class="font-semibold text-[var(--foreground)] mb-1">2. Kosakata Katakana UI/UX (Langsung Paham!)</div>
+            <p class="text-[var(--muted-foreground)] leading-relaxed">
+              Istilah sehari-hari tim produk Jepang: <code class="px-1 py-0.5 rounded bg-[var(--card)]">ユーザーリサーチ (User Research)</code>, <code class="px-1 py-0.5 rounded bg-[var(--card)]">プロトタイプ (Prototype)</code>, <code class="px-1 py-0.5 rounded bg-[var(--card)]">デザインシステム (Design System)</code>, <code class="px-1 py-0.5 rounded bg-[var(--card)]">画面 / がめん (Layar/Screen UI)</code>, dan <code class="px-1 py-0.5 rounded bg-[var(--card)]">課題 / かだい (Pain point/Masalah user)</code>.
+            </p>
+          </div>
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+            <div class="font-semibold text-[var(--foreground)] mb-1">3. Spot Networking UI/UX Saat Liburan Mei 2027</div>
+            <p class="text-[var(--muted-foreground)] leading-relaxed">
+              Saat di Tokyo nanti, cek event bulanan <strong class="text-[var(--foreground)]">Spectrum Tokyo</strong> (komunitas desain bilingual terbesar di Tokyo), <strong class="text-[var(--foreground)]">Friends of Figma Tokyo</strong>, dan <strong class="text-[var(--foreground)]">TokyoDev</strong>. Banyak perusahaan Jepang (Mercari, LINE Yahoo, SmartHR, Goodpatch, Woven by Toyota) mencari UI/UX Designer!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- TAB 2: SENTENCE LEGO (20 SOAL N5-N3) & CONJUGATION DRILL   -->
+    <!-- ========================================================== -->
+    <section id="tab-lego" class="hidden space-y-6">
+
+      <!-- SUB-MODE SWITCHER: SENTENCE LEGO VS CONJUGATION REFLEX DRILL -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-[var(--foreground)]">🧱 Latihan Struktur Kalimat & Mesin Konjugasi (N5 → N3)</h2>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Latih cara menyusun kalimat utuh dari kosakata pasif anime & mengubah akhiran kata kerja dalam < 2 detik.
+          </p>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button onclick="setGrammarSubMode('lego')" id="submode-btn-lego" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
+            🧱 Sentence Lego (20 Soal)
+          </button>
+          <button onclick="setGrammarSubMode('conj')" id="submode-btn-conj" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+            ⚡ Drill Konjugasi Cepat (Anime → Sopan)
+          </button>
+          <button onclick="toggleGrammarCheatSheet()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+            📖 Rumus
+          </button>
+        </div>
+      </div>
+
+      <!-- COLLAPSIBLE PARTICLE & CONJUGATION TABLE -->
+      <div id="grammar-cheatsheet" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 space-y-1.5">
+          <div class="font-bold text-[var(--foreground)] mb-1">7 Partikel Kunci ("Lem" Kalimat S-O-V):</div>
+          <div><strong class="text-[var(--foreground)]">は (wa):</strong> Topik kalimat (<code class="px-1 bg-[var(--card)]">私は UI/UXデザイナーです</code>).</div>
+          <div><strong class="text-[var(--foreground)]">が (ga):</strong> Subjek spesifik, kata sifat suka/bisa/paham (<code class="px-1 bg-[var(--card)]">日本語がわかります</code>, <code class="px-1 bg-[var(--card)]">デザインが好きです</code>).</div>
+          <div><strong class="text-[var(--foreground)]">を (o):</strong> Objek yang dikenai aksi (<code class="px-1 bg-[var(--card)]">アプリをデザインする</code> = mendesain aplikasi).</div>
+          <div><strong class="text-[var(--foreground)]">に (ni):</strong> Waktu spesifik (<code class="px-1 bg-[var(--card)]">五月に</code>), tujuan (<code class="px-1 bg-[var(--card)]">日本に行く</code>), atau target (<code class="px-1 bg-[var(--card)]">ユーザーに聞く</code> = bertanya ke user).</div>
+          <div><strong class="text-[var(--foreground)]">で (de):</strong> Tempat terjadinya aktivitas (<code class="px-1 bg-[var(--card)]">東京で働く</code>) atau alat/tools (<code class="px-1 bg-[var(--card)]">Figmaで作る</code> = membuat dengan Figma).</div>
+          <div><strong class="text-[var(--foreground)]">から / けど / ため(に):</strong> "Karena" (<code class="px-1 bg-[var(--card)]">~から</code>), "Tetapi" (<code class="px-1 bg-[var(--card)]">~けど</code>), "Demi/Untuk" (<code class="px-1 bg-[var(--card)]">ユーザーのために</code>).</div>
+        </div>
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 space-y-1.5">
+          <div class="font-bold text-[var(--foreground)] mb-1">Rumus Cepat Konjugasi Kata Kerja:</div>
+          <div><strong class="text-[var(--foreground)]">Kelompok Ru-Verb (Ichidan):</strong> <code class="px-1 bg-[var(--card)]">見る (miru)</code>, <code class="px-1 bg-[var(--card)]">食べる (taberu)</code>, <code class="px-1 bg-[var(--card)]">考える (kangaeru - berpikir)</code> → Buang <code class="px-1 bg-[var(--card)]">る</code> lalu tambah <code class="px-1 bg-[var(--card)]">ます / たいです / て / られます (bisa)</code>.</div>
+          <div><strong class="text-[var(--foreground)]">Kelompok U-Verb (Godan):</strong> Ubah vokal akhir <code class="px-1 bg-[var(--card)]">-u</code> ke <code class="px-1 bg-[var(--card)]">-i + ます</code>:
+            <br>• <code class="px-1 bg-[var(--card)]">作る (tsukuru - membuat)</code> → <code class="px-1 bg-[var(--card)]">作ります</code> | Te-form: <code class="px-1 bg-[var(--card)]">作って</code> | Bisa: <code class="px-1 bg-[var(--card)]">作れます</code>
+            <br>• <code class="px-1 bg-[var(--card)]">使う (tsukau - memakai)</code> → <code class="px-1 bg-[var(--card)]">使います</code> | Te-form: <code class="px-1 bg-[var(--card)]">使って</code> | Bisa: <code class="px-1 bg-[var(--card)]">使えます</code>
+            <br>• <code class="px-1 bg-[var(--card)]">話す (hanasu - bicara)</code> → <code class="px-1 bg-[var(--card)]">話します</code> | Te-form: <code class="px-1 bg-[var(--card)]">話して</code> | Bisa: <code class="px-1 bg-[var(--card)]">話せます</code>
+          </div>
+          <div><strong class="text-[var(--foreground)]">Irregular (Hanya 2!):</strong> <code class="px-1 bg-[var(--card)]">する (melakukan)</code> → <code class="px-1 bg-[var(--card)]">します / して / できます (bisa)</code> | <code class="px-1 bg-[var(--card)]">来る (kuru - datang)</code> → <code class="px-1 bg-[var(--card)]">来ます (kimasu)</code>.</div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW A: SENTENCE LEGO BUILDER (20 QUESTIONS + LEVEL FILTER + MIC CHECK) -->
+      <div id="lego-subview-main" class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[var(--border)]">
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-xs font-semibold text-[var(--muted-foreground)]">Filter Level:</label>
+            <select id="lego-category-select" onchange="filterLegoByCategory()" class="text-xs px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] font-medium">
+              <option value="all">Semua Level (20 Soal N5–N3)</option>
+              <option value="n5">Level 1: N5 Partikel & Sopan Dasar</option>
+              <option value="n4">Level 2: N4 Konjugasi & Konektor Kalimat</option>
+              <option value="ux">Level 3: N3 & UI/UX Designer Career Track</option>
+            </select>
+            <span id="lego-level-badge" class="text-xs font-semibold px-2.5 py-1 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              Soal 1 / 20
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="prevLegoQuestion()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              ← Sebelumnya
+            </button>
+            <button onclick="nextLegoQuestion()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              Berikutnya →
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)] font-medium">Susun kalimat bahasa Jepang untuk arti berikut:</div>
+          <h3 id="lego-prompt-id" class="text-lg md:text-xl font-bold text-[var(--foreground)] mt-1">
+            "Saya bekerja sebagai UI/UX Designer di Indonesia."
+          </h3>
+        </div>
+
+        <!-- ANIME VOCAB CLUE BOX -->
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5 text-xs space-y-1">
+          <div class="font-semibold text-[var(--foreground)]">💡 Jembatan Kosakata Anime → Dunia Nyata:</div>
+          <div id="lego-anime-clue" class="text-[var(--muted-foreground)]"></div>
+        </div>
+
+        <!-- DROP ZONE -->
+        <div>
+          <div class="text-xs font-medium text-[var(--muted-foreground)] mb-1.5">
+            Klik blok kata di bawah sesuai urutan (klik blok di kotak ini untuk melepas):
+          </div>
+          <div id="lego-answer-zone" class="min-h-[68px] p-3.5 rounded-xl bg-[var(--background)] border-2 border-dashed border-[var(--border)] flex flex-wrap items-center gap-2"></div>
+        </div>
+
+        <!-- AVAILABLE WORD CHIPS -->
+        <div>
+          <div class="text-xs font-medium text-[var(--muted-foreground)] mb-1.5">Blok Kata & Partikel Tersedia:</div>
+          <div id="lego-bank-zone" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- ACTION BUTTONS & MIC PRONUNCIATION CHECK -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[var(--border)]">
+          <div class="flex flex-wrap gap-2">
+            <button onclick="checkLegoAnswer()" class="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
+              ✅ Cek Susunan Kalimat
+            </button>
+            <button onclick="clearLegoAnswer()" class="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              Ulangi
+            </button>
+            <button onclick="speakCurrentLegoAnswer()" class="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              🔊 Dengarkan Audio
+            </button>
+            <button onclick="startMicCheckForLego()" id="lego-mic-btn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90">
+              🎤 Ucapkan ke Mic (Cek Lafal)
+            </button>
+          </div>
+          <div id="lego-score-counter" class="text-xs font-medium text-[var(--muted-foreground)]">
+            Skor Lego: 0 / 20 Selesai
+          </div>
+        </div>
+
+        <!-- MIC RESULT BOX FOR LEGO -->
+        <div id="lego-mic-result" class="hidden rounded-xl p-3.5 border border-[var(--border)] bg-[var(--background)] text-xs space-y-1"></div>
+
+        <!-- EXPLANATION FEEDBACK BOX -->
+        <div id="lego-feedback-box" class="hidden rounded-xl p-4 border border-[var(--border)] bg-[var(--background)] space-y-2 text-xs"></div>
+      </div>
+
+      <!-- SUB-VIEW B: FAST CONJUGATION DRILL ENGINE -->
+      <div id="conj-subview-main" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[var(--border)]">
+          <div>
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              ⚡ Latihan Refleks Otot Otak
+            </span>
+            <h3 class="text-lg font-bold text-[var(--foreground)] mt-1">
+              Mesin Konjugasi Cepat: Kata Kerja Anime (Kamus) → Bentuk Target
+            </h3>
+            <p class="text-xs text-[var(--muted-foreground)]">
+              Jangan menghafal rumus! Latih refleks mengubah kata kerja dasar ke bentuk sopan, keinginan (~たい), sambung (~て), atau kemampuan (Bisa).
+            </p>
+          </div>
+          <div class="text-xs font-bold px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)]" id="conj-streak-badge">
+            Streak Konjugasi: 0 🔥
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 text-center space-y-4">
+          <div id="conj-target-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[var(--primary)] text-[var(--primary-foreground)]">
+            Ubah ke: Bentuk Ingin Sopan (~たいです)
+          </div>
+          <div id="conj-base-verb" class="text-3xl md:text-4xl font-bold text-[var(--foreground)]">
+            作る (tsukuru — membuat / mendesain)
+          </div>
+          <div id="conj-context-sentence" class="text-xs text-[var(--muted-foreground)]">
+            Konteks: "Saya ingin membuat aplikasi yang mudah digunakan (使いやすいアプリを...)"
+          </div>
+
+          <div id="conj-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto pt-2"></div>
+
+          <div id="conj-feedback-box" class="text-xs font-medium min-h-[28px] pt-2"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- TAB 3: CONVERSATIONAL ISLANDS (UI/UX & TRAVEL) + MIC CHECK -->
+    <!-- ========================================================== -->
+    <section id="tab-islands" class="hidden space-y-6">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base font-bold text-[var(--foreground)]">🏝️ 6 "Conversational Islands" (UI/UX Career Networking & Travel)</h2>
+            <p class="text-xs text-[var(--muted-foreground)]">
+              Klik <strong>🔊 Putar</strong> untuk mendengar intonasi Jepang, lalu klik <strong>🎤 Latihan Ucapkan</strong> untuk menguji pelafalan Anda lewat mikrofon!
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <button onclick="toggleIslandRomaji()" id="toggle-romaji-btn" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              👁️ Romaji: ON
+            </button>
+            <button onclick="toggleIslandTranslation()" id="toggle-trans-btn" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              🇮🇩 Arti: ON
+            </button>
+            <button onclick="toggleSlowSpeech()" id="toggle-speed-btn" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              🐢 Kecepatan: Normal (1.0x)
+            </button>
+          </div>
+        </div>
+
+        <!-- ISLAND SELECTOR PILLS -->
+        <div id="island-selector-bar" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2"></div>
+      </div>
+
+      <!-- ACTIVE ISLAND DIALOGUE & SHADOWING DECK -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[var(--border)]">
+          <div>
+            <span id="island-category-tag" class="text-xs font-semibold px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              UI/UX Career & Networking
+            </span>
+            <h3 id="island-title" class="text-lg font-bold text-[var(--foreground)] mt-1"></h3>
+            <p id="island-context" class="text-xs text-[var(--muted-foreground)]"></p>
+          </div>
+          <div class="flex gap-2 shrink-0">
+            <button onclick="playEntireIsland()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
+              ▶️ Putar Semua Dialog
+            </button>
+            <button onclick="markIslandMastered()" id="btn-master-island" class="px-3 py-2 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
+              ⭐ Tandai Hafal (+75 XP)
+            </button>
+          </div>
+        </div>
+
+        <!-- DIALOGUE LINES WITH MIC CHECK -->
+        <div id="island-dialogue-container" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- TAB 4: KANA SPEED-RECALL (UI/UX KATAKANA) & SRS FLASHCARDS -->
+    <!-- ========================================================== -->
+    <section id="tab-kana" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT: KANA SPEED RECALL BLITZ -->
+        <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-[var(--foreground)]">⚡ Kana Speed-Recall Blitz</h2>
+              <p class="text-xs text-[var(--muted-foreground)]">Kuasai Hiragana & Katakana Istilah UI/UX di bawah 2 detik!</p>
+            </div>
+            <div class="flex gap-1 bg-[var(--background)] p-1 rounded-lg border border-[var(--border)]">
+              <button onclick="setKanaDeck('hiragana')" id="kana-deck-hiragana" class="px-2 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">Hiragana</button>
+              <button onclick="setKanaDeck('katakana')" id="kana-deck-katakana" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Katakana (UI/UX!)</button>
+              <button onclick="setKanaDeck('mixed')" id="kana-deck-mixed" class="px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]">Campur</button>
+            </div>
+          </div>
+
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 text-center space-y-4">
+            <div class="flex justify-between items-center text-xs text-[var(--muted-foreground)]">
+              <span id="kana-streak-label">Streak Benar: 0 🔥</span>
+              <span id="kana-accuracy-label">Akurasi: 100%</span>
+            </div>
+
+            <div class="py-4">
+              <div id="kana-char-display" class="text-6xl font-bold text-[var(--foreground)] select-none">あ</div>
+              <div id="kana-hint-word" class="text-xs text-[var(--muted-foreground)] mt-2">Klik pilihan bunyi yang tepat:</div>
+            </div>
+
+            <div id="kana-options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
+            <div id="kana-feedback-msg" class="text-xs font-medium h-5"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: SMART SRS SENTENCE & VOCAB DECK (WITH MIC CHECK) -->
+        <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold text-[var(--foreground)]">🧠 Active Recall SRS Deck (N5–N3 & UI/UX)</h2>
+              <p class="text-xs text-[var(--muted-foreground)]">Ucapkan keras-keras atau tes lewat mikrofon sebelum membuka jawaban!</p>
+            </div>
+            <select id="srs-category-filter" onchange="filterSrsDeck()" class="text-xs px-2.5 py-1.5 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)]">
+              <option value="all">Semua Kartu</option>
+              <option value="ux">UI/UX Designer & Career</option>
+              <option value="grammar">Pola Kalimat & Partikel</option>
+              <option value="travel">Travel & Izakaya</option>
+              <option value="custom">Kartu Anime Saya</option>
+            </select>
+          </div>
+
+          <!-- FLASHCARD BOX -->
+          <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 min-h-[250px] flex flex-col justify-between">
+            <div class="flex justify-between items-center text-xs text-[var(--muted-foreground)]">
+              <span id="srs-card-index">Kartu 1 / 15</span>
+              <div class="flex gap-1.5">
+                <button onclick="startMicCheckForSrs()" id="srs-mic-btn" class="px-2.5 py-1 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80 font-medium">
+                  🎤 Tes Ucapkan
+                </button>
+                <button onclick="speakCurrentSrsCard()" class="px-2.5 py-1 rounded bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:opacity-80">
+                  🔊 Audio
+                </button>
+              </div>
+            </div>
+
+            <div class="my-4 text-center space-y-2">
+              <div class="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">Ucapkan dalam Bahasa Jepang:</div>
+              <div id="srs-front-text" class="text-lg font-bold text-[var(--foreground)]"></div>
+
+              <div id="srs-mic-feedback" class="hidden text-xs p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]"></div>
+
+              <!-- ANSWER REVEAL -->
+              <div id="srs-back-answer" class="hidden pt-3 mt-3 border-t border-[var(--border)] space-y-1">
+                <div id="srs-jp-text" class="text-xl font-bold text-[var(--foreground)]"></div>
+                <div id="srs-romaji-text" class="text-xs font-medium text-[var(--muted-foreground)]"></div>
+                <div id="srs-note-text" class="text-xs text-[var(--muted-foreground)] italic mt-1"></div>
+              </div>
+            </div>
+
+            <!-- SRS CONTROLS -->
+            <div id="srs-reveal-btn-wrap" class="text-center">
+              <button onclick="revealSrsCard()" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
+                Tampilkan Jawaban Jepang
+              </button>
+            </div>
+
+            <div id="srs-rating-btns" class="hidden grid grid-cols-3 gap-2">
+              <button onclick="rateSrsCard('hard')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:opacity-80">
+                😓 Masih Bingung (+5 XP)
+              </button>
+              <button onclick="rateSrsCard('good')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80">
+                👍 Lumayan Lancar (+10 XP)
+              </button>
+              <button onclick="rateSrsCard('easy')" class="py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
+                ⚡ Refleks Cepat <2dtk (+15 XP)
+              </button>
+            </div>
+          </div>
+
+          <!-- ADD ANIME SENTENCE MINING FORM -->
+          <div class="pt-2 border-t border-[var(--border)]">
+            <details class="text-xs">
+              <summary class="cursor-pointer font-semibold text-[var(--foreground)] hover:opacity-80">
+                ➕ Tambah Kalimat Baru dari Anime / Belajar Harian (Sentence Mining)
+              </summary>
+              <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input id="custom-srs-id" type="text" placeholder="Arti Indonesia" class="px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+                <input id="custom-srs-jp" type="text" placeholder="Kalimat Jepang" class="px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+                <div class="flex gap-2">
+                  <input id="custom-srs-romaji" type="text" placeholder="Romaji & Catatan" class="flex-1 px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+                  <button onclick="addCustomSrsCard()" class="px-3 py-2 rounded-lg font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">
+                    Simpan
+                  </button>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- TAB 5: AI SENSEI & VOICE ROLEPLAY (GEMINI FLASH / PRO)     -->
+    <!-- ========================================================== -->
+    <section id="tab-ai" class="hidden space-y-6">
+      <!-- API CONFIGURATION BAR -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base font-bold text-[var(--foreground)]">🤖 AI Sensei & Simulasi Roleplay Interaktif (Gemini Flash / Pro)</h2>
+            <p class="text-xs text-[var(--muted-foreground)]">
+              Default menggunakan <strong>Gemini 2.5 Flash (Gratis & Cepat)</strong>, atau pindah ke <strong>Gemini 2.5 Pro</strong> untuk bedah nuansa N3 & review portofolio UI/UX mendalam. Tanpa API Key pun, <strong>Mode Simulasi Lokal Pintar</strong> tetap aktif 100%!
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <select id="gemini-model-select" onchange="saveGeminiConfig()" class="text-xs px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] font-semibold">
+              <option value="gemini-2.5-flash">⚡ Gemini 2.5 Flash (Gratis / Cepat - Default)</option>
+              <option value="gemini-2.0-flash">⚡ Gemini 2.0 Flash (Gratis / Alternatif)</option>
+              <option value="gemini-2.5-pro">🧠 Gemini 2.5 Pro (Akun Pro / Deep N3 Coach)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center pt-2 border-t border-[var(--border)]">
+          <div class="md:col-span-8 flex gap-2">
+            <input id="gemini-api-key-input" type="password" placeholder="Masukkan Google AI Studio API Key (AIzaSy...) — Opsional, tersimpan aman di browser Anda" class="flex-1 px-3 py-2 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+            <button onclick="saveGeminiConfig()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">
+              Simpan Key
+            </button>
+          </div>
+          <div class="md:col-span-4 text-xs text-[var(--muted-foreground)] md:text-right" id="gemini-status-badge">
+            Status: Mode Simulasi Lokal Pintar Aktif (Masukkan API Key untuk Live Gemini API)
+          </div>
+        </div>
+      </div>
+
+      <!-- ROLEPLAY SCENARIO & CHAT + VOICE SIMULATOR -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- LEFT: SCENARIO SELECTOR & AI GENERATOR TOOLS -->
+        <div class="lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <h3 class="text-sm font-bold text-[var(--foreground)]">🎭 Pilih Lawan Bicara Roleplay:</h3>
+          <div class="space-y-2">
+            <button onclick="setAiScenario('kenji_ux')" id="ai-scen-kenji_ux" class="w-full text-left p-3 rounded-xl border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] text-xs space-y-0.5">
+              <div class="font-bold">🎨 Kenji-san (Lead Product Designer di Tokyo)</div>
+              <div class="opacity-90">Ngobrol santai di acara Spectrum Tokyo Meetup tentang kerjaan UI/UX, Figma, & karir di Jepang.</div>
+            </button>
+            <button onclick="setAiScenario('izakaya')" id="ai-scen-izakaya" class="w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs space-y-0.5">
+              <div class="font-bold">🍻 Sato-san (Warga Lokal di Izakaya Shibuya)</div>
+              <div class="opacity-80">Latihan small talk liburan, pesan makanan, cerita tentang anime & Indonesia.</div>
+            </button>
+            <button onclick="setAiScenario('converter')" id="ai-scen-converter" class="w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs space-y-0.5">
+              <div class="font-bold">🔧 Klinik Kalimat: Anime/Indo → Jepang Natural</div>
+              <div class="opacity-80">Ketik kata-kata lepas yang Anda tahu (campur Indo/Jepang), Sensei akan merangkainya jadi kalimat sopan + bedah partikelnya!</div>
+            </button>
+          </div>
+
+          <div class="pt-3 border-t border-[var(--border)] space-y-2">
+            <div class="text-xs font-bold text-[var(--foreground)]">✨ Generator Soal Baru (AI / Smart Local):</div>
+            <button onclick="generateNewLegoWithAi()" id="btn-gen-lego" class="w-full py-2.5 px-3 rounded-xl text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 text-left">
+              ➕ Generate Soal Sentence Lego UI/UX Baru ke Tab 2
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT: CHAT & VOICE CONVERSATION WINDOW -->
+        <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <div id="ai-chat-history" class="space-y-3 max-h-[380px] overflow-y-auto pr-1">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- INPUT & MICROPHONE SPEAK BAR -->
+          <div class="pt-3 border-t border-[var(--border)] space-y-2">
+            <div class="flex flex-wrap gap-1.5" id="ai-quick-replies">
+              <!-- Quick suggestion chips -->
+            </div>
+            <div class="flex gap-2">
+              <button onclick="startMicForAiChat()" id="ai-mic-btn" title="Bicara dalam bahasa Jepang" class="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 shrink-0">
+                🎤 Bicara (JP)
+              </button>
+              <input id="ai-user-input" type="text" onkeydown="if(event.key==='Enter') sendAiMessage()" placeholder="Ketik atau bicara dalam bahasa Jepang / campur Indonesia..." class="flex-1 px-3.5 py-2.5 rounded-xl bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] text-xs" />
+              <button onclick="sendAiMessage()" id="ai-send-btn" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 shrink-0">
+                Kirim →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // =====================================================
+    // STATE & PERSISTENCE (localStorage)
+    // =====================================================
+    const STORAGE_KEY = 'nihongo_sprint_2027_ux_v2';
+
+    const defaultState = {
+      xp: 0,
+      streak: 1,
+      routineMode: 'weekday',
+      completedDailyQuests: {},
+      completedMilestones: {},
+      completedLegoIds: {},
+      masteredIslands: {},
+      customCards: [],
+      customLegoQuestions: [],
+      geminiApiKey: '',
+      geminiModel: 'gemini-2.5-flash'
+    };
+
+    let appState = loadState();
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return JSON.parse(JSON.stringify(defaultState));
+        return Object.assign(JSON.parse(JSON.stringify(defaultState)), JSON.parse(raw));
+      } catch (e) {
+        return JSON.parse(JSON.stringify(defaultState));
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {}
+      updateHeaderStats();
+    }
+
+    function addXp(amount) {
+      appState.xp = (appState.xp || 0) + amount;
+      saveState();
+    }
+
+    function incrementStreak() {
+      appState.streak = (appState.streak || 1) + 1;
+      addXp(20);
+    }
+
+    function resetAllProgress() {
+      if (confirm('Reset semua progres XP, checklist mingguan, dan kartu kustom?')) {
+        const savedKey = appState.geminiApiKey;
+        const savedModel = appState.geminiModel;
+        appState = JSON.parse(JSON.stringify(defaultState));
+        appState.geminiApiKey = savedKey;
+        appState.geminiModel = savedModel;
+        saveState();
+        renderDailyQuests();
+        renderRoadmap();
+        filterLegoByCategory();
+        renderIslandSelector();
+        renderActiveIsland();
+      }
+    }
+
+    // =====================================================
+    // COUNTDOWN & HEADER METRICS
+    // =====================================================
+    function updateCountdowns() {
+      const now = new Date();
+      const targetJan = new Date('2027-01-30T23:59:59');
+      const targetMay = new Date('2027-05-01T23:59:59');
+
+      const diffJan = Math.max(0, Math.ceil((targetJan - now) / (1000 * 60 * 60 * 24)));
+      const diffMay = Math.max(0, Math.ceil((targetMay - now) / (1000 * 60 * 60 * 24)));
+
+      document.getElementById('countdown-jan').textContent = diffJan + ' Hari';
+      document.getElementById('countdown-may').textContent = diffMay + ' Hari';
+    }
+
+    function updateHeaderStats() {
+      const xp = appState.xp || 0;
+      const level = Math.floor(xp / 200) + 1;
+      const titles = [
+        'Anime Listener',
+        'Katakana UX Explorer',
+        'Sentence Lego Builder',
+        'Polite Switcher (Desu/Masu)',
+        'Daily Conversationalist',
+        'Izakaya Smooth Talker',
+        'Tokyo UI/UX Designer (N3)'
+      ];
+      const rankTitle = titles[Math.min(level - 1, titles.length - 1)];
+
+      document.getElementById('user-xp-display').textContent = `Lv.${level} (${xp} XP)`;
+      document.getElementById('user-rank-title').textContent = rankTitle;
+      document.getElementById('streak-display').textContent = `${appState.streak || 1} Hari`;
+
+      const totalMilestones = roadmapData.length;
+      const doneMilestones = Object.keys(appState.completedMilestones || {}).length;
+      const pct = Math.min(100, Math.round((doneMilestones / totalMilestones) * 100));
+      document.getElementById('overall-progress-label').textContent = `${doneMilestones}/${totalMilestones} Milestone Mingguan (${pct}%)`;
+      document.getElementById('overall-progress-bar').style.width = `${Math.max(5, pct)}%`;
+    }
+
+    // =====================================================
+    // JAPANESE TTS (TEXT-TO-SPEECH) & STT (MICROPHONE CHECK)
+    // =====================================================
+    let slowSpeech = false;
+
+    function toggleSlowSpeech() {
+      slowSpeech = !slowSpeech;
+      const btn = document.getElementById('toggle-speed-btn');
+      btn.textContent = slowSpeech ? '🐢 Kecepatan: Lambat (0.75x)' : '🐢 Kecepatan: Normal (1.0x)';
+    }
+
+    function speakJapanese(text) {
+      if (!('speechSynthesis' in window)) {
+        alert('Browser Anda tidak mendukung fitur Web Speech API TTS.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'ja-JP';
+      utter.rate = slowSpeech ? 0.75 : 0.95;
+
+      const voices = window.speechSynthesis.getVoices();
+      const jpVoice = voices.find(v => v.lang && v.lang.toLowerCase().includes('ja'));
+      if (jpVoice) utter.voice = jpVoice;
+
+      window.speechSynthesis.speak(utter);
+    }
+
+    function testJapaneseVoice() {
+      speakJapanese('こんにちは！私はインドネシアのUI・UXデザイナーです。五月に日本へ行きます！');
+    }
+
+    // Normalize Japanese text for similarity comparison
+    function normalizeJp(str) {
+      return (str || '')
+        .replace(/[、。！？!?,.\s「」『』・]/g, '')
+        .toLowerCase();
+    }
+
+    // Calculate character-overlap similarity percentage
+    function calcJpSimilarity(target, spoken) {
+      const t = normalizeJp(target);
+      const s = normalizeJp(spoken);
+      if (!t || !s) return 0;
+      if (t === s) return 100;
+
+      // Bigram Dice coefficient for resilient Japanese matching
+      const getBigrams = (txt) => {
+        const bg = [];
+        for (let i = 0; i < txt.length - 1; i++) bg.push(txt.slice(i, i + 2));
+        return bg.length ? bg : [txt];
+      };
+      const tBg = getBigrams(t);
+      const sBg = getBigrams(s);
+      let matches = 0;
+      const used = new Array(sBg.length).fill(false);
+
+      for (let i = 0; i < tBg.length; i++) {
+        for (let j = 0; j < sBg.length; j++) {
+          if (!used[j] && tBg[i] === sBg[j]) {
+            matches++;
+            used[j] = true;
+            break;
+          }
+        }
+      }
+      return Math.min(100, Math.round((2 * matches * 100) / (tBg.length + sBg.length)));
+    }
+
+    function runSpeechRecognition(onResultCallback, buttonEl) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) {
+        const manual = prompt('Browser ini belum mengizinkan Web Speech API mikrofon secara langsung. Ketik kalimat yang baru saja Anda ucapkan untuk dicek:');
+        if (manual) onResultCallback(manual, true);
+        return;
+      }
+
+      const rec = new SpeechRec();
+      rec.lang = 'ja-JP';
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+
+      const origText = buttonEl ? buttonEl.textContent : '';
+      if (buttonEl) {
+        buttonEl.classList.add('mic-recording');
+        buttonEl.textContent = '🎙️ Mendengarkan (Bicara Jepang)...';
+      }
+
+      rec.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        if (buttonEl) {
+          buttonEl.classList.remove('mic-recording');
+          buttonEl.textContent = origText;
+        }
+        onResultCallback(transcript, false);
+      };
+
+      rec.onerror = (err) => {
+        if (buttonEl) {
+          buttonEl.classList.remove('mic-recording');
+          buttonEl.textContent = origText;
+        }
+        if (err.error === 'not-allowed' || err.error === 'service-not-allowed') {
+          const manual = prompt('Izin mikrofon diblokir oleh iframe/browser. Ucapkan kalimatnya keras-keras, lalu ketik/paste di sini untuk cek skor:');
+          if (manual) onResultCallback(manual, true);
+        } else {
+          alert('Tidak terdengar suara (' + err.error + '). Pastikan Anda berbicara dalam bahasa Jepang dekat mikrofon.');
+        }
+      };
+
+      rec.onend = () => {
+        if (buttonEl) {
+          buttonEl.classList.remove('mic-recording');
+          buttonEl.textContent = origText;
+        }
+      };
+
+      try {
+        rec.start();
+      } catch (e) {
+        if (buttonEl) {
+          buttonEl.classList.remove('mic-recording');
+          buttonEl.textContent = origText;
+        }
+      }
+    }
+
+    // =====================================================
+    // TAB NAVIGATION
+    // =====================================================
+    function switchTab(tabId) {
+      const tabs = ['dashboard', 'lego', 'islands', 'kana', 'ai'];
+      tabs.forEach(t => {
+        const sec = document.getElementById('tab-' + t);
+        const btn = document.getElementById('tab-btn-' + t);
+        if (t === tabId) {
+          sec.classList.remove('hidden');
+          btn.classList.add('tab-btn-active');
+          btn.classList.remove('text-[var(--muted-foreground)]');
+        } else {
+          sec.classList.add('hidden');
+          btn.classList.remove('tab-btn-active');
+          btn.classList.add('text-[var(--muted-foreground)]');
+        }
+      });
+    }
+
+    // =====================================================
+    // TAB 1: FLEXIBLE DAILY ROUTINE & POMODORO TIMER
+    // =====================================================
+    const dailyQuestsData = {
+      weekday: [
+        {
+          id: 'wd_1',
+          time: '5 Menit',
+          title: 'Katakana UI/UX Blitz & 10 Kartu SRS',
+          desc: 'Buka Tab 4 saat pagi. Latih kecepatan baca Katakana Desain (プロトタイプ, リサーチ, 画面) & 10 kartu SRS.',
+          xp: 25,
+          actionTab: 'kana'
+        },
+        {
+          id: 'wd_2',
+          time: '10 Menit',
+          title: 'Sentence Lego & Drill Konjugasi (3–5 Soal)',
+          desc: 'Buka Tab 2. Susun kalimat UI/UX & travel serta latih refleks konjugasi kata kerja anime ke bentuk sopan.',
+          xp: 35,
+          actionTab: 'lego'
+        },
+        {
+          id: 'wd_3',
+          time: '10 Menit',
+          title: 'Shadowing + 🎤 Mic Check 1 Conversational Island',
+          desc: 'Buka Tab 3. Putar audio dialog UI/UX Networking atau Izakaya, lalu klik tombol 🎤 Latihan Ucapkan.',
+          xp: 40,
+          actionTab: 'islands'
+        },
+        {
+          id: 'wd_4',
+          time: 'Bonus',
+          title: 'Ngobrol 3 Balasan dengan AI Sensei (Kenji-san)',
+          desc: 'Buka Tab 5. Ceritakan apa yang Anda desain hari ini di Figma kepada Kenji-san dalam bahasa Jepang!',
+          xp: 30,
+          actionTab: 'ai'
+        }
+      ],
+      weekend: [
+        {
+          id: 'we_1',
+          time: '15 Menit',
+          title: 'Deep SRS + Tambah 3 Kalimat dari Anime',
+          desc: 'Review seluruh dek UI/UX & Travel di Tab 4, lalu masukkan minimal 3 kalimat baru dari anime yang Anda tonton.',
+          xp: 40,
+          actionTab: 'kana'
+        },
+        {
+          id: 'we_2',
+          time: '25 Menit',
+          title: 'Selesaikan 10 Soal Sentence Lego + 15 Streak Konjugasi',
+          desc: 'Buka Tab 2. Kuasai perubahan bentuk ~たい (ingin), ~ています (profesi), dan Potential Form (bisa).',
+          xp: 50,
+          actionTab: 'lego'
+        },
+        {
+          id: 'we_3',
+          time: '25 Menit',
+          title: 'Blind Island Simulation (Arti OFF + Mic Check)',
+          desc: 'Buka Tab 3, matikan Arti & Romaji, lalu ucapkan seluruh baris dialog Anda ke mikrofon dengan akurasi >80%.',
+          xp: 60,
+          actionTab: 'islands'
+        },
+        {
+          id: 'we_4',
+          time: '25 Menit',
+          title: 'Live Roleplay dengan Gemini AI Sensei (Portfolio Pitch)',
+          desc: 'Buka Tab 5. Latih menjelaskan 1 proyek UI/UX Anda (masalah user -> solusi desain) dalam bahasa Jepang sopan.',
+          xp: 50,
+          actionTab: 'ai'
+        }
+      ]
+    };
+
+    let timerInterval = null;
+    let timerSecondsLeft = 25 * 60;
+    let timerRunning = false;
+
+    function setRoutineMode(mode) {
+      appState.routineMode = mode;
+      saveState();
+
+      const btnWd = document.getElementById('mode-btn-weekday');
+      const btnWe = document.getElementById('mode-btn-weekend');
+      if (mode === 'weekday') {
+        btnWd.className = 'px-2.5 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
+        btnWe.className = 'px-2.5 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]';
+        document.getElementById('timer-mode-label').textContent = 'Sprint Fokus Hari Kerja (25 Menit)';
+        timerSecondsLeft = 25 * 60;
+      } else {
+        btnWe.className = 'px-2.5 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
+        btnWd.className = 'px-2.5 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]';
+        document.getElementById('timer-mode-label').textContent = 'Deep Dive Akhir Pekan (45x2 Menit)';
+        timerSecondsLeft = 45 * 60;
+      }
+      stopSprintTimer();
+      updateTimerDisplay();
+      renderDailyQuests();
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerSecondsLeft / 60).toString().padStart(2, '0');
+      const s = (timerSecondsLeft % 60).toString().padStart(2, '0');
+      document.getElementById('sprint-timer-display').textContent = `${m}:${s}`;
+    }
+
+    function toggleSprintTimer() {
+      const btn = document.getElementById('timer-start-btn');
+      if (timerRunning) {
+        stopSprintTimer();
+      } else {
+        timerRunning = true;
+        btn.textContent = 'Jeda';
+        timerInterval = setInterval(() => {
+          if (timerSecondsLeft > 0) {
+            timerSecondsLeft--;
+            updateTimerDisplay();
+          } else {
+            stopSprintTimer();
+            addXp(50);
+            alert('Sprint selesai! +50 XP ditambahkan.');
+          }
+        }, 1000);
+      }
+    }
+
+    function stopSprintTimer() {
+      timerRunning = false;
+      if (timerInterval) clearInterval(timerInterval);
+      const btn = document.getElementById('timer-start-btn');
+      if (btn) btn.textContent = 'Mulai Sprint';
+    }
+
+    function resetSprintTimer() {
+      stopSprintTimer();
+      timerSecondsLeft = appState.routineMode === 'weekday' ? 25 * 60 : 45 * 60;
+      updateTimerDisplay();
+    }
+
+    function renderDailyQuests() {
+      const mode = appState.routineMode || 'weekday';
+      const quests = dailyQuestsData[mode];
+      const container = document.getElementById('daily-quests-container');
+      let doneCount = 0;
+
+      container.innerHTML = quests.map(q => {
+        const isDone = !!appState.completedDailyQuests[q.id];
+        if (isDone) doneCount++;
+        return `
+          <div class="p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] flex items-start gap-3 transition-all ${isDone ? 'opacity-65' : ''}">
+            <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleDailyQuest('${q.id}', ${q.xp})" class="mt-1 h-4 w-4 rounded cursor-pointer" />
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-wrap items-center justify-between gap-1">
+                <span class="text-xs font-bold text-[var(--foreground)] ${isDone ? 'line-through' : ''}">${q.title}</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)] font-medium">${q.time} • +${q.xp} XP</span>
+              </div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1 leading-relaxed">${q.desc}</p>
+              ${q.actionTab ? `<button onclick="switchTab('${q.actionTab}')" class="mt-1.5 text-xs font-semibold text-[var(--foreground)] underline hover:opacity-80">Buka Modul →</button>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('daily-quest-status').textContent = `${doneCount}/${quests.length} Quest Harian Selesai`;
+    }
+
+    function toggleDailyQuest(id, xp) {
+      if (appState.completedDailyQuests[id]) {
+        delete appState.completedDailyQuests[id];
+        appState.xp = Math.max(0, (appState.xp || 0) - xp);
+      } else {
+        appState.completedDailyQuests[id] = true;
+        appState.xp = (appState.xp || 0) + xp;
+      }
+      saveState();
+      renderDailyQuests();
+    }
+
+    function resetDailyQuests() {
+      appState.completedDailyQuests = {};
+      saveState();
+      renderDailyQuests();
+    }
+
+    // =====================================================
+    // ROADMAP MILESTONES (8 NOV 2026 - MEI 2027)
+    // =====================================================
+    let activeRoadmapPhase = 'phase1';
+
+    const roadmapData = [
+      {
+        id: 'm1',
+        phase: 'phase1',
+        week: 'Minggu 1 (8–15 Nov 2026)',
+        title: 'Recall Cepat Hiragana/Katakana UI/UX & 7 Partikel Inti',
+        kpi: 'Baca Kana < 2 detik/huruf (termasuk istilah Figma/UX) + paham struktur S-O-V dengan は, が, を, に, で, と, へ.'
+      },
+      {
+        id: 'm2',
+        phase: 'phase1',
+        week: 'Minggu 2–3 (16–29 Nov 2026)',
+        title: 'Mesin Konjugasi Sopan (~ます) & Kata Sifat UX (使いやすい)',
+        kpi: 'Otomatis mengubah kata kerja anime ke ~ます, ~ません, ~ました, ~たいです + kata sifat ~い / ~な.'
+      },
+      {
+        id: 'm3',
+        phase: 'phase1',
+        week: 'Minggu 4–5 (30 Nov–13 Des 2026)',
+        title: 'Konektor Kalimat (Te-form, ~から, ~けど) & Pulau #1-#2',
+        kpi: 'Lancar memperkenalkan diri sebagai UI/UX Designer (Pulau #1) & pesan makan di restoran/konbini.'
+      },
+      {
+        id: 'm4',
+        phase: 'phase1',
+        week: 'Minggu 6–7 (14–27 Des 2026)',
+        title: 'Potential Form ("Bisa melakukan") & Pengalaman (~たことがある)',
+        kpi: 'Mampu menceritakan tools desain yang dikuasai, riset user, dan pengalaman kerja tanpa terjemahan di kepala.'
+      },
+      {
+        id: 'm5',
+        phase: 'phase1',
+        week: 'Minggu 8–10 (28 Des 2026–17 Jan 2027)',
+        title: 'Pengandaian (~たら/~ば), Memberi/Menerima & Pulau #3-#5',
+        kpi: 'Kuasai navigasi Shinkansen/stasiun, kondisi darurat, dan basa-basi akrab di Izakaya.'
+      },
+      {
+        id: 'm6',
+        phase: 'phase1',
+        week: 'Minggu 11–12 (18–30 Jan 2027) — MILESTONE 1',
+        title: 'Boss Fight: Simulasi Percakapan 15 Menit Non-Stop (Mic >80%)',
+        kpi: 'Lulus semua 6 Conversational Islands dengan mode Arti OFF & siap ngobrol daily conversation.'
+      },
+      {
+        id: 'm7',
+        phase: 'phase2',
+        week: 'Februari 2027 (Bulan 4)',
+        title: 'Jembatan N4 ke N3: Opini Desain, Nuansa & Kanji UI/UX',
+        kpi: 'Kuasai pola N3 (~について, ~きっかけ, ~ために) & baca Kanji UI umum (画面, 課題, 改善, 検索, 設定, 登録).'
+      },
+      {
+        id: 'm8',
+        phase: 'phase2',
+        week: 'Maret 2027 (Bulan 5)',
+        title: 'Portfolio Walkthrough dalam Bahasa Jepang & Networking',
+        kpi: 'Lancar mempresentasikan 2 studi kasus UI/UX (masalah user -> riset -> hasil desain) & tukar kontak LINE/LinkedIn.'
+      },
+      {
+        id: 'm9',
+        phase: 'phase2',
+        week: 'April – Mei 2027 (Bulan 6)',
+        title: 'Real-Speed Listening & Siap Hadir di Meetup Desain Tokyo!',
+        kpi: 'Terbiasa dengan kecepatan bicara native di Spectrum Tokyo / Friends of Figma Tokyo & berangkat liburan Mei 2027!'
+      }
+    ];
+
+    function filterRoadmap(phase) {
+      activeRoadmapPhase = phase;
+      const b1 = document.getElementById('roadmap-btn-phase1');
+      const b2 = document.getElementById('roadmap-btn-phase2');
+      if (phase === 'phase1') {
+        b1.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
+        b2.className = 'px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]';
+      } else {
+        b2.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
+        b1.className = 'px-2.5 py-1 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]';
+      }
+      renderRoadmap();
+    }
+
+    function renderRoadmap() {
+      const container = document.getElementById('roadmap-list-container');
+      const items = roadmapData.filter(m => m.phase === activeRoadmapPhase);
+
+      container.innerHTML = items.map(item => {
+        const done = !!appState.completedMilestones[item.id];
+        return `
+          <div class="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--background)] flex items-start gap-3">
+            <input type="checkbox" ${done ? 'checked' : ''} onchange="toggleMilestone('${item.id}')" class="mt-1 h-4 w-4 rounded cursor-pointer" />
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center justify-between gap-1">
+                <span class="text-xs font-semibold text-[var(--muted-foreground)]">${item.week}</span>
+                <span class="text-xs font-medium px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)]">${done ? '✅ Tercapai' : '+100 XP'}</span>
+              </div>
+              <div class="text-sm font-bold text-[var(--foreground)] mt-0.5 ${done ? 'line-through opacity-70' : ''}">${item.title}</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1"><strong>Target KPI:</strong> ${item.kpi}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleMilestone(id) {
+      if (appState.completedMilestones[id]) {
+        delete appState.completedMilestones[id];
+        appState.xp = Math.max(0, (appState.xp || 0) - 100);
+      } else {
+        appState.completedMilestones[id] = true;
+        appState.xp = (appState.xp || 0) + 100;
+      }
+      saveState();
+      renderRoadmap();
+    }
+
+    // =====================================================
+    // TAB 2: 20 SENTENCE LEGO QUESTIONS + CONJUGATION DRILL
+    // =====================================================
+    function toggleGrammarCheatSheet() {
+      document.getElementById('grammar-cheatsheet').classList.toggle('hidden');
+    }
+
+    function setGrammarSubMode(mode) {
+      const legoView = document.getElementById('lego-subview-main');
+      const conjView = document.getElementById('conj-subview-main');
+      const bLego = document.getElementById('submode-btn-lego');
+      const bConj = document.getElementById('submode-btn-conj');
+
+      if (mode === 'lego') {
+        legoView.classList.remove('hidden');
+        conjView.classList.add('hidden');
+        bLego.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
+        bConj.className = 'px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]';
+      } else {
+        legoView.classList.add('hidden');
+        conjView.classList.remove('hidden');
+        bConj.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
+        bLego.className = 'px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]';
+        nextConjDrill();
+      }
+    }
+
+    const baseLegoQuestions = [
+      // --- LEVEL 1: N5 CORE ---
+      {
+        id: 'lego_1',
+        cat: 'n5',
+        level: 'N5 Core • Partikel Waktu & Tujuan',
+        promptId: 'Saya akan pergi ke Jepang pada bulan Mei.',
+        animeClue: 'Di anime kasual: 「五月に日本へ行くぞ」(Gogatsu ni Nihon e iku zo). Untuk dunia nyata, gunakan 私は (watashi wa) dan akhiran sopan 行きます (ikimasu).',
+        correctBlocks: ['私は', '五月に', '日本へ', '行きます'],
+        distractors: ['を', '行く', 'で'],
+        romaji: 'Watashi wa gogatsu ni Nihon e ikimasu.',
+        explanation: 'Urutan baku Jepang: [Topik は] + [Waktu に] + [Tujuan へ/に] + [Kata Kerja ます].'
+      },
+      {
+        id: 'lego_2',
+        cat: 'ux',
+        level: 'N5/N4 UI/UX • Lokasi Kerja (で) & Peran (として)',
+        promptId: 'Saya bekerja sebagai UI/UX Designer di Indonesia.',
+        animeClue: 'Kosakata: インドネシア (Indonesia), UI/UXデザイナー (UI/UX Designer), 働く (hataraku = bekerja). Gunakan ~ています untuk profesi saat ini.',
+        correctBlocks: ['インドネシアで', 'UI/UXデザイナーとして', '働いています'],
+        distractors: ['に', 'を', '働くぞ'],
+        romaji: 'Indoneshia de UI/UX dezainaa toshite hataraite imasu.',
+        explanation: 'Partikel で (de) menandai tempat beraktivitas, sedangkan として (toshite) berarti "sebagai".'
+      },
+      {
+        id: 'lego_3',
+        cat: 'ux',
+        level: 'N5 UI/UX • Partikel Alat/Tools (で) & Objek (を)',
+        promptId: 'Setiap hari saya menggunakan Figma untuk mendesain aplikasi.',
+        animeClue: 'Kosakata: 毎日 (mainichi = setiap hari), 使う (tsukau = memakai) → 使って (menggunakan), アプリ (aplikasi), デザインする → デザインしています.',
+        correctBlocks: ['毎日', 'Figmaを', '使って、', 'アプリを', 'デザインしています'],
+        distractors: ['Figmaに', 'アプリが', '使うだ'],
+        romaji: 'Mainichi Figma o tsukatte, apuri o dezain shite imasu.',
+        explanation: 'Menggabungkan 2 aksi berurutan dengan Te-form: Figmaを使って (menggunakan Figma, lalu...) アプリをデザインしています (mendesain aplikasi).'
+      },
+      {
+        id: 'lego_4',
+        cat: 'n5',
+        level: 'N5 Travel • Request Sopan di Restoran',
+        promptId: 'Permisi, boleh minta menu bahasa Jepang dan air putih?',
+        animeClue: 'Jangan gunakan 「水をくれ」(Mizu o kure - kasar ala anime!). Gunakan お願いします (onegaishimasu).',
+        correctBlocks: ['すみません、', '日本語のメニューと', 'お水を', 'お願いします'],
+        distractors: ['くれ', 'で', 'が'],
+        romaji: 'Sumimasen, Nihongo no menyuu to omizu o onegaishimasu.',
+        explanation: 'Partikel と (to) menghubungkan dua kata benda ("menu bahasa Jepang DAN air").'
+      },
+      {
+        id: 'lego_5',
+        cat: 'n5',
+        level: 'N5 Travel • Menanyakan Lokasi / Peron Stasiun',
+        promptId: 'Permisi, Shinkansen tujuan Kyoto berangkat dari peron nomor berapa?',
+        animeClue: 'Kosakata: 京都行き (Kyouto-yuki = tujuan Kyoto), 何番線 (nanbansen = peron nomor berapa), 出る (deru = berangkat) → 出ますか.',
+        correctBlocks: ['すみません、', '京都行きの新幹線は', '何番線から', '出ますか？'],
+        distractors: ['何番線に', '出るか', 'を'],
+        romaji: 'Sumimasen, Kyouto-yuki no Shinkansen wa nanbansen kara demasu ka?',
+        explanation: 'から (kara) berarti "dari" (berangkat dari peron nomor berapa).'
+      },
+      {
+        id: 'lego_6',
+        cat: 'n5',
+        level: 'N5 Core • Mengajak Seseorang dengan Sopan (~ませんか)',
+        promptId: 'Kalau ada waktu akhir pekan ini, maukah minum kopi bersama?',
+        animeClue: 'Mengajak secara sopan menggunakan bentuk negatif tanya: 飲みませんか (nomimasen ka = maukah minum bersama?).',
+        correctBlocks: ['今週末、', 'もし時間があったら、', '一緒に', 'コーヒーを', '飲みませんか？'],
+        distractors: ['飲むか', 'コーヒーに', 'で'],
+        romaji: 'Konshuumatsu, moshi jikan ga attara, issho ni koohii o nomimasen ka?',
+        explanation: '一緒に (issho ni = bersama-sama) + [Objek] を + [Kata Kerja ~ませんか] adalah rumus ajakan paling sopan dan hangat.'
+      },
+
+      // --- LEVEL 2: N4 CONJUGATION & CONNECTORS ---
+      {
+        id: 'lego_7',
+        cat: 'n4',
+        level: 'N4 Core • Menyambung Kalimat dengan Alasan (~から)',
+        promptId: 'Karena dari kecil sering menonton anime, saya sedikit paham bahasa Jepang.',
+        animeClue: 'Kata sifat/kemampuan "paham" (わかります) memakai partikel が (ga), bukan を.',
+        correctBlocks: ['子供の時から', 'アニメを', 'よく見ていたから、', '日本語が', '少しわかります'],
+        distractors: ['日本語を', 'わかるだ'],
+        romaji: 'Kodomo no toki kara anime o yoku mite ita kara, Nihongo ga sukoshi wakarimasu.',
+        explanation: 'Untuk わかります (paham) dan 話せます (bisa bicara), bahasa Jepang selalu menggunakan partikel が.'
+      },
+      {
+        id: 'lego_8',
+        cat: 'n4',
+        level: 'N4 Core • Kontras (~けど) & Nominalisasi (のは)',
+        promptId: 'Saya tahu banyak kosakata, tetapi merangkai kalimat masih sulit.',
+        animeClue: 'Kosakata: 単語 (tango = kosakata), 知っている (tahu), 文を作る (membuat kalimat), 難しい (sulit).',
+        correctBlocks: ['単語は', 'たくさん知っていますけど、', '文を作るのは', 'まだ難しいです'],
+        distractors: ['難しいだ', 'に', 'から'],
+        romaji: 'Tango wa takusan shitte imasu kedo, bun o tsukuru no wa mada muzukashii desu.',
+        explanation: 'Menambahkan のは (no wa) setelah kata kerja kamus (文を作る) mengubahnya menjadi kata benda ("Hal membuat kalimat itu...").'
+      },
+      {
+        id: 'lego_9',
+        cat: 'n4',
+        level: 'N4 Core • Menceritakan Pengalaman (~たことがあります)',
+        promptId: 'Saya belum pernah pergi ke Jepang, jadi saya sangat menantikannya.',
+        animeClue: 'Pola belum pernah: 行ったことがありません (itta koto ga arimasen). Menantikan: 楽しみにしています (tanoshimi ni shite imasu).',
+        correctBlocks: ['まだ日本へ', '行ったことがありませんから、', 'とても', '楽しみにしています'],
+        distractors: ['行くことがない', '楽しみにするぞ'],
+        romaji: 'Mada Nihon e itta koto ga arimasen kara, totemo tanoshimi ni shite imasu.',
+        explanation: 'とても楽しみにしています (Saya sangat menantikannya!) adalah frasa wajib yang sangat disukai orang Jepang.'
+      },
+      {
+        id: 'lego_10',
+        cat: 'n4',
+        level: 'N4 Core • Kemampuan / Potential Form (話せます)',
+        promptId: 'Bahasa Jepang percakapan sehari-hari bisa saya bicarakan, tetapi Kanji yang sulit masih belajar.',
+        animeClue: '話す (hanasu) → 話せます (hanasemasu = bisa bicara). 日常会話 (nichijou kaiwa = percakapan sehari-hari).',
+        correctBlocks: ['日常会話は', '話せますが、', '難しい漢字は', 'まだ勉強中です'],
+        distractors: ['話しますが', '漢字を', '勉強だ'],
+        romaji: 'Nichijou kaiwa wa hanasemasu ga, muzukashii kanji wa mada benkyou-chuu desu.',
+        explanation: '勉強中です (benkyou-chuu desu = sedang dalam proses belajar) terdengar sangat ringkas dan natural!'
+      },
+      {
+        id: 'lego_11',
+        cat: 'n4',
+        level: 'N4 Travel • Meminta Rekomendasi Warga Lokal',
+        promptId: 'Saya ingin mencoba pergi ke tempat yang sering dikunjungi warga lokal.',
+        animeClue: '地元の人 (jimoto no hito = warga lokal), よく行く場所 (tempat yang sering dikunjungi), 行ってみたいです (ingin mencoba pergi).',
+        correctBlocks: ['地元の人が', 'よく行く場所に', '行ってみたいです'],
+        distractors: ['地元の人を', '行くたいです', 'で'],
+        romaji: 'Jimoto no hito ga yoku iku basho ni itte mitai desu.',
+        explanation: '~てみたいです (Te-form + mitai desu) berarti "ingin mencoba melakukan X".'
+      },
+      {
+        id: 'lego_12',
+        cat: 'n4',
+        level: 'N4 Travel • Meminta Lawan Bicara Pelan-Pelan (~てもらえますか)',
+        promptId: 'Maaf, bolehkah Anda berbicara sedikit lebih pelan?',
+        animeClue: 'もう少し (mou sukoshi = sedikit lagi), ゆっくり (pelan-pelan), 話してもらえますか (bolehkah minta tolong bicara).',
+        correctBlocks: ['すみません、', 'もう少し', 'ゆっくり', '話してもらえますか？'],
+        distractors: ['話せろ', 'ゆっくりに', 'を'],
+        romaji: 'Sumimasen, mou sukoshi yukkuri hanashite moraemasu ka?',
+        explanation: '~てもらえますか adalah cara meminta bantuan paling halus dalam percakapan sehari-hari.'
+      },
+
+      // --- LEVEL 3: N3 & UI/UX DESIGNER TRACK ---
+      {
+        id: 'lego_13',
+        cat: 'ux',
+        level: 'N3 UI/UX • Kata Sifat Emas UX (使いやすい & わかりやすい)',
+        promptId: 'Saya selalu berusaha membuat desain yang mudah dipakai dan mudah dipahami oleh user.',
+        animeClue: '使いやすい (tsukaiyasui = mudah dipakai), わかりやすい (mudah dipahami), ~ようにしています (selalu berusaha agar... - N3).',
+        correctBlocks: ['ユーザーにとって', '使いやすくて', 'わかりやすいデザインを', '作るようにしています'],
+        distractors: ['使いやすいだ', '作るたい', 'に'],
+        romaji: 'Yuuzaa ni totte tsukaiyasukute wakariyasui dezain o tsukuru youni shite imasu.',
+        explanation: 'ユーザーにとって (bagi user) + [Kata Kerja Kamus] ようにしています (berusaha secara konsisten melakukan X) adalah pola N3 kelas atas untuk wawancara UI/UX!'
+      },
+      {
+        id: 'lego_14',
+        cat: 'ux',
+        level: 'N3 UI/UX • Menyelesaikan Masalah User (課題を解決する)',
+        promptId: 'Melalui riset user, saya menemukan masalah lalu memperbaiki desain layar.',
+        animeClue: 'ユーザーリサーチ (User Research), 課題を見つける (menemukan masalah/pain point), 画面 (gamen = layar), 改善する (kaizen suru = memperbaiki).',
+        correctBlocks: ['ユーザーリサーチで', '課題を見つけて、', '画面のデザインを', '改善しました'],
+        distractors: ['課題を', '改善するだ', 'に'],
+        romaji: 'Yuuzaa risaachi de kadai o mitsukete, gamen no dezain o kaizen shimashita.',
+        explanation: 'Kalimat ini langsung menjelaskan proses kerja End-to-End Product Designer (Research -> Problem Finding -> UI Improvement)!'
+      },
+      {
+        id: 'lego_15',
+        cat: 'ux',
+        level: 'N3 UI/UX • Kolaborasi dengan Engineer & PM',
+        promptId: 'Saya bekerja sambil berdiskusi erat dengan Product Manager dan Engineer.',
+        animeClue: 'PMやエンジニアと (bersama PM dan Engineer), 相談しながら (soudan shinagara = sambil berdiskusi), 進める (susumeru = menjalankan pekerjaan).',
+        correctBlocks: ['PMやエンジニアと', '相談しながら、', 'プロジェクトを', '進めています'],
+        distractors: ['相談して', 'プロジェクトに', '進めるだ'],
+        romaji: 'PM ya enjinia to soudan shinagara, purojekuto o susumete imasu.',
+        explanation: '~ながら (nagara) berarti melakukan dua hal secara bersamaan ("sambil berdiskusi, menjalankan proyek").'
+      },
+      {
+        id: 'lego_16',
+        cat: 'ux',
+        level: 'N3 UI/UX • Menjelaskan Design System & Efisiensi',
+        promptId: 'Dengan membuat Design System di Figma, kecepatan pengembangan tim menjadi lebih cepat.',
+        animeClue: 'デザインシステムを作ることで (dengan membuat Design System), 開発のスピード (kecepatan development), 速くなりました (menjadi lebih cepat).',
+        correctBlocks: ['Figmaで', 'デザインシステムを', '作ったことで、', '開発のスピードが', '速くなりました'],
+        distractors: ['速いだった', 'スピードを', 'に'],
+        romaji: 'Figma de dezain shisutemu o tsukutta koto de, kaihatsu no supiido ga hayaku narimashita.',
+        explanation: '~たことで (karena/dengan telah melakukan X) adalah pola N3 untuk menjelaskan dampak (impact) hasil kerja Anda!'
+      },
+      {
+        id: 'lego_17',
+        cat: 'ux',
+        level: 'N3 UI/UX • Meminta Feedback Portofolio dengan Sopan',
+        promptId: 'Ini adalah portofolio desain saya. Kalau berkenan, bolehkah saya meminta pendapat Anda?',
+        animeClue: 'ポートフォリオ (portofolio), ご意見 (go-iken = pendapat Anda), いただけますか (bolehkah saya menerima - bentuk sopan Kenjougo).',
+        correctBlocks: ['こちらは', '私のポートフォリオです。', 'よかったら、', 'ご意見を', 'いただけますか？'],
+        distractors: ['意見をくれ', '私だ', 'で'],
+        romaji: 'Kochira wa watashi no pootoforio desu. Yokattara, go-iken o itadakemasu ka?',
+        explanation: 'Saat bertemu Senior Designer Jepang di meetup, tunjukkan portofolio di HP/iPad Anda dan ucapkan kalimat ini!'
+      },
+      {
+        id: 'lego_18',
+        cat: 'ux',
+        level: 'N3 Networking • Menjelaskan Alasan Tertarik Jepang (~きっかけ)',
+        promptId: 'Awalnya saya suka Jepang karena anime, tetapi sekarang saya tertarik pada desain produk Jepang.',
+        animeClue: 'アニメがきっかけで (bermula dari anime), 日本のプロダクトデザイン (desain produk Jepang), 興味があります (tertarik).',
+        correctBlocks: ['最初は', 'アニメがきっかけで', '日本が好きになりましたが、', '今は日本の', 'プロダクトデザインに', '興味があります'],
+        distractors: ['デザインを', 'きっかけだ'],
+        romaji: 'Saisho wa anime ga kikkake de Nihon ga suki ni narimashita ga, ima wa Nihon no purodakuto dezain ni kyoumi ga arimasu.',
+        explanation: '[X] がきっかけで (bermula/dipicu oleh X) adalah pola N3 paling natural saat ditanya kenapa ingin ke Jepang.'
+      },
+      {
+        id: 'lego_19',
+        cat: 'ux',
+        level: 'N4/N3 Networking • Mengajak Tukar Kontak (LINE / LinkedIn)',
+        promptId: 'Kalau berkenan, bolehkah kita bertukar LINE atau LinkedIn?',
+        animeClue: '交換する (koukan suru = bertukar) → 交換してもいいですか (bolehkah bertukar?).',
+        correctBlocks: ['もしよかったら、', 'LINEか', 'LinkedInを', '交換してもいいですか？'],
+        distractors: ['交換しろ', 'に', 'で'],
+        romaji: 'Moshi yokattara, LINE ka LinkedIn o koukan shitemo ii desu ka?',
+        explanation: 'Kalimat wajib untuk menutup obrolan di meetup Tokyo agar Anda mendapatkan koneksi kerja nyata!'
+      },
+      {
+        id: 'lego_20',
+        cat: 'ux',
+        level: 'N3 Career • Menyatakan Target Karir Masa Depan',
+        promptId: 'Di masa depan, saya ingin bekerja sebagai UI/UX Designer di perusahaan teknologi di Jepang.',
+        animeClue: '将来は (shourai wa = di masa depan), 日本のテック企業で (di perusahaan tech Jepang), 働きたいと思っています (berpikir ingin bekerja).',
+        correctBlocks: ['将来は', '日本のテック企業で', 'UI/UXデザイナーとして', '働きたいと', '思っています'],
+        distractors: ['企業に', '働くぞ', 'を'],
+        romaji: 'Shourai wa Nihon no tekku kigyou de UI/UX dezainaa toshite hatarakitai to omotte imasu.',
+        explanation: '~たいと思っています (berpikir ingin melakukan X) menunjukkan niat masa depan yang matang dan serius dibanding sekadar ~たいです.'
+      }
+    ];
+
+    let filteredLegoList = [];
+    let currentLegoIndex = 0;
+    let currentSelectedBlocks = [];
+    let currentBankBlocks = [];
+
+    function getAllLegoQuestions() {
+      return [...baseLegoQuestions, ...(appState.customLegoQuestions || [])];
+    }
+
+    function filterLegoByCategory() {
+      const cat = document.getElementById('lego-category-select').value;
+      const all = getAllLegoQuestions();
+      filteredLegoList = cat === 'all' ? all : all.filter(q => q.cat === cat);
+      if (filteredLegoList.length === 0) filteredLegoList = all;
+      currentLegoIndex = 0;
+      initLegoQuestion();
+    }
+
+    function initLegoQuestion() {
+      if (filteredLegoList.length === 0) filteredLegoList = getAllLegoQuestions();
+      const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
+      currentSelectedBlocks = [];
+      const combined = [...q.correctBlocks, ...q.distractors];
+      currentBankBlocks = combined
+        .map((text, idx) => ({ id: 'blk_' + idx, text }))
+        .sort(() => Math.random() - 0.5);
+
+      document.getElementById('lego-feedback-box').classList.add('hidden');
+      document.getElementById('lego-mic-result').classList.add('hidden');
+      renderLegoQuestion();
+    }
+
+    function renderLegoQuestion() {
+      const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
+      const isCompleted = !!appState.completedLegoIds[q.id];
+
+      document.getElementById('lego-level-badge').textContent = `Soal ${(currentLegoIndex % filteredLegoList.length) + 1} / ${filteredLegoList.length} • ${q.level} ${isCompleted ? '✅' : ''}`;
+      document.getElementById('lego-prompt-id').textContent = `"${q.promptId}"`;
+      document.getElementById('lego-anime-clue').innerHTML = q.animeClue;
+
+      const ansZone = document.getElementById('lego-answer-zone');
+      if (currentSelectedBlocks.length === 0) {
+        ansZone.innerHTML = `<span class="text-xs text-[var(--muted-foreground)] italic">Klik potongan kata di bawah sesuai urutan S - Waktu - Tempat - O - Kata Kerja...</span>`;
+      } else {
+        ansZone.innerHTML = currentSelectedBlocks.map((b, i) => `
+          <button onclick="removeBlockFromAnswer(${i})" class="lego-chip px-3 py-1.5 rounded-lg text-sm font-bold bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm">
+            ${b.text}
+          </button>
+        `).join('');
+      }
+
+      const bankZone = document.getElementById('lego-bank-zone');
+      bankZone.innerHTML = currentBankBlocks.map((b, i) => {
+        const used = currentSelectedBlocks.some(sel => sel.id === b.id);
+        return `
+          <button onclick="selectBlockFromBank(${i})" ${used ? 'disabled' : ''} class="lego-chip px-3.5 py-2 rounded-xl text-sm font-semibold border border-[var(--border)] ${used ? 'opacity-30 cursor-not-allowed bg-[var(--background)]' : 'bg-[var(--background)] text-[var(--foreground)] hover:border-[var(--foreground)]'}">
+            ${b.text}
+          </button>
+        `;
+      }).join('');
+
+      const allTotal = getAllLegoQuestions().length;
+      const doneCount = Object.keys(appState.completedLegoIds || {}).length;
+      document.getElementById('lego-score-counter').textContent = `Total Skor Lego: ${doneCount} / ${allTotal} Selesai`;
+    }
+
+    function selectBlockFromBank(bankIdx) {
+      const block = currentBankBlocks[bankIdx];
+      if (!currentSelectedBlocks.some(b => b.id === block.id)) {
+        currentSelectedBlocks.push(block);
+        renderLegoQuestion();
+      }
+    }
+
+    function removeBlockFromAnswer(ansIdx) {
+      currentSelectedBlocks.splice(ansIdx, 1);
+      renderLegoQuestion();
+    }
+
+    function clearLegoAnswer() {
+      currentSelectedBlocks = [];
+      document.getElementById('lego-feedback-box').classList.add('hidden');
+      document.getElementById('lego-mic-result').classList.add('hidden');
+      renderLegoQuestion();
+    }
+
+    function checkLegoAnswer() {
+      const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
+      const userJoined = currentSelectedBlocks.map(b => b.text).join('');
+      const targetJoined = q.correctBlocks.join('');
+      const fb = document.getElementById('lego-feedback-box');
+      fb.classList.remove('hidden');
+
+      if (userJoined === targetJoined) {
+        if (!appState.completedLegoIds[q.id]) {
+          appState.completedLegoIds[q.id] = true;
+          addXp(30);
+        }
+        speakJapanese(targetJoined);
+        fb.innerHTML = `
+          <div class="font-bold text-sm text-[var(--foreground)]">🎉 Tepat Sekali! (+30 XP) — Sekarang coba klik "🎤 Ucapkan ke Mic"!</div>
+          <div class="text-sm font-bold mt-1">${q.correctBlocks.join(' ')}</div>
+          <div class="text-[var(--muted-foreground)] font-medium">${q.romaji}</div>
+          <div class="pt-1 text-[var(--muted-foreground)]"><strong>Penjelasan Struktur:</strong> ${q.explanation}</div>
+        `;
+        renderLegoQuestion();
+      } else {
+        fb.innerHTML = `
+          <div class="font-bold text-sm text-[var(--foreground)]">🤔 Belum Tepat — Perhatikan Urutan Partikel & Kata Kerja di Ujung</div>
+          <div class="text-[var(--muted-foreground)] mt-1">Susunan yang benar: <strong class="text-[var(--foreground)]">${q.correctBlocks.join(' • ')}</strong></div>
+          <div class="text-[var(--muted-foreground)]">${q.romaji}</div>
+          <div class="pt-1 text-[var(--muted-foreground)]">${q.explanation}</div>
+        `;
+      }
+    }
+
+    function speakCurrentLegoAnswer() {
+      const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
+      speakJapanese(q.correctBlocks.join(''));
+    }
+
+    function startMicCheckForLego() {
+      const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
+      const targetJp = q.correctBlocks.join('');
+      const btn = document.getElementById('lego-mic-btn');
+      const resBox = document.getElementById('lego-mic-result');
+
+      runSpeechRecognition((transcript) => {
+        const score = calcJpSimilarity(targetJp, transcript);
+        resBox.classList.remove('hidden');
+        if (score >= 70) {
+          addXp(25);
+          resBox.innerHTML = `
+            <div class="font-bold text-[var(--foreground)]">🎤 Skor Pelafalan: ${score}% — Mantap! (+25 XP)</div>
+            <div class="text-[var(--muted-foreground)]">Suara Anda terdengar: <strong class="text-[var(--foreground)]">「${transcript}」</strong></div>
+            <div class="text-[var(--muted-foreground)]">Target kalimat: 「${targetJp}」 (${q.romaji})</div>
+          `;
+        } else {
+          resBox.innerHTML = `
+            <div class="font-bold text-[var(--foreground)]">🎤 Skor Pelafalan: ${score}% — Coba Dengarkan Audio & Ucapkan Lagi!</div>
+            <div class="text-[var(--muted-foreground)]">Terdeteksi: <strong class="text-[var(--foreground)]">「${transcript}」</strong></div>
+            <div class="text-[var(--muted-foreground)]">Target seharusnya: <strong class="text-[var(--foreground)]">「${targetJp}」</strong> (${q.romaji})</div>
+          `;
+        }
+      }, btn);
+    }
+
+    function prevLegoQuestion() {
+      currentLegoIndex = (currentLegoIndex - 1 + filteredLegoList.length) % filteredLegoList.length;
+      initLegoQuestion();
+    }
+
+    function nextLegoQuestion() {
+      currentLegoIndex = (currentLegoIndex + 1) % filteredLegoList.length;
+      initLegoQuestion();
+    }
+
+    // =====================================================
+    // CONJUGATION REFLEX DRILL ENGINE
+    // =====================================================
+    const conjDrills = [
+      {
+        targetForm: 'Bentuk Ingin Sopan (~たいです)',
+        baseVerb: '作る (tsukuru — membuat / mendesain)',
+        context: 'Saya ingin membuat desain yang mudah dipakai (使いやすいデザインを...)',
+        correct: '作りたいです (tsukuritai desu)',
+        options: ['作りたいです (tsukuritai desu)', '作るたいです (tsukurutai desu)', '作ってたいです (tsukuttetai desu)', '作らないです (tsukuranai desu)'],
+        rule: 'U-verb berakhiran る (tsukuru): ubah ru -> ri + たいです = 作りたいです.'
+      },
+      {
+        targetForm: 'Bentuk Bisa / Potential Form (N4)',
+        baseVerb: '話す (hanasu — berbicara)',
+        context: 'Saya bisa berbicara bahasa Jepang sedikit (日本語が少し...)',
+        correct: '話せます (hanasemasu)',
+        options: ['話せます (hanasemasu)', '話します (hanashimasu)', '話したいです (hanashitai desu)', '話して (hanashite)'],
+        rule: 'U-verb: ubah vokal -u (su) menjadi -e (se) + ます → 話せます (bisa bicara).'
+      },
+      {
+        targetForm: 'Bentuk Sedang / Status Rutin (~ています)',
+        baseVerb: '使う (tsukau — menggunakan)',
+        context: 'Saya sehari-hari menggunakan Figma (普段はFigmaを...)',
+        correct: '使っています (tsukatte imasu)',
+        options: ['使っています (tsukatte imasu)', '使いますて (tsukaimasute)', '使うています (tsukaute imasu)', '使いたいです (tsukaitai desu)'],
+        rule: 'Kata kerja berakhiran う, つ, る berubah menjadi ~って (使って + います).'
+      },
+      {
+        targetForm: 'Bentuk Tolong / Request Sopan (~てください)',
+        baseVerb: '見る (miru — melihat)',
+        context: 'Tolong lihat portofolio saya ini (このポートフォリオを...)',
+        correct: '見てください (mite kudasai)',
+        options: ['見てください (mite kudasai)', '見ってください (mitte kudasai)', '見りてください (mirite kudasai)', '見ますください (mimasu kudasai)'],
+        rule: '見る adalah Ru-verb (Ichidan): langsung buang る + てください = 見てください.'
+      },
+      {
+        targetForm: 'Bentuk Lampau Sopan (~ました)',
+        baseVerb: '行く (iku — pergi)',
+        context: 'Kemarin saya pergi ke meetup desain di Shibuya (昨日、渋谷のミートアップへ...)',
+        correct: '行きました (ikimashita)',
+        options: ['行きました (ikimashita)', '行ったです (itta desu)', '行きますた (ikimasuta)', '行きませんでした (ikimasen deshita)'],
+        rule: '行く → 行きます (sekarang) → 行きました (lampau sopan).'
+      },
+      {
+        targetForm: 'Bentuk Bisa / Potential Form (N4)',
+        baseVerb: '使う (tsukau — menggunakan)',
+        context: 'Saya juga bisa menggunakan komponen Design System (デザインシステムも...)',
+        correct: '使えます (tsukaemasu)',
+        options: ['使えます (tsukaemasu)', '使います (tsukaimasu)', '使われます (tsukawaremasu)', '使って (tsukatte)'],
+        rule: '使う (tsukau): ubah u -> e + ます = 使えます (tsukaemasu = bisa dipakai/menggunakan).'
+      },
+      {
+        targetForm: 'Bentuk Bolehkah Saya (~てもいいですか)',
+        baseVerb: '聞く (kiku — bertanya / mendengar)',
+        context: 'Bolehkah saya bertanya sedikit tentang budaya kerja di sini? (少し...)',
+        correct: '聞いてもいいですか (kiitemo ii desu ka)',
+        options: ['聞いてもいいですか (kiitemo ii desu ka)', '聞くてもいいですか (kikutemo ii desu ka)', '聞きていいですか (kikite ii desu ka)', '聞きますか (kikimasu ka)'],
+        rule: 'Kata kerja berakhiran く (kiku) berubah menjadi ~いて (聞いて + もいいですか).'
+      },
+      {
+        targetForm: 'Kata Sifat ~い → Menjadi (Perubahanの状態 ~くなりました)',
+        baseVerb: '使いやすい (tsukaiyasui — mudah digunakan)',
+        context: 'Setelah diperbaiki, aplikasinya menjadi mudah digunakan (改善して、アプリが...)',
+        correct: '使いやすくなりました (tsukaiyasuku narimashita)',
+        options: ['使いやすくなりました (tsukaiyasuku narimashita)', '使いやすいになりました (tsukaiyasui ni narimashita)', '使いやすくてなりました', '使いやすいでした'],
+        rule: 'Kata sifat ~い: ganti い di ujung dengan く + なりました (menjadi...).'
+      }
+    ];
+
+    let currentConjIdx = 0;
+    let conjStreak = 0;
+
+    function nextConjDrill() {
+      const d = conjDrills[currentConjIdx % conjDrills.length];
+      document.getElementById('conj-target-badge').textContent = `Ubah ke: ${d.targetForm}`;
+      document.getElementById('conj-base-verb').textContent = d.baseVerb;
+      document.getElementById('conj-context-sentence').textContent = `Konteks: "${d.context}"`;
+      document.getElementById('conj-feedback-box').textContent = '';
+
+      const shuffled = [...d.options].sort(() => Math.random() - 0.5);
+      document.getElementById('conj-options-grid').innerHTML = shuffled.map(opt => `
+        <button onclick="answerConjDrill('${opt.replace(/'/g, "\\'")}')" class="p-3 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] font-bold text-xs md:text-sm hover:border-[var(--foreground)] transition-all">
+          ${opt}
+        </button>
+      `).join('');
+    }
+
+    function answerConjDrill(selected) {
+      const d = conjDrills[currentConjIdx % conjDrills.length];
+      const fb = document.getElementById('conj-feedback-box');
+      if (selected === d.correct) {
+        conjStreak++;
+        addXp(15);
+        const jpOnly = d.correct.split('(')[0].trim();
+        speakJapanese(jpOnly);
+        fb.innerHTML = `<span class="text-[var(--foreground)] font-bold">✅ Benar! (+15 XP)</span> — ${d.rule}`;
+        document.getElementById('conj-streak-badge').textContent = `Streak Konjugasi: ${conjStreak} 🔥`;
+        currentConjIdx++;
+        setTimeout(nextConjDrill, 1400);
+      } else {
+        conjStreak = 0;
+        document.getElementById('conj-streak-badge').textContent = `Streak Konjugasi: 0 🔥`;
+        fb.innerHTML = `<span class="text-[var(--foreground)] font-bold">❌ Kurang tepat!</span> Jawaban yang benar: <strong>${d.correct}</strong> (${d.rule})`;
+      }
+    }
+
+    // =====================================================
+    // TAB 3: CONVERSATIONAL ISLANDS (UI/UX & TRAVEL) + MIC
+    // =====================================================
+    let showIslandRomaji = true;
+    let showIslandTranslation = true;
+    let currentIslandIdx = 0;
+
+    const islandsData = [
+      {
+        id: 'isl_ux_1',
+        tag: '🎨 UI/UX Career #1',
+        title: 'Pulau 1: Perkenalan Diri sebagai UI/UX Designer',
+        context: 'Saat berkenalan di acara desain/tech Tokyo (Spectrum Tokyo, Friends of Figma, atau bar/izakaya) dan menceritakan pekerjaan Anda.',
+        lines: [
+          {
+            speaker: 'Anda',
+            jp: 'はじめまして！インドネシアから来ました。五月に日本へ旅行に来ました。',
+            romaji: 'Hajimemashite! Indoneshia kara kimashita. Gogatsu ni Nihon e ryokou ni kimashita.',
+            id: 'Salam kenal! Saya datang dari Indonesia. Bulan Mei ini saya datang berlibur ke Jepang.',
+            note: 'Gunakan [Negara] から来ました (datang dari...) dan 旅行に来ました (datang untuk liburan).'
+          },
+          {
+            speaker: 'Designer Jepang',
+            jp: 'えっ、インドネシアからですか！日本語がお上手ですね。お仕事は何をされているんですか？',
+            romaji: 'E, Indoneshia kara desu ka! Nihongo ga ojouzu desu ne. Oshigoto wa nani o sarete iru n desu ka?',
+            id: 'Wah, dari Indonesia! Bahasa Jepangnya jago ya. Pekerjaan Anda di bidang apa?',
+            note: '何をされているんですか adalah bentuk sopan yang paling sering dipakai untuk menanyakan profesi.'
+          },
+          {
+            speaker: 'Anda',
+            jp: 'いいえ、まだまだです！子供の時からアニメが好きで、少しずつ勉強しました。仕事はUI・UXデザイナーをしています。',
+            romaji: 'Iie, mada mada desu! Kodomo no toki kara anime ga suki de, sukoshizutsu benkyou shimashita. Shigoto wa UI/UX dezainaa o shite imasu.',
+            id: 'Ah tidak, masih belum seberapa! Sejak kecil saya suka anime, jadi belajar sedikit demi sedikit. Pekerjaan saya adalah UI/UX Designer.',
+            note: 'UI・UXデザイナーをしています (bekerja sebagai UI/UX Designer).'
+          },
+          {
+            speaker: 'Anda',
+            jp: '普段はモバイルアプリやウェブのプロダクトデザインを担当しています。将来は日本で働きたいと思っています！',
+            romaji: 'Fudan wa mobairu apuri ya webu no purodakuto dezain o tantou shite imasu. Shourai wa Nihon de hatarakitai to omotte imasu!',
+            id: 'Sehari-hari saya menangani product design untuk aplikasi mobile dan web. Ke depannya saya berpikir ingin bekerja di Jepang!',
+            note: '担当しています (tantou shite imasu = menangani/bertanggung jawab atas) membuat Anda terdengar sangat profesional!'
+          }
+        ]
+      },
+      {
+        id: 'isl_ux_2',
+        tag: '🎨 UI/UX Career #2',
+        title: 'Pulau 2: Ngobrol Proses Desain, Figma & Tukar Kontak',
+        context: 'Melanjutkan obrolan dengan Product Designer / Engineer Jepang di meetup dan meminta review/bertukar LINE & LinkedIn.',
+        lines: [
+          {
+            speaker: 'Designer Jepang',
+            jp: 'へえ、UI・UXデザイナーなんですね！普段はどんなツールやデザインプロセスで仕事をしていますか？',
+            romaji: 'Hee, UI/UX dezainaa nan desu ne! Fudan wa donna tsuuru ya dezain purosesu de shigoto o shite imasu ka?',
+            id: 'Wah, seorang UI/UX Designer rupanya! Biasanya bekerja dengan tools atau proses desain seperti apa?',
+            note: 'どんなツール (tools seperti apa), デザインプロセス (proses desain).'
+          },
+          {
+            speaker: 'Anda',
+            jp: '主にFigmaを使って、ユーザーリサーチからプロトタイプ作成、デザインシステムの構築まで行っています。',
+            romaji: 'Omoni Figma o tsukatte, yuuzaa risaachi kara purototaipu sakusei, dezain shisutemu no kouchiku made okonatte imasu.',
+            id: 'Utamanya saya menggunakan Figma, mulai dari user research, pembuatan prototipe, hingga membangun design system.',
+            note: 'から...まで (mulai dari X sampai Y), 行っています (okonatte imasu = melakukan/menjalankan secara profesional).'
+          },
+          {
+            speaker: 'Anda',
+            jp: 'ユーザーにとって使いやすくて、わかりやすい画面を作ることを一番大切にしています。',
+            romaji: 'Yuuzaa ni totte tsukaiyasukute, wakariyasui gamen o tsukuru koto o ichiban taisetsu ni shite imasu.',
+            id: 'Hal yang paling saya utamakan adalah membuat tampilan layar yang mudah dipakai dan mudah dipahami bagi user.',
+            note: '一番大切にしています (paling saya utamakan/jaga) — kalimat kunci untuk menunjukkan filosofi desain Anda!'
+          },
+          {
+            speaker: 'Anda',
+            jp: 'もしよかったら、LINEかLinkedInを交換してもいいですか？私のポートフォリオもぜひ見ていただきたいです！',
+            romaji: 'Moshi yokattara, LINE ka LinkedIn o koukan shitemo ii desu ka? Watashi no pootoforio mo zehi mite itadakitai desu!',
+            id: 'Kalau berkenan, bolehkah kita tukar LINE atau LinkedIn? Saya juga ingin sekali Anda melihat portofolio saya!',
+            note: '見ていただきたいです (ingin meminta kesediaan Anda melihat - sangat sopan dan berkesan).'
+          }
+        ]
+      },
+      {
+        id: 'isl_3',
+        tag: '🍻 Social & Izakaya',
+        title: 'Pulau 3: Ngobrol Akrab di Izakaya & Tanya Rekomendasi Lokal',
+        context: 'Duduk di counter bar/izakaya lokal—tempat terbaik di Jepang untuk mendapat teman lokal secara organik.',
+        lines: [
+          {
+            speaker: 'Anda',
+            jp: 'すみません、生ビールを一つと、おすすめの焼き鳥を三本お願いします！',
+            romaji: 'Sumimasen, nama biiru o hitotsu to, osusume no yakitori o sanbon onegaishimasu!',
+            id: 'Permisi, minta draft beer satu dan yakitori rekomendasinya tiga tusuk ya! (Bisa ganti dengan ウーロン茶 / Oolong tea)',
+            note: 'おすすめ (osusume = rekomendasi) adalah kata ajaib di seluruh restoran Jepang.'
+          },
+          {
+            speaker: 'Warga Lokal',
+            jp: '一人旅ですか？日本のどこへ行く予定ですか？',
+            romaji: 'Hitoritabi desu ka? Nihon no doko e iku yotei desu ka?',
+            id: 'Liburan sendirian? Rencananya mau pergi ke mana saja di Jepang?',
+            note: '一人旅 (hitoritabi = solo travel), 予定 (yotei = rencana/jadwal).'
+          },
+          {
+            speaker: 'Anda',
+            jp: '今回は東京と京都へ行く予定ですが、地元の人がよく行く場所やデザインの展示にも行ってみたいです。おすすめはありますか？',
+            romaji: 'Konkai wa Toukyou to Kyouto e iku yotei desu ga, jimoto no hito ga yoku iku basho ya dezain no tenji nimo itte mitai desu. Osusume wa arimasu ka?',
+            id: 'Kali ini rencananya ke Tokyo dan Kyoto, tapi saya ingin coba ke tempat favorit warga lokal atau pameran desain juga. Apakah ada rekomendasi?',
+            note: 'デザインの展示 (dezain no tenji = pameran desain, seperti 21_21 DESIGN SIGHT di Roppongi!).'
+          }
+        ]
+      },
+      {
+        id: 'isl_4',
+        tag: '🍜 Daily Survival',
+        title: 'Pulau 4: Konbini, Restoran & Pembayaran IC Card',
+        context: 'Transaksi cepat di 7-Eleven/FamilyMart/Lawson dan restoran ramen/sushi tanpa bingung saat kasir bertanya cepat.',
+        lines: [
+          {
+            speaker: 'Staf Konbini',
+            jp: 'お弁当は温めますか？レジ袋はご利用ですか？',
+            romaji: 'Obentou wa atatamemasu ka? Rejibukuro wa goriyou desu ka?',
+            id: 'Apakah bentonya mau dipanaskan? Apakah perlu kantong plastik?',
+            note: '温めます (atatamemasu = memanaskan), レジ袋 (kantong plastik).'
+          },
+          {
+            speaker: 'Anda',
+            jp: 'はい、温めてください。袋は大丈夫です。支払いはSuicaでお願いします。',
+            romaji: 'Hai, atatamete kudasai. Fukuro wa daijoubu desu. Shiharai wa Suica de onegaishimasu.',
+            id: 'Ya, tolong panaskan. Kantongnya tidak usah (daijoubu). Pembayarannya pakai Suica ya.',
+            note: '大丈夫です (daijoubu desu) adalah cara paling sopan & natural untuk menolak kantong/struk.'
+          },
+          {
+            speaker: 'Anda',
+            jp: 'すみません、お会計をお願いします。別々で払ってもいいですか？',
+            romaji: 'Sumimasen, okaikei o onegaishimasu. Betsubetsu de harattemo ii desu ka?',
+            id: 'Permisi, minta bill-nya. Bolehkah kami membayar terpisah/masing-masing?',
+            note: 'お会計 (bill/pembayaran), 別々で (betsubetsu de = bayar terpisah).'
+          }
+        ]
+      },
+      {
+        id: 'isl_5',
+        tag: '🚅 Transit & Emergency',
+        title: 'Pulau 5: Navigasi Stasiun Shinkansen & Tanya Arah',
+        context: 'Saat berada di stasiun besar seperti Tokyo/Shinjuku/Shibuya atau membutuhkan bantuan petugas stasiun.',
+        lines: [
+          {
+            speaker: 'Anda',
+            jp: 'すみません、京都行きの新幹線は何番線から出ますか？',
+            romaji: 'Sumimasen, Kyouto-yuki no Shinkansen wa nanbansen kara demasu ka?',
+            id: 'Permisi, Shinkansen tujuan Kyoto berangkat dari peron nomor berapa?',
+            note: '[Tujuan]-行き (tujuan ke...), 何番線 (nanbansen = peron nomor berapa).'
+          },
+          {
+            speaker: 'Petugas Stasiun',
+            jp: '京都行きは十四番線ですよ。あちらのエスカレーターを上ってください。',
+            romaji: 'Kyouto-yuki wa juuyon-bansen desu yo. Achira no esukareetaa o agatte kudasai.',
+            id: 'Tujuan Kyoto di peron 14 ya. Silakan naik eskalator yang di sebelah sana.',
+            note: '上ってください (agatte kudasai = silakan naik).'
+          },
+          {
+            speaker: 'Anda',
+            jp: 'ありがとうございます！あと、この電車は渋谷に止まりますか？',
+            romaji: 'Arigatou gozaimasu! Ato, kono densha wa Shibuya ni tomarimasu ka?',
+            id: 'Terima kasih banyak! Lalu, apakah kereta ini berhenti di Shibuya?',
+            note: '[Stasiun] に止まりますか (Apakah berhenti di stasiun X?).'
+          }
+        ]
+      },
+      {
+        id: 'isl_6',
+        tag: '🚀 N3 Design Coffee Chat',
+        title: 'Pulau 6: Coffee Chat / Wawancara Santai UI/UX di Jepang',
+        context: 'Ketika kenalan Designer/Recruiter di Tokyo mengajak ngobrol lebih serius soal peluang kerja UI/UX di Jepang.',
+        lines: [
+          {
+            speaker: 'Design Manager Jepang',
+            jp: 'どうして日本でUI・UXデザイナーとして働きたいと思ったんですか？きっかけは何ですか？',
+            romaji: 'Doushite Nihon de UI/UX dezainaa toshite hatarakitai to omotta n desu ka? Kikkake wa nan desu ka?',
+            id: 'Kenapa Anda berpikir ingin bekerja sebagai UI/UX Designer di Jepang? Apa pemicu awalnya (kikkake)?',
+            note: 'きっかけ (kikkake = pemicu awal/alasan mula) selalu ditanyakan dalam wawancara di Jepang!'
+          },
+          {
+            speaker: 'Anda',
+            jp: '最初はアニメがきっかけで日本が好きになりましたが、今は日本の丁寧なものづくりやデザイン文化に強い魅力を感じています。',
+            romaji: 'Saisho wa anime ga kikkake de Nihon ga suki ni narimashita ga, ima wa Nihon no teinei na monozukuri ya dezain bunka ni tsuyoi miryoku o kanjite imasu.',
+            id: 'Awalnya saya suka Jepang karena anime, tetapi sekarang saya sangat tertarik dengan budaya desain dan filosofi "monozukuri" (kerajinan/pembuatan produk yang teliti) di Jepang.',
+            note: '丁寧なものづくり (teinei na monozukuri = pembuatan produk yang penuh perhatian pada detail) adalah kata kunci yang membuat interviewer Jepang langsung terkesan!'
+          },
+          {
+            speaker: 'Anda',
+            jp: 'ユーザーの課題を解決するデザインで、日本のプロダクトチームに貢献できるようになりたいです。',
+            romaji: 'Yuuzaa no kadai o kaiketsu suru dezain de, Nihon no purodakuto chiimu ni kouken dekiru youni naritai desu.',
+            id: 'Dengan desain yang menyelesaikan masalah user, saya ingin bisa berkontribusi pada tim produk di Jepang.',
+            note: 'ユーザーの課題を解決する (menyelesaikan masalah user) + 貢献できるようになりたい (ingin bisa berkontribusi).'
+          }
+        ]
+      }
+    ];
+
+    function toggleIslandRomaji() {
+      showIslandRomaji = !showIslandRomaji;
+      document.getElementById('toggle-romaji-btn').textContent = showIslandRomaji ? '👁️ Romaji: ON' : '🙈 Romaji: OFF';
+      renderActiveIsland();
+    }
+
+    function toggleIslandTranslation() {
+      showIslandTranslation = !showIslandTranslation;
+      document.getElementById('toggle-trans-btn').textContent = showIslandTranslation ? '🇮🇩 Arti: ON' : '🔥 Arti: OFF (Mode Ujian)';
+      renderActiveIsland();
+    }
+
+    function renderIslandSelector() {
+      const bar = document.getElementById('island-selector-bar');
+      bar.innerHTML = islandsData.map((isl, idx) => {
+        const isActive = idx === currentIslandIdx;
+        const isMastered = !!appState.masteredIslands[isl.id];
+        return `
+          <button onclick="selectIsland(${idx})" class="text-left p-3 rounded-xl border transition-all ${isActive ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]' : 'bg-[var(--background)] text-[var(--foreground)] border-[var(--border)] hover:opacity-90'}">
+            <div class="flex items-center justify-between text-xs opacity-85 mb-0.5">
+              <span>${isl.tag}</span>
+              <span>${isMastered ? '⭐ Hafal' : ''}</span>
+            </div>
+            <div class="text-xs font-bold leading-snug">${isl.title}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectIsland(idx) {
+      currentIslandIdx = idx;
+      renderIslandSelector();
+      renderActiveIsland();
+    }
+
+    function renderActiveIsland() {
+      const isl = islandsData[currentIslandIdx];
+      document.getElementById('island-category-tag').textContent = isl.tag;
+      document.getElementById('island-title').textContent = isl.title;
+      document.getElementById('island-context').textContent = isl.context;
+
+      const isMastered = !!appState.masteredIslands[isl.id];
+      document.getElementById('btn-master-island').textContent = isMastered ? '⭐ Sudah Dikuasai' : '⭐ Tandai Hafal (+75 XP)';
+
+      const container = document.getElementById('island-dialogue-container');
+      container.innerHTML = isl.lines.map((line, lIdx) => {
+        const isUser = line.speaker === 'Anda';
+        return `
+          <div class="p-4 rounded-xl border border-[var(--border)] ${isUser ? 'bg-[var(--background)]' : 'bg-[var(--card)]'} space-y-1.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-bold px-2 py-0.5 rounded ${isUser ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]'}">
+                ${isUser ? '🗣️ Anda (Shadowing & Mic Check)' : '👤 ' + line.speaker}
+              </span>
+              <div class="flex items-center gap-1.5">
+                <button onclick="speakIslandLine(${currentIslandIdx}, ${lIdx})" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80 font-medium">
+                  🔊 Putar
+                </button>
+                <button onclick="micCheckIslandLine(${currentIslandIdx}, ${lIdx})" id="isl-mic-btn-${lIdx}" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:opacity-80 font-semibold">
+                  🎤 Latihan Ucapkan
+                </button>
+              </div>
+            </div>
+            <div class="text-base md:text-lg font-bold text-[var(--foreground)] leading-relaxed pt-1">
+              ${line.jp}
+            </div>
+            ${showIslandRomaji ? `<div class="text-xs font-medium text-[var(--muted-foreground)]">${line.romaji}</div>` : ''}
+            <div id="isl-mic-res-${lIdx}" class="hidden text-xs p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)]"></div>
+            ${showIslandTranslation ? `
+              <div class="text-xs text-[var(--foreground)] pt-1 border-t border-[var(--border)] mt-1">
+                <strong>Arti:</strong> "${line.id}"
+              </div>
+              <div class="text-xs text-[var(--muted-foreground)] italic">
+                💡 <strong>Bedah Pola:</strong> ${line.note}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function speakIslandLine(islIdx, lineIdx) {
+      speakJapanese(islandsData[islIdx].lines[lineIdx].jp);
+    }
+
+    function micCheckIslandLine(islIdx, lineIdx) {
+      const line = islandsData[islIdx].lines[lineIdx];
+      const btn = document.getElementById(`isl-mic-btn-${lineIdx}`);
+      const resEl = document.getElementById(`isl-mic-res-${lineIdx}`);
+
+      runSpeechRecognition((transcript) => {
+        const score = calcJpSimilarity(line.jp, transcript);
+        resEl.classList.remove('hidden');
+        if (score >= 70) {
+          addXp(20);
+          resEl.innerHTML = `<span class="font-bold">🎉 Akurasi Lafal: ${score}% (+20 XP)</span> — Terdengar: 「${transcript}」`;
+        } else {
+          resEl.innerHTML = `<span class="font-bold">🎤 Akurasi Lafal: ${score}%</span> — Terdeteksi: 「${transcript}」. Dengarkan tombol 🔊 lalu coba tirukan ritmenya lagi!`;
+        }
+      }, btn);
+    }
+
+    function playEntireIsland() {
+      const isl = islandsData[currentIslandIdx];
+      speakJapanese(isl.lines.map(l => l.jp).join('。 '));
+    }
+
+    function markIslandMastered() {
+      const isl = islandsData[currentIslandIdx];
+      if (!appState.masteredIslands[isl.id]) {
+        appState.masteredIslands[isl.id] = true;
+        addXp(75);
+      } else {
+        delete appState.masteredIslands[isl.id];
+      }
+      saveState();
+      renderIslandSelector();
+      renderActiveIsland();
+    }
+
+    // =====================================================
+    // TAB 4: KANA SPEED-RECALL (UI/UX EDITION) & SRS DECK
+    // =====================================================
+    const kanaData = {
+      hiragana: [
+        { char: 'あ', romaji: 'a', hint: 'あにめ (Anime)' },
+        { char: 'い', romaji: 'i', hint: 'いく (Iku - Pergi)' },
+        { char: 'う', romaji: 'u', hint: 'うまい (Umai - Enak)' },
+        { char: 'え', romaji: 'e', hint: 'えき (Eki - Stasiun)' },
+        { char: 'お', romaji: 'o', hint: 'おれ (Ore - Aku)' },
+        { char: 'か', romaji: 'ka', hint: 'かだい (Kadai - Masalah UX)' },
+        { char: 'き', romaji: 'ki', hint: 'きのう (Kinou - Kemarin)' },
+        { char: 'く', romaji: 'ku', hint: 'くるま (Kuruma - Mobil)' },
+        { char: 'け', romaji: 'ke', hint: 'けど (Kedo - Tapi)' },
+        { char: 'こ', romaji: 'ko', hint: 'これ (Kore - Ini)' },
+        { char: 'さ', romaji: 'sa', hint: 'さくら (Sakura)' },
+        { char: 'し', romaji: 'shi', hint: 'しごと (Shigoto - Kerja)' },
+        { char: 'す', romaji: 'su', hint: 'すき (Suki - Suka)' },
+        { char: 'せ', romaji: 'se', hint: 'せってい (Settei - Settings UI)' },
+        { char: 'そ', romaji: 'so', hint: 'それ (Sore - Itu)' },
+        { char: 'た', romaji: 'ta', hint: 'たべる (Taberu - Makan)' },
+        { char: 'ち', romaji: 'chi', hint: 'ちかい (Chikai - Dekat)' },
+        { char: 'つ', romaji: 'tsu', hint: 'つかいやすい (Tsukaiyasui - Good UX!)' },
+        { char: 'て', romaji: 'te', hint: 'ていねい (Teinei - Teliti/Sopan)' },
+        { char: 'と', romaji: 'to', hint: 'ともだち (Tomodachi)' },
+        { char: 'な', romaji: 'na', hint: 'なに (Nani - Apa)' },
+        { char: 'に', romaji: 'ni', hint: 'にほん (Nihon - Jepang)' },
+        { char: 'ぬ', romaji: 'nu', hint: 'いぬ (Inu - Anjing)' },
+        { char: 'ね', romaji: 'ne', hint: 'ねこ (Neko - Kucing)' },
+        { char: 'の', romaji: 'no', hint: 'のむ (Nomu - Minum)' },
+        { char: 'は', romaji: 'ha', hint: 'はなす (Hanasu - Bicara)' },
+        { char: 'ひ', romaji: 'hi', hint: 'ひと (Hito - Orang)' },
+        { char: 'ふ', romaji: 'fu', hint: 'ふだん (Fudan - Sehari-hari)' },
+        { char: 'へ', romaji: 'he', hint: 'へや (Heya - Kamar)' },
+        { char: 'ほ', romaji: 'ho', hint: 'ほんとう (Hontou - Benar)' },
+        { char: 'ま', romaji: 'ma', hint: 'まだ (Mada - Masih)' },
+        { char: 'み', romaji: 'mi', hint: 'みる (Miru - Melihat)' },
+        { char: 'む', romaji: 'mu', hint: 'むずかしい (Muzukashii - Sulit)' },
+        { char: 'め', romaji: 'me', hint: 'がめん (Gamen - Screen UI)' },
+        { char: 'も', romaji: 'mo', hint: 'ものづくり (Monozukuri - Craftsmanship)' },
+        { char: 'や', romaji: 'ya', hint: 'やすい (Yasui - Mudah/Murah)' },
+        { char: 'ゆ', romaji: 'yu', hint: 'ゆめ (Yume - Mimpi)' },
+        { char: 'よ', romaji: 'yo', hint: 'よく (Yoku - Sering)' },
+        { char: 'ら', romaji: 'ra', hint: 'らいねん (Rainen - Tahun Depan)' },
+        { char: 'り', romaji: 'ri', hint: 'りょこう (Ryokou - Liburan)' },
+        { char: 'る', romaji: 'ru', hint: 'つくる (Tsukuru - Membuat)' },
+        { char: 'れ', romaji: 're', hint: 'れんしゅう (Renshuu - Latihan)' },
+        { char: 'ろ', romaji: 'ro', hint: 'ろく (Roku - Enam)' },
+        { char: 'わ', romaji: 'wa', hint: 'わかりやすい (Wakariyasui - Intuitif)' },
+        { char: 'を', romaji: 'o (wo)', hint: 'Partikel Objek を' },
+        { char: 'ん', romaji: 'n', hint: 'にほん (Nihon)' }
+      ],
+      katakana: [
+        { char: 'ア', romaji: 'a', hint: 'アイコン / アプリ (Icon / App)' },
+        { char: 'イ', romaji: 'i', hint: 'インターフェース (Interface)' },
+        { char: 'ウ', romaji: 'u', hint: 'ウェブ (Web)' },
+        { char: 'エ', romaji: 'e', hint: 'エクスペリエンス (Experience - UX)' },
+        { char: 'オ', romaji: 'o', hint: 'オンボーディング (Onboarding)' },
+        { char: 'カ', romaji: 'ka', hint: 'カラーパレット (Color Palette)' },
+        { char: 'キ', romaji: 'ki', hint: 'キャリア (Career)' },
+        { char: 'ク', romaji: 'ku', hint: 'クリック (Click)' },
+        { char: 'ケ', romaji: 'ke', hint: 'ケーススタディ (Case Study)' },
+        { char: 'コ', romaji: 'ko', hint: 'コンポーネント (Component Figma)' },
+        { char: 'サ', romaji: 'sa', hint: 'サービスデザイン (Service Design)' },
+        { char: 'シ', romaji: 'shi', hint: 'デザインシステム (Design System)' },
+        { char: 'ス', romaji: 'su', hint: 'スクロール (Scroll)' },
+        { char: 'セ', romaji: 'se', hint: 'セクション (Section)' },
+        { char: 'ソ', romaji: 'so', hint: 'ペルソナ (Persona)' },
+        { char: 'タ', romaji: 'ta', hint: 'タイポグラフィ (Typography)' },
+        { char: 'チ', romaji: 'chi', hint: 'プロダクトチーム (Product Team)' },
+        { char: 'ツ', romaji: 'tsu', hint: 'デザインツール (Design Tool)' },
+        { char: 'テ', romaji: 'te', hint: 'ユーザビリティテスト (Usability Test)' },
+        { char: 'ト', romaji: 'to', hint: 'プロトタイプ (Prototype)' },
+        { char: 'ナ', romaji: 'na', hint: 'ナビゲーション (Navigation)' },
+        { char: 'ニ', romaji: 'ni', hint: 'ユーザーニーズ (User Needs)' },
+        { char: 'ネ', romaji: 'ne', hint: 'ネットワーク (Network)' },
+        { char: 'ノ', romaji: 'no', hint: 'ノート (Note)' },
+        { char: 'ハ', romaji: 'ha', hint: 'ハイファイ (Hi-Fi Mockup)' },
+        { char: 'ヒ', romaji: 'hi', hint: 'ヒアリング (User Interview/Hearing)' },
+        { char: 'フ', romaji: 'fu', hint: 'フィードバック (Feedback) / Figma' },
+        { char: 'ヘ', romaji: 'he', hint: 'ヘッダー (Header)' },
+        { char: 'ホ', romaji: 'ho', hint: 'ポートフォリオ (Portfolio)' },
+        { char: 'マ', romaji: 'ma', hint: 'マイクロインタラクション' },
+        { char: 'ミ', romaji: 'mi', hint: 'ミートアップ (Meetup)' },
+        { char: 'メ', romaji: 'me', hint: 'メニュー (Menu)' },
+        { char: 'モ', romaji: 'mo', hint: 'モバイルアプリ (Mobile App)' },
+        { char: 'ユ', romaji: 'yu', hint: 'ユーザーリサーチ (User Research)' },
+        { char: 'ラ', romaji: 'ra', hint: 'ガイドライン (Guideline)' },
+        { char: 'リ', romaji: 'ri', hint: 'リサーチ (Research)' },
+        { char: 'ル', romaji: 'ru', hint: 'モーダル (Modal)' },
+        { char: 'レ', romaji: 're', hint: 'レイアウト (Layout) / ワイヤーフレーム' },
+        { char: 'ロ', romaji: 'ro', hint: 'ログイン画面 (Login Screen)' },
+        { char: 'ワ', romaji: 'wa', hint: 'ワイヤーフレーム (Wireframe)' },
+        { char: 'ン', romaji: 'n', hint: 'デザイン (Design)' }
+      ]
+    };
+
+    let currentKanaMode = 'hiragana';
+    let currentKanaTarget = null;
+    let kanaStreak = 0;
+    let kanaTotalAttempts = 0;
+    let kanaCorrectAttempts = 0;
+
+    function setKanaDeck(mode) {
+      currentKanaMode = mode;
+      ['hiragana', 'katakana', 'mixed'].forEach(m => {
+        const btn = document.getElementById('kana-deck-' + m);
+        if (m === mode) {
+          btn.className = 'px-2 py-1 rounded text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]';
+        } else {
+          btn.className = 'px-2 py-1 rounded text-xs font-medium text-[var(--muted-foreground)]';
+        }
+      });
+      nextKanaCard();
+    }
+
+    function getActiveKanaPool() {
+      if (currentKanaMode === 'hiragana') return kanaData.hiragana;
+      if (currentKanaMode === 'katakana') return kanaData.katakana;
+      return [...kanaData.hiragana, ...kanaData.katakana];
+    }
+
+    function nextKanaCard() {
+      const pool = getActiveKanaPool();
+      currentKanaTarget = pool[Math.floor(Math.random() * pool.length)];
+
+      document.getElementById('kana-char-display').textContent = currentKanaTarget.char;
+      document.getElementById('kana-hint-word').textContent = `Istilah: ${currentKanaTarget.hint}`;
+
+      const wrongPool = pool.filter(k => k.romaji !== currentKanaTarget.romaji);
+      const shuffledWrong = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3);
+      const options = [currentKanaTarget, ...shuffledWrong].sort(() => Math.random() - 0.5);
+
+      const grid = document.getElementById('kana-options-grid');
+      grid.innerHTML = options.map(opt => `
+        <button onclick="answerKana('${opt.romaji}')" class="py-2.5 px-3 rounded-xl font-bold text-sm bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:border-[var(--foreground)] transition-all">
+          ${opt.romaji}
+        </button>
+      `).join('');
+    }
+
+    function answerKana(selectedRomaji) {
+      kanaTotalAttempts++;
+      const msgEl = document.getElementById('kana-feedback-msg');
+
+      if (selectedRomaji === currentKanaTarget.romaji) {
+        kanaCorrectAttempts++;
+        kanaStreak++;
+        addXp(5);
+        speakJapanese(currentKanaTarget.char);
+        msgEl.textContent = `✅ Benar! ${currentKanaTarget.char} = ${currentKanaTarget.romaji} (+5 XP)`;
+        nextKanaCard();
+      } else {
+        kanaStreak = 0;
+        msgEl.textContent = `❌ Kurang tepat! ${currentKanaTarget.char} dibaca "${currentKanaTarget.romaji}" (${currentKanaTarget.hint})`;
+      }
+
+      const acc = Math.round((kanaCorrectAttempts / kanaTotalAttempts) * 100);
+      document.getElementById('kana-streak-label').textContent = `Streak Benar: ${kanaStreak} 🔥`;
+      document.getElementById('kana-accuracy-label').textContent = `Akurasi: ${acc}%`;
+    }
+
+    // =====================================================
+    // SMART SRS FLASHCARDS (UI/UX + N5-N3)
+    // =====================================================
+    const baseSrsCards = [
+      {
+        category: 'ux',
+        idText: 'Saya bekerja sebagai UI/UX Designer di Indonesia.',
+        jpText: 'インドネシアでUI・UXデザイナーとして働いています。',
+        romaji: 'Indoneshia de UI/UX dezainaa toshite hataraite imasu.',
+        note: 'Pola kunci: [Tempat] で [Profesi] として (sebagai) 働いています.'
+      },
+      {
+        category: 'ux',
+        idText: 'Saya selalu berusaha membuat desain yang mudah dipakai dan mudah dipahami.',
+        jpText: '使いやすくて、わかりやすいデザインを作るようにしています。',
+        romaji: 'Tsukaiyasukute, wakariyasui dezain o tsukuru youni shite imasu.',
+        note: '使いやすい (mudah dipakai / good UX) + わかりやすい (intuitif/mudah dipahami).'
+      },
+      {
+        category: 'ux',
+        idText: 'Melalui riset user, saya menemukan masalah (pain point) dan memperbaiki layar aplikasi.',
+        jpText: 'ユーザーリサーチで課題を見つけて、アプリの画面を改善しました。',
+        romaji: 'Yuuzaa risaachi de kadai o mitsukete, apuri no gamen o kaizen shimashita.',
+        note: '課題 (kadai = masalah/pain point), 画面 (gamen = screen UI), 改善 (kaizen = iterasi/perbaikan).'
+      },
+      {
+        category: 'ux',
+        idText: 'Ini adalah portofolio saya di Figma. Bolehkah saya meminta pendapat Anda?',
+        jpText: 'こちらは私のポートフォリオです。ご意見をいただけますか？',
+        romaji: 'Kochira wa watashi no pootoforio desu. Go-iken o itadakemasu ka?',
+        note: 'ご意見をいただけますか (bolehkah saya menerima pendapat Anda - sopan bisnis/N3).'
+      },
+      {
+        category: 'ux',
+        idText: 'Saya sedang mencari peluang untuk berkarir sebagai Product Designer di Jepang.',
+        jpText: '日本でプロダクトデザイナーとして働くチャンスを探しています。',
+        romaji: 'Nihon de purodakuto dezainaa toshite hataraku chansu o sagashite imasu.',
+        note: 'チャンスを探しています (sedang mencari peluang).'
+      },
+      {
+        category: 'grammar',
+        idText: 'Saya bisa berbicara bahasa Jepang sedikit, tetapi belum lancar.',
+        jpText: '日本語が少し話せますが、まだペラペラではありません。',
+        romaji: 'Nihongo ga sukoshi hanasemasu ga, mada perapera dewa arimasen.',
+        note: '話せます (hanasemasu = bisa bicara - Potential form).'
+      },
+      {
+        category: 'grammar',
+        idText: 'Bagaimana cara mengatakan X dalam bahasa Jepang?',
+        jpText: '「X」は日本語で何と言いますか？',
+        romaji: '"X" wa Nihongo de nan to iimasu ka?',
+        note: 'Kalimat penyelamat saat Anda lupa satu istilah ketika sedang ngobrol.'
+      },
+      {
+        category: 'travel',
+        idText: 'Permisi, boleh minta bon/bill-nya?',
+        jpText: 'すみません、お会計をお願いします。',
+        romaji: 'Sumimasen, okaikei o onegaishimasu.',
+        note: 'お会計 (okaikei = pembayaran/bill).'
+      }
+    ];
+
+    let currentSrsPool = [];
+    let currentSrsIdx = 0;
+
+    function getCombinedSrsCards() {
+      const custom = (appState.customCards || []).map(c => ({
+        category: 'custom',
+        idText: c.idText,
+        jpText: c.jpText,
+        romaji: c.romaji,
+        note: 'Kartu Sentence Mining Anime / Kustom Anda'
+      }));
+      return [...baseSrsCards, ...custom];
+    }
+
+    function filterSrsDeck() {
+      const cat = document.getElementById('srs-category-filter').value;
+      const all = getCombinedSrsCards();
+      currentSrsPool = cat === 'all' ? all : all.filter(c => c.category === cat);
+      if (currentSrsPool.length === 0) currentSrsPool = all;
+      currentSrsIdx = 0;
+      renderSrsCard();
+    }
+
+    function renderSrsCard() {
+      if (currentSrsPool.length === 0) currentSrsPool = getCombinedSrsCards();
+      const card = currentSrsPool[currentSrsIdx % currentSrsPool.length];
+
+      document.getElementById('srs-card-index').textContent = `Kartu ${(currentSrsIdx % currentSrsPool.length) + 1} / ${currentSrsPool.length}`;
+      document.getElementById('srs-front-text').textContent = `"${card.idText}"`;
+      document.getElementById('srs-jp-text').textContent = card.jpText;
+      document.getElementById('srs-romaji-text').textContent = card.romaji;
+      document.getElementById('srs-note-text').textContent = card.note;
+
+      document.getElementById('srs-mic-feedback').classList.add('hidden');
+      document.getElementById('srs-back-answer').classList.add('hidden');
+      document.getElementById('srs-rating-btns').classList.add('hidden');
+      document.getElementById('srs-reveal-btn-wrap').classList.remove('hidden');
+    }
+
+    function revealSrsCard() {
+      document.getElementById('srs-back-answer').classList.remove('hidden');
+      document.getElementById('srs-rating-btns').classList.remove('hidden');
+      document.getElementById('srs-reveal-btn-wrap').classList.add('hidden');
+      speakCurrentSrsCard();
+    }
+
+    function speakCurrentSrsCard() {
+      const card = currentSrsPool[currentSrsIdx % currentSrsPool.length];
+      if (card) speakJapanese(card.jpText);
+    }
+
+    function startMicCheckForSrs() {
+      const card = currentSrsPool[currentSrsIdx % currentSrsPool.length];
+      const btn = document.getElementById('srs-mic-btn');
+      const fb = document.getElementById('srs-mic-feedback');
+
+      runSpeechRecognition((transcript) => {
+        const score = calcJpSimilarity(card.jpText, transcript);
+        fb.classList.remove('hidden');
+        revealSrsCard();
+        if (score >= 70) {
+          addXp(20);
+          fb.innerHTML = `<span class="font-bold">🎉 Skor Mic: ${score}% (+20 XP)</span> — Terdengar: 「${transcript}」`;
+        } else {
+          fb.innerHTML = `<span class="font-bold">🎤 Skor Mic: ${score}%</span> — Terdeteksi: 「${transcript}」. Bandingkan dengan jawaban di bawah!`;
+        }
+      }, btn);
+    }
+
+    function rateSrsCard(rating) {
+      const xpMap = { hard: 5, good: 10, easy: 15 };
+      addXp(xpMap[rating] || 10);
+      currentSrsIdx = (currentSrsIdx + 1) % currentSrsPool.length;
+      renderSrsCard();
+    }
+
+    function addCustomSrsCard() {
+      const idEl = document.getElementById('custom-srs-id');
+      const jpEl = document.getElementById('custom-srs-jp');
+      const romEl = document.getElementById('custom-srs-romaji');
+
+      const idText = idEl.value.trim();
+      const jpText = jpEl.value.trim();
+      const romaji = romEl.value.trim() || '-';
+
+      if (!idText || !jpText) {
+        alert('Mohon isi minimal Arti Indonesia dan Kalimat Jepangnya.');
+        return;
+      }
+
+      if (!appState.customCards) appState.customCards = [];
+      appState.customCards.push({ idText, jpText, romaji });
+      addXp(20);
+
+      idEl.value = '';
+      jpEl.value = '';
+      romEl.value = '';
+
+      filterSrsDeck();
+      alert('Kartu baru berhasil ditambahkan ke SRS Deck (+20 XP)!');
+    }
+
+    // =====================================================
+    // TAB 5: GEMINI FLASH / PRO AI SENSEI & LOCAL FALLBACK
+    // =====================================================
+    let currentAiScenario = 'kenji_ux';
+    let aiChatMessages = [];
+
+    const scenarioConfigs = {
+      kenji_ux: {
+        name: 'Kenji-san (Lead Product Designer di Tokyo)',
+        greetingJp: 'こんにちは！Spectrum Tokyoのデザインミートアップへようこそ！インドネシアから来られたんですね。普段はどんなUI・UXのデザインをされていますか？',
+        greetingRomaji: 'Konnichiwa! Spectrum Tokyo no dezain miitoappu e youkoso! Indoneshia kara korareta n desu ne. Fudan wa donna UI/UX no dezain o sarete imasu ka?',
+        greetingId: 'Halo! Selamat datang di design meetup Spectrum Tokyo! Anda datang dari Indonesia ya. Sehari-hari mengerjakan desain UI/UX seperti apa?',
+        quickReplies: [
+          '普段はFigmaでモバイルアプリをデザインしています。',
+          'ユーザーにとって使いやすい画面を作るようにしています。',
+          '日本のデザインチームで働きたいと思っています！'
+        ],
+        systemPrompt: `Kamu adalah Kenji, seorang Lead Product Designer ramah di Tokyo yang bertemu user (seorang UI/UX Designer dari Indonesia yang suka anime dan sedang liburan ke Jepang di bulan Mei sambil mencari koneksi kerja).
+Tugasmu:
+1. Balas dalam bahasa Jepang sopan natural (Desu/Masu) sebanyak 1-2 kalimat yang relevan dengan dunia UI/UX Design di Jepang.
+2. Sertakan cara baca Romaji dan terjemahan bahasa Indonesia.
+3. Jika kalimat user masih kaku, campur bahasa Indonesia, atau terlalu gaya anime (kasual), berikan koreksi lembut "💡 Tips Sensei (Versi Natural Sopan):" beserta penjelasan singkat partikelnya.`
+      },
+      izakaya: {
+        name: 'Sato-san (Warga Lokal di Izakaya Shibuya)',
+        greetingJp: 'いらっしゃい！隣いいですか？どこから旅行に来たの？日本語上手だね！',
+        greetingRomaji: 'Irasshai! Tonari ii desu ka? Doko kara ryokou ni kita no? Nihongo jouzu da ne!',
+        greetingId: 'Selamat datang! Boleh duduk di sebelah? Datang liburan dari mana? Bahasa Jepangnya jago ya!',
+        quickReplies: [
+          'インドネシアから来ました！アニメが好きで勉強しました。',
+          'おすすめの焼き鳥と生ビールをお願いします！',
+          '東京で地元の人がよく行く場所はどこですか？'
+        ],
+        systemPrompt: `Kamu adalah Sato, warga lokal ramah di Izakaya Shibuya yang mengobrol dengan turis asal Indonesia yang berprofesi sebagai UI/UX Designer.
+Balas dengan bahasa Jepang percakapan natural, berikan Romaji, Arti Indonesia, dan koreksi kalimat user ("💡 Tips Sensei") jika ada partikel atau konjugasi yang bisa dibuat lebih alami.`
+      },
+      converter: {
+        name: 'Klinik Kalimat Sensei (Anime/Indo → Jepang Sopan & UI/UX)',
+        greetingJp: 'ようこそ！知っている単語（アニメの言葉やインドネシア語でもOK）を並べて送ってください。自然な丁寧語（です・ます）とN3表現に組み立てます！',
+        greetingRomaji: 'Youkoso! Shitte iru tango o narabete okutte kudasai. Shizen na teineigo to N3 hyougen ni kumitatemasu!',
+        greetingId: 'Selamat datang! Ketik kosakata lepas yang Anda tahu (boleh campur kata anime + bahasa Indonesia, misal: "watashi, iku, Tokyo, belajar UI UX, ingin kerja"). Saya akan merangkainya menjadi kalimat Jepang sopan natural + membedah partikelnya!',
+        quickReplies: [
+          'watashi, UI UX designer, Figma, tsukuru, aplikasi mudah dipakai',
+          'dari kecil nonton anime, sekarang ingin kerja di Jepang',
+          'boleh minta lihat portofolio saya dan minta feedback?'
+        ],
+        systemPrompt: `Kamu adalah guru tata bahasa Jepang khusus untuk penonton anime & UI/UX Designer Indonesia. User akan mengirimkan kata-kata lepas atau kalimat campuran.
+Tugasmu:
+1. Rangkai menjadi Kalimat Bahasa Jepang Sopan (Desu/Masu) & versi N3 Profesional.
+2. Tulis Romaji.
+3. Bedah fungsi setiap partikel (は, が, を, に, で) dan perubahan kata kerjanya secara ringkas agar user paham cara merangkainya.`
+      }
+    };
+
+    function initGeminiConfigUI() {
+      document.getElementById('gemini-api-key-input').value = appState.geminiApiKey || '';
+      document.getElementById('gemini-model-select').value = appState.geminiModel || 'gemini-2.5-flash';
+      updateGeminiStatusBadge();
+      setAiScenario('kenji_ux');
+    }
+
+    function saveGeminiConfig() {
+      const key = document.getElementById('gemini-api-key-input').value.trim();
+      const model = document.getElementById('gemini-model-select').value;
+      appState.geminiApiKey = key;
+      appState.geminiModel = model;
+      saveState();
+      updateGeminiStatusBadge();
+    }
+
+    function updateGeminiStatusBadge() {
+      const badge = document.getElementById('gemini-status-badge');
+      const model = appState.geminiModel || 'gemini-2.5-flash';
+      if (appState.geminiApiKey) {
+        badge.innerHTML = `<span class="font-semibold text-[var(--foreground)]">✅ Terhubung ke ${model}</span>`;
+      } else {
+        badge.innerHTML = `Status: <strong>Simulasi Pintar Aktif</strong> (Isi API Key jika ingin panggil ${model} langsung)`;
+      }
+    }
+
+    function setAiScenario(scenKey) {
+      currentAiScenario = scenKey;
+      ['kenji_ux', 'izakaya', 'converter'].forEach(k => {
+        const btn = document.getElementById('ai-scen-' + k);
+        if (k === scenKey) {
+          btn.className = 'w-full text-left p-3 rounded-xl border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] text-xs space-y-0.5';
+        } else {
+          btn.className = 'w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-xs space-y-0.5';
+        }
+      });
+
+      const cfg = scenarioConfigs[scenKey];
+      aiChatMessages = [
+        {
+          role: 'assistant',
+          jp: cfg.greetingJp,
+          romaji: cfg.greetingRomaji,
+          id: cfg.greetingId,
+          tip: 'Klik salah satu contoh balasan di bawah, bicara lewat tombol 🎤 Bicara (JP), atau ketik kalimat Anda sendiri!'
+        }
+      ];
+      renderAiChat();
+      renderQuickReplies(cfg.quickReplies);
+    }
+
+    function renderQuickReplies(replies) {
+      const wrap = document.getElementById('ai-quick-replies');
+      wrap.innerHTML = replies.map(r => `
+        <button onclick="useQuickReply('${r.replace(/'/g, "\\'")}')" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--background)] text-[var(--foreground)] border border-[var(--border)] hover:border-[var(--foreground)]">
+          💬 ${r}
+        </button>
+      `).join('');
+    }
+
+    function useQuickReply(text) {
+      document.getElementById('ai-user-input').value = text;
+      sendAiMessage();
+    }
+
+    function renderAiChat() {
+      const box = document.getElementById('ai-chat-history');
+      box.innerHTML = aiChatMessages.map((m, idx) => {
+        if (m.role === 'user') {
+          return `
+            <div class="flex justify-end">
+              <div class="max-w-[85%] rounded-2xl p-3.5 bg-[var(--primary)] text-[var(--primary-foreground)] text-xs space-y-1">
+                <div class="font-bold">Anda:</div>
+                <div class="text-sm font-semibold">${m.text}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="flex justify-start">
+              <div class="max-w-[90%] rounded-2xl p-4 bg-[var(--background)] border border-[var(--border)] text-xs space-y-1.5">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="font-bold text-[var(--foreground)]">🤖 ${scenarioConfigs[currentAiScenario].name}</span>
+                  ${m.jp ? `<button onclick="speakJapanese('${m.jp.replace(/'/g, "\\'")}')" class="px-2 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)]">🔊 Putar</button>` : ''}
+                </div>
+                ${m.jp ? `<div class="text-base font-bold text-[var(--foreground)] leading-relaxed">${m.jp}</div>` : ''}
+                ${m.romaji ? `<div class="text-[var(--muted-foreground)] font-medium">${m.romaji}</div>` : ''}
+                ${m.id ? `<div class="text-[var(--foreground)] pt-1 border-t border-[var(--border)]"><strong>Arti:</strong> ${m.id}</div>` : ''}
+                ${m.tip ? `<div class="p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)] leading-relaxed mt-1">💡 <strong>Feedback & Bedah Kalimat:</strong><br/>${m.tip}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function startMicForAiChat() {
+      const btn = document.getElementById('ai-mic-btn');
+      runSpeechRecognition((transcript) => {
+        document.getElementById('ai-user-input').value = transcript;
+        sendAiMessage();
+      }, btn);
+    }
+
+    async function sendAiMessage() {
+      const inputEl = document.getElementById('ai-user-input');
+      const userText = inputEl.value.trim();
+      if (!userText) return;
+
+      inputEl.value = '';
+      aiChatMessages.push({ role: 'user', text: userText });
+      renderAiChat();
+      addXp(20);
+
+      const sendBtn = document.getElementById('ai-send-btn');
+      sendBtn.textContent = '...';
+      sendBtn.disabled = true;
+
+      try {
+        if (appState.geminiApiKey) {
+          const reply = await callGeminiApiForRoleplay(userText);
+          aiChatMessages.push(reply);
+          if (reply.jp) speakJapanese(reply.jp);
+        } else {
+          const localReply = generateSmartLocalSenseiReply(userText, currentAiScenario);
+          aiChatMessages.push(localReply);
+          if (localReply.jp) speakJapanese(localReply.jp);
+        }
+      } catch (err) {
+        const fallback = generateSmartLocalSenseiReply(userText, currentAiScenario);
+        fallback.tip += ` (Catatan: Koneksi langsung ke API dibatasi/error, menggunakan Smart Local Sensei).`;
+        aiChatMessages.push(fallback);
+        if (fallback.jp) speakJapanese(fallback.jp);
+      } finally {
+        sendBtn.textContent = 'Kirim →';
+        sendBtn.disabled = false;
+        renderAiChat();
+      }
+    }
+
+    async function callGeminiApiForRoleplay(userText) {
+      const model = appState.geminiModel || 'gemini-2.5-flash';
+      const key = appState.geminiApiKey;
+      const cfg = scenarioConfigs[currentAiScenario];
+
+      const prompt = `${cfg.systemPrompt}
+Balas HANYA dalam format JSON valid dengan key berikut:
+{
+  "jp": "Kalimat balasan bahasa Jepang (atau hasil konversi kalimat)",
+  "romaji": "Cara baca romaji",
+  "id": "Arti dalam bahasa Indonesia",
+  "tip": "Koreksi kalimat user dari gaya anime/campuran ke bentuk sopan natural + bedah partikel"
+}
+Input User: "${userText}"`;
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: 'application/json' }
+        })
+      });
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+      const parsed = JSON.parse(rawText);
+      return {
+        role: 'assistant',
+        jp: parsed.jp || 'なるほど、素晴らしいですね！',
+        romaji: parsed.romaji || 'Naruhodo, subarashii desu ne!',
+        id: parsed.id || 'Begitu ya, luar biasa!',
+        tip: parsed.tip || 'Kalimat Anda sudah cukup jelas dan sopan.'
+      };
+    }
+
+    function generateSmartLocalSenseiReply(userText, scen) {
+      const lower = userText.toLowerCase();
+
+      if (scen === 'converter') {
+        if (lower.includes('figma') || lower.includes('ux') || lower.includes('mudah')) {
+          return {
+            role: 'assistant',
+            jp: '私はUI・UXデザイナーとして、Figmaで使いやすいアプリをデザインしています。',
+            romaji: 'Watashi wa UI/UX dezainaa toshite, Figma de tsukaiyasui apuri o dezain shite imasu.',
+            id: 'Sebagai UI/UX Designer, saya mendesain aplikasi yang mudah digunakan menggunakan Figma.',
+            tip: 'Perhatikan partikelnya: として (sebagai), Figmaで (menggunakan alat Figma), 使いやすいアプリを (objek: aplikasi yang mudah dipakai), デザインしています (sedang/rutin mendesain).'
+          };
+        }
+        if (lower.includes('portofolio') || lower.includes('feedback') || lower.includes('lihat')) {
+          return {
+            role: 'assistant',
+            jp: 'こちらは私のポートフォリオです。よかったら見て、フィードバックをいただけますか？',
+            romaji: 'Kochira wa watashi no pootoforio desu. Yokattara mite, fiidobakku o itadakemasu ka?',
+            id: 'Ini adalah portofolio saya. Kalau berkenan, bolehkah melihatnya dan memberi saya feedback?',
+            tip: 'Gunakan こちらは (ini - sopan) dan いただけますか (bolehkah saya menerima... - bentuk rendah hati N3).'
+          };
+        }
+        return {
+          role: 'assistant',
+          jp: '子供の時からアニメがきっかけで日本語を勉強して、将来は日本でUI・UXデザイナーとして働きたいと思っています。',
+          romaji: 'Kodomo no toki kara anime ga kikkake de Nihongo o benkyou shite, shourai wa Nihon de UI/UX dezainaa toshite hatarakitai to omotte imasu.',
+          id: 'Sejak kecil saya belajar bahasa Jepang karena dipicu oleh anime, dan ke depannya saya ingin bekerja di Jepang sebagai UI/UX Designer.',
+          tip: 'Pola emas: [X] がきっかけで (bermula dari X) + [Tempat] で [Profesi] として働きたいと思っています (ingin bekerja sebagai...).'
+        };
+      }
+
+      if (scen === 'kenji_ux') {
+        if (lower.includes('figma') || lower.includes('モバイル') || lower.includes('デザイン') || lower.includes('使いやすい')) {
+          return {
+            role: 'assistant',
+            jp: 'いいですね！日本のチームでもFigmaとデザインシステムが一番よく使われていますよ。ユーザーリサーチも普段されますか？',
+            romaji: 'Ii desu ne! Nihon no chiimu demo Figma to dezain shisutemu ga ichiban yoku tsukawarete imasu yo. Yuuzaa risaachi mo fudan saremasu ka?',
+            id: 'Bagus sekali! Di tim Jepang pun Figma dan Design System paling sering digunakan. Apakah Anda sehari-hari juga melakukan User Research?',
+            tip: 'Kalimat Anda sudah natural! Untuk menjawab pertanyaan Kenji-san berikutnya, coba gunakan: 「はい、ユーザーインタビューやユーザビリティテストも行っています」(Ya, saya juga melakukan user interview dan usability test).'
+          };
+        }
+        return {
+          role: 'assistant',
+          jp: 'なるほど！日本のIT企業でもインドネシア出身のデザイナーやエンジニアが増えていますよ。よかったらLinkedInを交換しませんか？',
+          romaji: 'Naruhodo! Nihon no IT kigyou demo Indoneshia shusshin no dezainaa ya enjinia ga fuete imasu yo. Yokattara LinkedIn o koukan shimasen ka?',
+          id: 'Begitu ya! Di perusahaan IT Jepang pun desainer dan engineer asal Indonesia makin bertambah lho. Kalau berkenan, maukah tukar LinkedIn?',
+          tip: 'Saat diajak tukar kontak dengan ~ませんか, jawab dengan antusias: 「はい、ぜひお願いします！」(Hai, zehi onegaishimasu! = Ya, tentu saja!).'
+        };
+      }
+
+      // Izakaya scenario
+      return {
+        role: 'assistant',
+        jp: 'へえ、アニメで日本語を覚えたの？すごいね！UI・UXデザイナーなら、六本木の「21_21 DESIGN SIGHT」っていう美術館が絶対おすすめだよ！',
+        romaji: 'Hee, anime de Nihongo o oboeta no? Sugoi ne! UI/UX dezainaa nara, Roppongi no "21_21 DESIGN SIGHT" tte iu bijutsukan ga zettai osusume da yo!',
+        id: 'Wah, hafal bahasa Jepang dari anime? Hebat ya! Kalau kamu UI/UX Designer, museum desain "21_21 DESIGN SIGHT" di Roppongi wajib banget dikunjungi!',
+        tip: 'Perhatikan cara warga lokal di Izakaya bicara santai (覚えたの？ / おすすめだよ). Anda tetap bisa membalas dengan sopan akrab: 「ありがとうございます！ぜひ行ってみます！」(Terima kasih! Saya pasti akan coba ke sana!).'
+      };
+    }
+
+    async function generateNewLegoWithAi() {
+      const btn = document.getElementById('btn-gen-lego');
+      btn.textContent = '⏳ Menambahkan Soal UI/UX Baru...';
+      btn.disabled = true;
+
+      const bonusPool = [
+        {
+          id: 'lego_custom_' + Date.now(),
+          cat: 'ux',
+          level: 'N3 UI/UX • Usability Testing',
+          promptId: 'Sebelum merilis fitur baru, kami melakukan usability test bersama 5 orang user.',
+          animeClue: '新しい機能をリリースする前に (sebelum merilis fitur baru), 五人のユーザーと (bersama 5 user), ユーザビリティテストを行いました (melakukan usability test).',
+          correctBlocks: ['新しい機能を', 'リリースする前に、', '五人のユーザーと', 'ユーザビリティテストを', '行いました'],
+          distractors: ['リリースした後に', 'テストが', '行うだ'],
+          romaji: 'Atarashii kinou o ririisu suru mae ni, gonin no yuuzaa to yuuzabiriti tesuto o okonaimashita.',
+          explanation: '[Kata Kerja Kamus] + 前に (mae ni) berarti "Sebelum melakukan X".'
+        },
+        {
+          id: 'lego_custom_' + (Date.now() + 1),
+          cat: 'ux',
+          level: 'N3 UI/UX • Iterasi Prototype',
+          promptId: 'Berdasarkan feedback dari user, saya memperbaiki prototipe di Figma.',
+          animeClue: 'ユーザーからのフィードバックをもとに (berdasarkan feedback dari user - N3), プロトタイプを修正しました (memperbaiki prototipe).',
+          correctBlocks: ['ユーザーからの', 'フィードバックをもとに、', 'Figmaの', 'プロトタイプを', '修正しました'],
+          distractors: ['フィードバックを', '修正するだ', 'に'],
+          romaji: 'Yuuzaa kara no fiidobakku o moto ni, Figma no purototaipu o shuusei shimashita.',
+          explanation: '[Kata Benda] をもとに (o moto ni) adalah pola N3 penting yang berarti "Berdasarkan pada X".'
+        }
+      ];
+
+      if (!appState.customLegoQuestions) appState.customLegoQuestions = [];
+      const pick = bonusPool[appState.customLegoQuestions.length % bonusPool.length];
+      appState.customLegoQuestions.push(pick);
+      addXp(25);
+      saveState();
+
+      btn.textContent = '✅ Soal Baru Ditambahkan ke Tab 2! (+25 XP)';
+      btn.disabled = false;
+      filterLegoByCategory();
+      setTimeout(() => {
+        btn.textContent = '➕ Generate Soal Sentence Lego UI/UX Baru ke Tab 2';
+      }, 2500);
+    }
+
+    function toggleAppTheme() {
+      const root = document.documentElement;
+      const isLight = root.classList.toggle('theme-light');
+      try {
+        localStorage.setItem('nihongo_sprint_theme', isLight ? 'light' : 'dark');
+      } catch (e) {}
+    }
+
+    // =====================================================
+    // INITIALIZE APP ON LOAD
+    // =====================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        if (localStorage.getItem('nihongo_sprint_theme') === 'light') {
+          document.documentElement.classList.add('theme-light');
+        }
+      } catch (e) {}
+      updateCountdowns();
+      updateHeaderStats();
+      setRoutineMode(appState.routineMode || 'weekday');
+      renderRoadmap();
+      filterLegoByCategory();
+      renderIslandSelector();
+      renderActiveIsland();
+      nextKanaCard();
+      filterSrsDeck();
+      initGeminiConfigUI();
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      }
+    });
+  </script>
+</body>
+</html>
