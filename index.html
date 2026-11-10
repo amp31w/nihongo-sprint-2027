@@ -398,7 +398,12 @@
           <div class="bg-[var(--background)] border border-[var(--border)] rounded-2xl p-5 text-center space-y-3">
             <div class="flex justify-between items-center text-xs text-[var(--muted-foreground)]">
               <span id="kana-streak-label">Streak: 0 🔥</span>
-              <span id="kana-accuracy-label">100%</span>
+              <div class="flex items-center gap-2">
+                <button onclick="toggleKanaVoiceMode()" id="kana-voice-mode-btn" class="px-2 py-0.5 rounded-md border border-[var(--border)] bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] font-medium">
+                  🎤 Mode Mic: OFF
+                </button>
+                <span id="kana-accuracy-label">100%</span>
+              </div>
             </div>
 
             <div class="py-3 space-y-2.5">
@@ -406,6 +411,9 @@
               <div class="flex items-center justify-center gap-1.5">
                 <button onclick="toggleKanaHint()" id="kana-hint-toggle-btn" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)]">
                   👁️ Contoh Kata
+                </button>
+                <button onclick="startMicCheckForKana()" id="kana-mic-btn" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] hover:opacity-85 border border-[var(--border)] font-semibold">
+                  🎤 Ucapkan
                 </button>
                 <button onclick="speakCurrentKanaCard()" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)]" title="Putar suara">
                   🔊
@@ -415,6 +423,14 @@
             </div>
 
             <div id="kana-options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+            <div id="kana-voice-only-panel" class="hidden flex items-center justify-center gap-2">
+              <button onclick="startMicCheckForKana()" id="kana-big-mic-btn" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">
+                🎤 Klik & Ucapkan Bahasa Jepang
+              </button>
+              <button onclick="nextKanaCard()" class="py-2.5 px-3 rounded-xl font-semibold text-xs bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)]">
+                Lewati →
+              </button>
+            </div>
             <div id="kana-feedback-msg" class="text-xs font-medium min-h-[1rem]"></div>
           </div>
         </div>
@@ -698,10 +714,11 @@
       speakJapanese('こんにちは！私はインドネシアのUI・UXデザイナーです。五月に日本へ行きます！');
     }
 
-    // Normalize Japanese text for similarity comparison
+    // Normalize Japanese text for similarity comparison (including Katakana -> Hiragana phonetic normalization)
     function normalizeJp(str) {
       return (str || '')
         .replace(/[、。！？!?,.\s「」『』・]/g, '')
+        .replace(/[\u30a1-\u30f6]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0x60))
         .toLowerCase();
     }
 
@@ -2046,60 +2063,128 @@
         { char: 'ン', romaji: 'n', hint: 'デザイン (Design)' }
       ],
       words: [
-        { char: 'つかいやすい', romaji: 'tsukaiyasui', hint: 'Mudah digunakan (Good UX)' },
-        { char: 'わかりやすい', romaji: 'wakariyasui', hint: 'Mudah dipahami (Intuitif)' },
-        { char: 'がめん', romaji: 'gamen', hint: 'Layar / Screen UI (画面)' },
-        { char: 'かだい', romaji: 'kadai', hint: 'Masalah / Pain point (課題)' },
-        { char: 'かいぜん', romaji: 'kaizen', hint: 'Perbaikan / Iterasi (改善)' },
-        { char: 'せってい', romaji: 'settei', hint: 'Pengaturan / Settings (設定)' },
-        { char: 'けんさく', romaji: 'kensaku', hint: 'Pencarian / Search (検索)' },
-        { char: 'しごと', romaji: 'shigoto', hint: 'Pekerjaan (仕事)' },
-        { char: 'りょこう', romaji: 'ryokou', hint: 'Liburan / Travel (旅行)' },
-        { char: 'おすすめ', romaji: 'osusume', hint: 'Rekomendasi' },
-        { char: 'すみません', romaji: 'sumimasen', hint: 'Permisi / Maaf' },
-        { char: 'ありがとう', romaji: 'arigatou', hint: 'Terima kasih' },
-        { char: 'おいしい', romaji: 'oishii', hint: 'Enak / Lezat' },
-        { char: 'たのしみ', romaji: 'tanoshimi', hint: 'Menantikan / Excited' },
-        { char: 'すこし', romaji: 'sukoshi', hint: 'Sedikit' },
-        { char: 'まいにち', romaji: 'mainichi', hint: 'Setiap hari' },
-        { char: 'デザイン', romaji: 'dezain', hint: 'Desain (Design)' },
-        { char: 'アプリ', romaji: 'apuri', hint: 'Aplikasi (App)' },
-        { char: 'プロトタイプ', romaji: 'purototaipu', hint: 'Prototipe (Prototype)' },
-        { char: 'リサーチ', romaji: 'risaachi', hint: 'Riset (Research)' },
-        { char: 'ユーザー', romaji: 'yuuzaa', hint: 'Pengguna (User)' },
-        { char: 'コンポーネント', romaji: 'konpoonento', hint: 'Komponen (Component)' },
-        { char: 'レイアウト', romaji: 'reiauto', hint: 'Tata letak (Layout)' },
-        { char: 'ポートフォリオ', romaji: 'pootoforio', hint: 'Portofolio (Portfolio)' },
-        { char: 'フィードバック', romaji: 'fiidobakku', hint: 'Masukan (Feedback)' },
-        { char: 'ミートアップ', romaji: 'miitoappu', hint: 'Acara komunitas (Meetup)' },
-        { char: 'エンジニア', romaji: 'enjinia', hint: 'Engineer / Developer' },
-        { char: 'メニュー', romaji: 'menyuu', hint: 'Menu restoran / UI' },
-        { char: 'コーヒー', romaji: 'koohii', hint: 'Kopi (Coffee)' },
-        { char: 'ホテル', romaji: 'hoteru', hint: 'Hotel' }
+        { char: 'つかいやすい', kanji: '使いやすい', romaji: 'tsukaiyasui', hint: 'Mudah digunakan (Good UX)' },
+        { char: 'わかりやすい', kanji: '分かりやすい', romaji: 'wakariyasui', hint: 'Mudah dipahami (Intuitif)' },
+        { char: 'がめん', kanji: '画面', romaji: 'gamen', hint: 'Layar / Screen UI (画面)' },
+        { char: 'かだい', kanji: '課題', romaji: 'kadai', hint: 'Masalah / Pain point (課題)' },
+        { char: 'かいぜん', kanji: '改善', romaji: 'kaizen', hint: 'Perbaikan / Iterasi (改善)' },
+        { char: 'せってい', kanji: '設定', romaji: 'settei', hint: 'Pengaturan / Settings (設定)' },
+        { char: 'けんさく', kanji: '検索', romaji: 'kensaku', hint: 'Pencarian / Search (検索)' },
+        { char: 'しごと', kanji: '仕事', romaji: 'shigoto', hint: 'Pekerjaan (仕事)' },
+        { char: 'りょこう', kanji: '旅行', romaji: 'ryokou', hint: 'Liburan / Travel (旅行)' },
+        { char: 'おすすめ', kanji: 'お勧め', romaji: 'osusume', hint: 'Rekomendasi' },
+        { char: 'すみません', kanji: 'すいません', romaji: 'sumimasen', hint: 'Permisi / Maaf' },
+        { char: 'ありがとう', kanji: '有難う', romaji: 'arigatou', hint: 'Terima kasih' },
+        { char: 'おいしい', kanji: '美味しい', romaji: 'oishii', hint: 'Enak / Lezat' },
+        { char: 'たのしみ', kanji: '楽しみ', romaji: 'tanoshimi', hint: 'Menantikan / Excited' },
+        { char: 'すこし', kanji: '少し', romaji: 'sukoshi', hint: 'Sedikit' },
+        { char: 'まいにち', kanji: '毎日', romaji: 'mainichi', hint: 'Setiap hari' },
+        { char: 'デザイン', kanji: 'デザイン', romaji: 'dezain', hint: 'Desain (Design)' },
+        { char: 'アプリ', kanji: 'アプリ', romaji: 'apuri', hint: 'Aplikasi (App)' },
+        { char: 'プロトタイプ', kanji: 'プロトタイプ', romaji: 'purototaipu', hint: 'Prototipe (Prototype)' },
+        { char: 'リサーチ', kanji: 'リサーチ', romaji: 'risaachi', hint: 'Riset (Research)' },
+        { char: 'ユーザー', kanji: 'ユーザー', romaji: 'yuuzaa', hint: 'Pengguna (User)' },
+        { char: 'コンポーネント', kanji: 'コンポーネント', romaji: 'konpoonento', hint: 'Komponen (Component)' },
+        { char: 'レイアウト', kanji: 'レイアウト', romaji: 'reiauto', hint: 'Tata letak (Layout)' },
+        { char: 'ポートフォリオ', kanji: 'ポートフォリオ', romaji: 'pootoforio', hint: 'Portofolio (Portfolio)' },
+        { char: 'フィードバック', kanji: 'フィードバック', romaji: 'fiidobakku', hint: 'Masukan (Feedback)' },
+        { char: 'ミートアップ', kanji: 'ミートアップ', romaji: 'miitoappu', hint: 'Acara komunitas (Meetup)' },
+        { char: 'エンジニア', kanji: 'エンジニア', romaji: 'enjinia', hint: 'Engineer / Developer' },
+        { char: 'メニュー', kanji: 'メニュー', romaji: 'menyuu', hint: 'Menu restoran / UI' },
+        { char: 'コーヒー', kanji: '珈琲', romaji: 'koohii', hint: 'Kopi (Coffee)' },
+        { char: 'ホテル', kanji: 'ホテル', romaji: 'hoteru', hint: 'Hotel' }
       ],
       sentences: [
-        { char: 'にほんへいきます', romaji: 'nihon e ikimasu', hint: 'Pergi ke Jepang' },
-        { char: 'インドネシアからきました', romaji: 'indoneshia kara kimashita', hint: 'Datang dari Indonesia' },
-        { char: 'デザイナーをしています', romaji: 'dezainaa o shite imasu', hint: 'Bekerja sebagai Designer' },
-        { char: 'アプリをつくっています', romaji: 'apuri o tsukutte imasu', hint: 'Sedang membuat aplikasi' },
-        { char: 'にほんごがすこしわかります', romaji: 'nihongo ga sukoshi wakarimasu', hint: 'Paham sedikit bahasa Jepang' },
-        { char: 'アニメがよくすきです', romaji: 'anime ga yoku suki desu', hint: 'Sangat suka anime' },
-        { char: 'とてもつかいやすいです', romaji: 'totemo tsukaiyasui desu', hint: 'Sangat mudah digunakan' },
-        { char: 'コーヒーをおねがいします', romaji: 'koohii o onegaishimasu', hint: 'Tolong minta kopi' },
-        { char: 'おかいけいをおねがいします', romaji: 'okaikei o onegaishimasu', hint: 'Tolong minta bon/bill-nya' },
-        { char: 'これはいくらですか', romaji: 'kore wa ikura desu ka', hint: 'Ini harganya berapa?' },
-        { char: 'おすすめはなんですか', romaji: 'osusume wa nan desu ka', hint: 'Rekomendasinya apa?' },
-        { char: 'ゆっくりはなしてください', romaji: 'yukkuri hanashite kudasai', hint: 'Tolong bicara pelan-pelan' },
-        { char: 'にほんで はたらきたいです', romaji: 'nihon de hatarakitai desu', hint: 'Ingin bekerja di Jepang' },
-        { char: 'とてもたのしみにしています', romaji: 'totemo tanoshimi ni shite imasu', hint: 'Sangat menantikannya' }
+        { char: 'にほんへいきます', kanji: '日本へ行きます', romaji: 'nihon e ikimasu', hint: 'Pergi ke Jepang' },
+        { char: 'インドネシアからきました', kanji: 'インドネシアから来ました', romaji: 'indoneshia kara kimashita', hint: 'Datang dari Indonesia' },
+        { char: 'デザイナーをしています', kanji: 'デザイナーをしています', romaji: 'dezainaa o shite imasu', hint: 'Bekerja sebagai Designer' },
+        { char: 'アプリをつくっています', kanji: 'アプリを作っています', romaji: 'apuri o tsukutte imasu', hint: 'Sedang membuat aplikasi' },
+        { char: 'にほんごがすこしわかります', kanji: '日本語が少しわかります', romaji: 'nihongo ga sukoshi wakarimasu', hint: 'Paham sedikit bahasa Jepang' },
+        { char: 'アニメがよくすきです', kanji: 'アニメがよく好きです', romaji: 'anime ga yoku suki desu', hint: 'Sangat suka anime' },
+        { char: 'とてもつかいやすいです', kanji: 'とても使いやすいです', romaji: 'totemo tsukaiyasui desu', hint: 'Sangat mudah digunakan' },
+        { char: 'コーヒーをおねがいします', kanji: 'コーヒーをお願いします', romaji: 'koohii o onegaishimasu', hint: 'Tolong minta kopi' },
+        { char: 'おかいけいをおねがいします', kanji: 'お会計をお願いします', romaji: 'okaikei o onegaishimasu', hint: 'Tolong minta bon/bill-nya' },
+        { char: 'これはいくらですか', kanji: 'これはいくらですか', romaji: 'kore wa ikura desu ka', hint: 'Ini harganya berapa?' },
+        { char: 'おすすめはなんですか', kanji: 'おすすめは何ですか', romaji: 'osusume wa nan desu ka', hint: 'Rekomendasinya apa?' },
+        { char: 'ゆっくりはなしてください', kanji: 'ゆっくり話してください', romaji: 'yukkuri hanashite kudasai', hint: 'Tolong bicara pelan-pelan' },
+        { char: 'にほんで はたらきたいです', kanji: '日本で働きたいです', romaji: 'nihon de hatarakitai desu', hint: 'Ingin bekerja di Jepang' },
+        { char: 'とてもたのしみにしています', kanji: 'とても楽しみにしています', romaji: 'totemo tanoshimi ni shite imasu', hint: 'Sangat menantikannya' }
       ]
+    };
+
+    const singleKanaHomophones = {
+      a: ['あ', 'ア', '亜', 'あにめ', 'アニメ'],
+      i: ['い', 'イ', '胃', '意', 'いく', '行く'],
+      u: ['う', 'ウ', '鵜', 'うまい'],
+      e: ['え', 'エ', '絵', '柄', 'えき', '駅'],
+      o: ['お', 'オ', '尾', 'おれ', '俺'],
+      ka: ['か', 'カ', '蚊', '課', 'かだい', '課題'],
+      ki: ['き', 'キ', '木', '気', '黄', 'きのう', '昨日'],
+      ku: ['く', 'ク', '区', '九', '苦', 'くるま', '車'],
+      ke: ['け', 'ケ', '毛', '気', 'けど'],
+      ko: ['こ', 'コ', '子', '個', 'これ'],
+      sa: ['さ', 'サ', '差', 'さくら', '桜'],
+      shi: ['し', 'シ', '四', '死', '詩', '市', 'しごと', '仕事'],
+      su: ['す', 'ス', '酢', '巣', 'すき', '好き'],
+      se: ['せ', 'セ', '背', 'せってい', '設定'],
+      so: ['そ', 'ソ', 'それ'],
+      ta: ['た', 'タ', '田', '他', 'たべる', '食べる'],
+      chi: ['ち', 'チ', '血', '地', '知', 'ちかい', '近い'],
+      tsu: ['つ', 'ツ', '津', 'つかいやすい', '使いやすい'],
+      te: ['て', 'テ', '手', 'ていねい', '丁寧'],
+      to: ['と', 'ト', '戸', '十', 'ともだち', '友達'],
+      na: ['な', 'ナ', '名', '菜', 'なに', '何'],
+      ni: ['に', 'ニ', '二', '荷', 'にほん', '日本'],
+      nu: ['ぬ', 'ヌ', 'いぬ', '犬'],
+      ne: ['ね', 'ネ', '根', '値', '音', 'ねこ', '猫'],
+      no: ['の', 'ノ', '野', 'のむ', '飲む'],
+      ha: ['は', 'ハ', '歯', '葉', '派', 'はなす', '話す'],
+      hi: ['ひ', 'ヒ', '日', '火', '灯', 'ひと', '人'],
+      fu: ['ふ', 'フ', '不', '負', '譜', 'ふだん', '普段'],
+      he: ['へ', 'ヘ', '屁', 'へや', '部屋'],
+      ho: ['ほ', 'ホ', '帆', '穂', '歩', 'ほんとう', '本当'],
+      ma: ['ま', 'マ', '間', '魔', '真', 'まだ'],
+      mi: ['み', 'ミ', '身', '実', '三', 'みる', '見る'],
+      mu: ['む', 'ム', '無', '六', 'むずかしい', '難しい'],
+      me: ['め', 'メ', '目', '芽', '眼', 'がめん', '画面'],
+      mo: ['も', 'モ', '藻', '喪', 'ものづくり'],
+      ya: ['や', 'ヤ', '矢', '夜', '屋', 'やすい', '安い'],
+      yu: ['ゆ', 'ユ', '湯', 'ゆめ', '夢'],
+      yo: ['よ', 'ヨ', '世', '夜', '四', 'よく'],
+      ra: ['ら', 'ラ', 'らいねん', '来年'],
+      ri: ['り', 'リ', '理', '利', 'りょこう', '旅行'],
+      ru: ['る', 'ル', '留', 'つくる', '作る'],
+      re: ['れ', 'レ', 'れんしゅう', '練習'],
+      ro: ['ろ', 'ロ', '炉', '路', 'ろく', '六'],
+      wa: ['わ', 'ワ', '輪', '和', 'わかりやすい'],
+      'o (wo)': ['を', 'お', 'オ', '尾'],
+      n: ['ん', 'ン', 'にほん', '日本', 'デザイン']
     };
 
     let currentKanaMode = 'hiragana';
     let currentKanaTarget = null;
+    let kanaVoiceOnlyMode = false;
     let kanaStreak = 0;
     let kanaTotalAttempts = 0;
     let kanaCorrectAttempts = 0;
+
+    function toggleKanaVoiceMode() {
+      kanaVoiceOnlyMode = !kanaVoiceOnlyMode;
+      const btn = document.getElementById('kana-voice-mode-btn');
+      const grid = document.getElementById('kana-options-grid');
+      const voicePanel = document.getElementById('kana-voice-only-panel');
+      if (kanaVoiceOnlyMode) {
+        btn.textContent = '🎤 Mode Mic: ON';
+        btn.className = 'px-2 py-0.5 rounded-md border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold';
+        grid.classList.add('hidden');
+        voicePanel.classList.remove('hidden');
+      } else {
+        btn.textContent = '🎤 Mode Mic: OFF';
+        btn.className = 'px-2 py-0.5 rounded-md border border-[var(--border)] bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] font-medium';
+        grid.classList.remove('hidden');
+        voicePanel.classList.add('hidden');
+      }
+    }
 
     function setKanaDeck(mode) {
       currentKanaMode = mode;
@@ -2141,6 +2226,58 @@
       if (currentKanaTarget) speakJapanese(currentKanaTarget.char);
     }
 
+    function evaluateKanaSpeechMatch(target, transcript) {
+      const cleanSpoken = (transcript || '').trim();
+      if (!cleanSpoken) return false;
+
+      const s1 = calcJpSimilarity(target.char, cleanSpoken);
+      const s2 = target.kanji ? calcJpSimilarity(target.kanji, cleanSpoken) : 0;
+      const s3 = calcJpSimilarity(target.romaji, cleanSpoken.toLowerCase());
+      if (Math.max(s1, s2, s3) >= 70) return true;
+
+      // Single character homophone / example word check
+      const homophones = singleKanaHomophones[target.romaji] || [];
+      for (const h of homophones) {
+        if (cleanSpoken.includes(h) || calcJpSimilarity(h, cleanSpoken) >= 70) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function startMicCheckForKana() {
+      if (!currentKanaTarget) return;
+      const activeBtn = kanaVoiceOnlyMode
+        ? document.getElementById('kana-big-mic-btn')
+        : document.getElementById('kana-mic-btn');
+      const msgEl = document.getElementById('kana-feedback-msg');
+
+      runSpeechRecognition((transcript) => {
+        kanaTotalAttempts++;
+        const isMatched = evaluateKanaSpeechMatch(currentKanaTarget, transcript);
+        const isWordOrSent = currentKanaMode === 'words' || currentKanaMode === 'sentences';
+        const xpGain = currentKanaMode === 'sentences' ? 20 : (currentKanaMode === 'words' ? 15 : 10);
+
+        if (isMatched) {
+          kanaCorrectAttempts++;
+          kanaStreak++;
+          addXp(xpGain);
+          speakJapanese(currentKanaTarget.char);
+          msgEl.textContent = isWordOrSent
+            ? `🎤 ✅ 「${transcript}」 = ${currentKanaTarget.romaji} ("${currentKanaTarget.hint}") (+${xpGain} XP)`
+            : `🎤 ✅ 「${transcript}」 = ${currentKanaTarget.romaji} (+${xpGain} XP)`;
+          nextKanaCard();
+        } else {
+          kanaStreak = 0;
+          msgEl.textContent = `🎤 ❌ Terdeteksi: 「${transcript}」 — Seharusnya: "${currentKanaTarget.romaji}"`;
+        }
+
+        const acc = Math.round((kanaCorrectAttempts / kanaTotalAttempts) * 100);
+        document.getElementById('kana-streak-label').textContent = `Streak: ${kanaStreak} 🔥`;
+        document.getElementById('kana-accuracy-label').textContent = `${acc}%`;
+      }, activeBtn);
+    }
+
     function nextKanaCard() {
       const pool = getActiveKanaPool();
       currentKanaTarget = pool[Math.floor(Math.random() * pool.length)];
@@ -2167,7 +2304,8 @@
 
       const grid = document.getElementById('kana-options-grid');
       const isLongText = currentKanaMode === 'words' || currentKanaMode === 'sentences';
-      grid.className = isLongText ? 'grid grid-cols-1 sm:grid-cols-2 gap-2' : 'grid grid-cols-2 sm:grid-cols-4 gap-2';
+      const baseGridClass = isLongText ? 'grid grid-cols-1 sm:grid-cols-2 gap-2' : 'grid grid-cols-2 sm:grid-cols-4 gap-2';
+      grid.className = kanaVoiceOnlyMode ? baseGridClass + ' hidden' : baseGridClass;
 
       grid.innerHTML = options.map(opt => `
         <button onclick="answerKana('${opt.romaji.replace(/'/g, "\\'")}')" class="py-2.5 px-3 rounded-xl font-bold ${currentKanaMode === 'sentences' ? 'text-xs sm:text-sm' : 'text-sm'} bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:border-[var(--foreground)] transition-all">
