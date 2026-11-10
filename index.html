@@ -948,6 +948,268 @@
       if (pctEl) pctEl.textContent = '0%';
     }
 
+    // Subtle pleasant chime when a voice answer is correct (avoids TTS echoing into live mic)
+    function playSuccessChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.07); // A5
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.19);
+        setTimeout(() => { try { ctx.close(); } catch (e) {} }, 250);
+      } catch (e) {}
+    }
+
+    // =====================================================
+    // CONTINUOUS HANDS-FREE MIC LOOP ENGINE
+    // =====================================================
+    let continuousMicActive = false;
+    let continuousMicSection = null; // 'kana' | 'srs' | 'lego'
+    let continuousRec = null;
+    let continuousStream = null;
+    let continuousAudioCtx = null;
+    let continuousAnimFrame = null;
+    let continuousIgnoreUntil = 0;
+    let continuousConsumedMap = {};
+    let continuousRestartTimer = null;
+
+    function isContinuousMicRunningFor(section) {
+      return continuousMicActive && continuousMicSection === section;
+    }
+
+    function markAllCurrentSpeechConsumed() {
+      continuousIgnoreUntil = Date.now() + 450;
+      // Also restart recognition buffer cleanly so previous card's speech never spills into the new card
+      if (continuousRec) {
+        try { continuousRec.abort(); } catch (e) {}
+      }
+    }
+
+    function stopContinuousMicLoop() {
+      continuousMicActive = false;
+      const prevSection = continuousMicSection;
+      continuousMicSection = null;
+      if (continuousRestartTimer) {
+        clearTimeout(continuousRestartTimer);
+        continuousRestartTimer = null;
+      }
+      if (continuousRec) {
+        try { continuousRec.onend = null; continuousRec.abort(); } catch (e) {}
+        continuousRec = null;
+      }
+      if (continuousAnimFrame) {
+        cancelAnimationFrame(continuousAnimFrame);
+        continuousAnimFrame = null;
+      }
+      if (continuousStream) {
+        continuousStream.getTracks().forEach(t => t.stop());
+        continuousStream = null;
+      }
+      if (continuousAudioCtx) {
+        try { continuousAudioCtx.close(); } catch (e) {}
+        continuousAudioCtx = null;
+      }
+      updateContinuousMicButtonsUI(prevSection);
+    }
+
+    function updateContinuousMicButtonsUI(section, liveStatusText = '') {
+      // Kana Blitz buttons
+      const kanaModeBtn = document.getElementById('kana-voice-mode-btn');
+      const kanaMicBtn = document.getElementById('kana-mic-btn');
+      const kanaBigBtn = document.getElementById('kana-big-mic-btn');
+      const isKanaRunning = isContinuousMicRunningFor('kana');
+
+      if (kanaModeBtn) {
+        if (kanaVoiceOnlyMode || isKanaRunning) {
+          kanaModeBtn.textContent = isKanaRunning ? '🔴 Mode Mic: ON (Stop)' : '🎤 Mode Mic: ON';
+          kanaModeBtn.className = 'px-2 py-0.5 rounded-md border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold';
+        } else {
+          kanaModeBtn.textContent = '🎤 Mode Mic: OFF';
+          kanaModeBtn.className = 'px-2 py-0.5 rounded-md border border-[var(--border)] bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] font-medium';
+        }
+      }
+      if (kanaMicBtn) {
+        if (isKanaRunning) {
+          kanaMicBtn.classList.add('mic-recording');
+          kanaMicBtn.textContent = liveStatusText || '⏹️ Stop Mic';
+        } else {
+          kanaMicBtn.classList.remove('mic-recording');
+          kanaMicBtn.textContent = '🎤 Ucapkan';
+        }
+      }
+      if (kanaBigBtn) {
+        if (isKanaRunning) {
+          kanaBigBtn.classList.add('mic-recording');
+          kanaBigBtn.textContent = liveStatusText || '🔴 Mic Aktif Non-Stop — Langsung Bicara! (Klik = Stop)';
+        } else {
+          kanaBigBtn.classList.remove('mic-recording');
+          kanaBigBtn.textContent = '🎤 Mulai Bicara Non-Stop';
+        }
+      }
+
+      // SRS button
+      const srsBtn = document.getElementById('srs-mic-btn');
+      const isSrsRunning = isContinuousMicRunningFor('srs');
+      if (srsBtn) {
+        if (isSrsRunning) {
+          srsBtn.classList.add('mic-recording');
+          srsBtn.textContent = liveStatusText || '⏹️ Stop Mic';
+        } else {
+          srsBtn.classList.remove('mic-recording');
+          srsBtn.textContent = '🎤 Mic';
+        }
+      }
+
+      // Lego button
+      const legoBtn = document.getElementById('lego-mic-btn');
+      const isLegoRunning = isContinuousMicRunningFor('lego');
+      if (legoBtn) {
+        if (isLegoRunning) {
+          legoBtn.classList.add('mic-recording');
+          legoBtn.textContent = liveStatusText || '⏹️ Stop Mic';
+        } else {
+          legoBtn.classList.remove('mic-recording');
+          legoBtn.textContent = '🎤 Mic';
+        }
+      }
+    }
+
+    async function startContinuousMicLoop(section, onSpeechCandidateCallback) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) {
+        alert('Browser ini belum mendukung Web Speech API mikrofon secara langsung. Gunakan Google Chrome atau Microsoft Edge.');
+        return;
+      }
+
+      // Stop any single-shot or previous continuous session first
+      if (activeSpeechRec) {
+        try { activeSpeechRec.abort(); } catch (e) {}
+        activeSpeechRec = null;
+      }
+      if (continuousMicActive) {
+        stopContinuousMicLoop();
+      }
+
+      continuousMicActive = true;
+      continuousMicSection = section;
+      continuousIgnoreUntil = 0;
+      continuousConsumedMap = {};
+      updateContinuousMicButtonsUI(section, '🎙️ Mendengarkan...');
+
+      // Open audio stream for chosen microphone & volume meter
+      let selectedAudioTrack = null;
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        try {
+          const devId = appState.selectedMicDeviceId;
+          const constraints = devId && devId !== 'default'
+            ? { audio: { deviceId: { exact: devId } } }
+            : { audio: true };
+          continuousStream = await navigator.mediaDevices.getUserMedia(constraints);
+          selectedAudioTrack = continuousStream.getAudioTracks()[0] || null;
+
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          continuousAudioCtx = new AudioCtx();
+          const src = continuousAudioCtx.createMediaStreamSource(continuousStream);
+          const analyser = continuousAudioCtx.createAnalyser();
+          analyser.fftSize = 256;
+          src.connect(analyser);
+          const freqData = new Uint8Array(analyser.frequencyBinCount);
+
+          const tickContinuousVol = () => {
+            if (!continuousMicActive || !continuousStream) return;
+            analyser.getByteFrequencyData(freqData);
+            let sum = 0;
+            for (let i = 0; i < freqData.length; i++) sum += freqData[i];
+            const v = Math.min(100, Math.round(((sum / freqData.length) / 65) * 100));
+            updateContinuousMicButtonsUI(section, `🔴 Mic ON (Vol: ${v}%) — Klik = Stop`);
+            continuousAnimFrame = requestAnimationFrame(tickContinuousVol);
+          };
+          tickContinuousVol();
+        } catch (err) {
+          // Continue with default browser SpeechRecognition
+        }
+      }
+
+      const spawnRecognizer = () => {
+        if (!continuousMicActive || continuousMicSection !== section) return;
+        continuousConsumedMap = {};
+
+        const rec = new SpeechRec();
+        continuousRec = rec;
+        rec.lang = 'ja-JP';
+        rec.continuous = true;
+        rec.interimResults = true;
+        rec.maxAlternatives = 5;
+
+        rec.onresult = (event) => {
+          if (!continuousMicActive || continuousMicSection !== section) return;
+          if (Date.now() < continuousIgnoreUntil) return;
+
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const res = event.results[i];
+            const consumedLen = continuousConsumedMap[i] || 0;
+
+            const alts = [];
+            for (let j = 0; j < res.length; j++) {
+              const fullTxt = (res[j].transcript || '');
+              const sliced = fullTxt.slice(consumedLen).trim();
+              if (sliced) alts.push(sliced);
+            }
+
+            const primary = alts[0] || '';
+            if (!primary) continue;
+
+            // Call handler with (primary, alts, isFinal)
+            const matchedAndAdvanced = onSpeechCandidateCallback(primary, alts, res.isFinal);
+            if (matchedAndAdvanced) {
+              // Mark consumed & reset buffer for the newly loaded question
+              continuousConsumedMap[i] = (res[0].transcript || '').length;
+              markAllCurrentSpeechConsumed();
+              return;
+            } else if (res.isFinal) {
+              continuousConsumedMap[i] = (res[0].transcript || '').length;
+            }
+          }
+        };
+
+        rec.onerror = (err) => {
+          if (!continuousMicActive) return;
+          if (err.error === 'not-allowed' || err.error === 'service-not-allowed') {
+            stopContinuousMicLoop();
+            alert('Izin mikrofon ditolak oleh browser. Klik ikon sebelah kiri alamat URL untuk mengizinkan Microphone.');
+          }
+        };
+
+        rec.onend = () => {
+          if (!continuousMicActive || continuousMicSection !== section) return;
+          // Automatically restart immediately so the user never has to click Mic again!
+          continuousRestartTimer = setTimeout(spawnRecognizer, 80);
+        };
+
+        try {
+          if (selectedAudioTrack && rec.start.length >= 1) {
+            rec.start(selectedAudioTrack);
+          } else {
+            rec.start();
+          }
+        } catch (e) {
+          try {
+            rec.start();
+          } catch (e2) {}
+        }
+      };
+
+      spawnRecognizer();
+    }
+
     async function runSpeechRecognition(onResultCallback, buttonEl, isDiagnosticTest = false) {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRec) {
@@ -1030,7 +1292,6 @@
 
       let resolved = false;
       let lastInterimText = '';
-      let bestFinalList = [];
 
       if (buttonEl) {
         buttonEl.classList.add('mic-recording');
@@ -1046,7 +1307,6 @@
             for (let j = 0; j < res.length; j++) {
               if (res[j].transcript) alts.push(res[j].transcript.trim());
             }
-            bestFinalList = alts;
             const primary = alts[0] || '';
             if (primary && !resolved) {
               resolved = true;
@@ -1067,7 +1327,6 @@
 
       rec.onerror = (err) => {
         if (resolved) return;
-        // If user spoke a quick syllable captured in interim results before error/end, use it!
         if (lastInterimText) {
           resolved = true;
           cleanupMicMonitor();
@@ -1079,18 +1338,9 @@
         if (err.error === 'not-allowed' || err.error === 'service-not-allowed') {
           const manual = prompt('Izin mikrofon diblokir oleh browser. Izinkan akses mikrofon di ikon sebelah kiri URL bar, atau ketik kalimat Jepang di sini:');
           if (manual) onResultCallback(manual, true, [manual]);
-        } else if (err.error === 'no-speech') {
-          const statusMsg = peakVolume < 4
-            ? '⚠️ Sinyal Mic 0% (Suara tidak masuk). Pilih perangkat mic Anda di panel "🎙️ Pilih Mic" di bagian atas!'
-            : '⚠️ Suara masuk (Vol ' + peakVolume + '%), tetapi browser belum mengenali kata Jepangnya. Coba ucapkan sedikit lebih panjang/jelas, atau cek pilihan mic di atas.';
-          const kanaMsg = document.getElementById('kana-feedback-msg');
-          if (kanaMsg && !document.getElementById('tab-kana').classList.contains('hidden')) {
-            kanaMsg.textContent = statusMsg;
-          }
-          if (peakVolume < 4) {
-            const drawer = document.getElementById('mic-settings-drawer');
-            if (drawer && drawer.classList.contains('hidden')) toggleMicSettingsDrawer();
-          }
+        } else if (err.error === 'no-speech' && peakVolume < 4) {
+          const drawer = document.getElementById('mic-settings-drawer');
+          if (drawer && drawer.classList.contains('hidden')) toggleMicSettingsDrawer();
         }
       };
 
@@ -1106,7 +1356,6 @@
       };
 
       try {
-        // Chrome 124+ supports passing MediaStreamTrack to rec.start(track) to force the chosen microphone
         if (selectedAudioTrack && rec.start.length >= 1) {
           rec.start(selectedAudioTrack);
         } else {
@@ -1125,6 +1374,7 @@
     // TAB NAVIGATION
     // =====================================================
     function switchTab(tabId) {
+      if (continuousMicActive) stopContinuousMicLoop();
       const tabs = ['dashboard', 'lego', 'islands', 'kana', 'ai'];
       tabs.forEach(t => {
         const sec = document.getElementById('tab-' + t);
@@ -1829,21 +2079,52 @@
     }
 
     function startMicCheckForLego() {
-      const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
-      const targetJp = q.correctBlocks.join('');
-      const btn = document.getElementById('lego-mic-btn');
-      const resBox = document.getElementById('lego-mic-result');
+      if (isContinuousMicRunningFor('lego')) {
+        stopContinuousMicLoop();
+        return;
+      }
 
-      runSpeechRecognition((transcript) => {
-        const score = calcJpSimilarity(targetJp, transcript);
-        resBox.classList.remove('hidden');
-        if (score >= 70) {
-          addXp(25);
-          resBox.innerHTML = `<span class="font-bold text-[var(--foreground)]">🎤 ${score}% (+25 XP)</span> — 「${transcript}」`;
-        } else {
-          resBox.innerHTML = `<span class="font-bold text-[var(--foreground)]">🎤 ${score}%</span> — Terdeteksi: 「${transcript}」`;
+      const resBox = document.getElementById('lego-mic-result');
+      resBox.classList.remove('hidden');
+      resBox.innerHTML = `<span class="text-[var(--muted-foreground)]">🔴 Mic Aktif (Hands-Free) — langsung ucapkan kalimatnya...</span>`;
+
+      startContinuousMicLoop('lego', (transcript, alts, isFinal) => {
+        const q = filteredLegoList[currentLegoIndex % filteredLegoList.length];
+        if (!q) return false;
+        const targetJp = q.correctBlocks.join('');
+
+        let bestScore = 0;
+        const candidates = alts && alts.length ? alts : [transcript];
+        for (const cand of candidates) {
+          const s = calcJpSimilarity(targetJp, cand);
+          if (s > bestScore) bestScore = s;
         }
-      }, btn);
+
+        resBox.classList.remove('hidden');
+        if (bestScore >= 70) {
+          addXp(25);
+          playSuccessChime();
+          resBox.innerHTML = `<span class="font-bold text-[var(--foreground)]">🎤 ✅ ${bestScore}% (+25 XP)</span> — 「${transcript}」 (Lanjut soal berikutnya...)`;
+          continuousIgnoreUntil = Date.now() + 950;
+          setTimeout(() => {
+            nextLegoQuestion();
+            if (isContinuousMicRunningFor('lego')) {
+              const box = document.getElementById('lego-mic-result');
+              if (box) {
+                box.classList.remove('hidden');
+                box.innerHTML = `<span class="text-[var(--muted-foreground)]">🔴 Mic masih aktif — silakan ucapkan soal ini...</span>`;
+              }
+            }
+          }, 850);
+          return true;
+        } else if (isFinal) {
+          resBox.innerHTML = `<span class="font-bold text-[var(--foreground)]">🎤 ${bestScore}%</span> — Terdeteksi: 「${transcript}」 (Coba ucapkan lagi)`;
+          return false;
+        } else {
+          resBox.innerHTML = `<span class="text-[var(--muted-foreground)]">🎙️ Mendengar: 「${transcript}」...</span>`;
+          return false;
+        }
+      });
     }
 
     function prevLegoQuestion() {
@@ -2489,11 +2770,19 @@
         btn.className = 'px-2 py-0.5 rounded-md border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold';
         grid.classList.add('hidden');
         voicePanel.classList.remove('hidden');
+        if (!isContinuousMicRunningFor('kana')) {
+          startMicCheckForKana();
+        } else {
+          updateContinuousMicButtonsUI();
+        }
       } else {
         btn.textContent = '🎤 Mode Mic: OFF';
         btn.className = 'px-2 py-0.5 rounded-md border border-[var(--border)] bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] font-medium';
         grid.classList.remove('hidden');
         voicePanel.classList.add('hidden');
+        if (isContinuousMicRunningFor('kana')) {
+          stopContinuousMicLoop();
+        }
       }
     }
 
@@ -2564,40 +2853,66 @@
 
     function startMicCheckForKana() {
       if (!currentKanaTarget) return;
-      const activeBtn = kanaVoiceOnlyMode
-        ? document.getElementById('kana-big-mic-btn')
-        : document.getElementById('kana-mic-btn');
       const msgEl = document.getElementById('kana-feedback-msg');
 
-      runSpeechRecognition((transcript, isManual, allTranscripts) => {
-        kanaTotalAttempts++;
+      if (isContinuousMicRunningFor('kana')) {
+        stopContinuousMicLoop();
+        if (msgEl) msgEl.textContent = '⏹️ Mic dihentikan.';
+        return;
+      }
+
+      if (msgEl) {
+        msgEl.textContent = '🔴 Mic Aktif Non-Stop — ucapkan jawabannya, soal akan lanjut otomatis!';
+      }
+
+      startContinuousMicLoop('kana', (transcript, allTranscripts, isFinal) => {
+        if (!currentKanaTarget) return false;
         const isMatched = evaluateKanaSpeechMatch(currentKanaTarget, transcript, allTranscripts);
         const isWordOrSent = currentKanaMode === 'words' || currentKanaMode === 'sentences';
         const xpGain = currentKanaMode === 'sentences' ? 20 : (currentKanaMode === 'words' ? 15 : 10);
 
         if (isMatched) {
+          const matchedCard = currentKanaTarget;
+          kanaTotalAttempts++;
           kanaCorrectAttempts++;
           kanaStreak++;
           addXp(xpGain);
-          speakJapanese(currentKanaTarget.char);
+          playSuccessChime();
           msgEl.textContent = isWordOrSent
-            ? `🎤 ✅ 「${transcript}」 = ${currentKanaTarget.romaji} ("${currentKanaTarget.hint}") (+${xpGain} XP)`
-            : `🎤 ✅ 「${transcript}」 = ${currentKanaTarget.romaji} (+${xpGain} XP)`;
+            ? `🎤 ✅ 「${transcript}」 = ${matchedCard.romaji} ("${matchedCard.hint}") (+${xpGain} XP) — Lanjut ucapkan soal ini!`
+            : `🎤 ✅ 「${transcript}」 = ${matchedCard.romaji} (+${xpGain} XP) — Lanjut ucapkan soal ini!`;
+          const acc = Math.round((kanaCorrectAttempts / kanaTotalAttempts) * 100);
+          document.getElementById('kana-streak-label').textContent = `Streak: ${kanaStreak} 🔥`;
+          document.getElementById('kana-accuracy-label').textContent = `${acc}%`;
           nextKanaCard();
-        } else {
+          return true;
+        } else if (isFinal) {
+          kanaTotalAttempts++;
           kanaStreak = 0;
-          msgEl.textContent = `🎤 ❌ Terdeteksi: 「${transcript}」 — Seharusnya: "${currentKanaTarget.romaji}"`;
+          msgEl.textContent = `🎤 💬 Terdengar: 「${transcript}」 — Coba ucapkan lagi ("${currentKanaTarget.romaji}")`;
+          const acc = Math.round((kanaCorrectAttempts / kanaTotalAttempts) * 100);
+          document.getElementById('kana-streak-label').textContent = `Streak: ${kanaStreak} 🔥`;
+          document.getElementById('kana-accuracy-label').textContent = `${acc}%`;
+          return false;
+        } else {
+          msgEl.textContent = `🎙️ Mendengar: 「${transcript}」...`;
+          return false;
         }
-
-        const acc = Math.round((kanaCorrectAttempts / kanaTotalAttempts) * 100);
-        document.getElementById('kana-streak-label').textContent = `Streak: ${kanaStreak} 🔥`;
-        document.getElementById('kana-accuracy-label').textContent = `${acc}%`;
-      }, activeBtn);
+      });
     }
 
     function nextKanaCard() {
+      if (typeof markAllCurrentSpeechConsumed === 'function') markAllCurrentSpeechConsumed();
       const pool = getActiveKanaPool();
-      currentKanaTarget = pool[Math.floor(Math.random() * pool.length)];
+      let nextCandidate = pool[Math.floor(Math.random() * pool.length)];
+      if (pool.length > 1 && currentKanaTarget) {
+        let tries = 0;
+        while (nextCandidate.char === currentKanaTarget.char && tries < 6) {
+          nextCandidate = pool[Math.floor(Math.random() * pool.length)];
+          tries++;
+        }
+      }
+      currentKanaTarget = nextCandidate;
 
       const charEl = document.getElementById('kana-char-display');
       charEl.textContent = currentKanaTarget.char;
@@ -2770,21 +3085,55 @@
     }
 
     function startMicCheckForSrs() {
-      const card = currentSrsPool[currentSrsIdx % currentSrsPool.length];
-      const btn = document.getElementById('srs-mic-btn');
-      const fb = document.getElementById('srs-mic-feedback');
+      if (isContinuousMicRunningFor('srs')) {
+        stopContinuousMicLoop();
+        return;
+      }
 
-      runSpeechRecognition((transcript) => {
-        const score = calcJpSimilarity(card.jpText, transcript);
-        fb.classList.remove('hidden');
-        revealSrsCard();
-        if (score >= 70) {
-          addXp(20);
-          fb.innerHTML = `<span class="font-bold">🎉 ${score}% (+20 XP)</span> — 「${transcript}」`;
-        } else {
-          fb.innerHTML = `<span class="font-bold">🎤 ${score}%</span> — 「${transcript}」`;
+      const fb = document.getElementById('srs-mic-feedback');
+      fb.classList.remove('hidden');
+      fb.innerHTML = `<span class="text-[var(--muted-foreground)]">🔴 Mic Aktif Non-Stop — ucapkan bahasa Jepangnya...</span>`;
+
+      startContinuousMicLoop('srs', (transcript, alts, isFinal) => {
+        const card = currentSrsPool[currentSrsIdx % currentSrsPool.length];
+        if (!card) return false;
+
+        let bestScore = 0;
+        const candidates = alts && alts.length ? alts : [transcript];
+        for (const cand of candidates) {
+          const s1 = calcJpSimilarity(card.jpText, cand);
+          const s2 = card.romaji ? calcJpSimilarity(card.romaji.toLowerCase(), cand.toLowerCase()) : 0;
+          const score = Math.max(s1, s2);
+          if (score > bestScore) bestScore = score;
         }
-      }, btn);
+
+        fb.classList.remove('hidden');
+        if (bestScore >= 70) {
+          addXp(20);
+          playSuccessChime();
+          document.getElementById('srs-back-answer').classList.remove('hidden');
+          fb.innerHTML = `<span class="font-bold">🎉 ✅ ${bestScore}% (+20 XP)</span> — 「${transcript}」 (Lanjut kartu berikutnya...)`;
+          continuousIgnoreUntil = Date.now() + 1000;
+          setTimeout(() => {
+            currentSrsIdx = (currentSrsIdx + 1) % currentSrsPool.length;
+            renderSrsCard();
+            if (isContinuousMicRunningFor('srs')) {
+              const feedbackEl = document.getElementById('srs-mic-feedback');
+              if (feedbackEl) {
+                feedbackEl.classList.remove('hidden');
+                feedbackEl.innerHTML = `<span class="text-[var(--muted-foreground)]">🔴 Mic masih aktif — silakan ucapkan kartu ini...</span>`;
+              }
+            }
+          }, 900);
+          return true;
+        } else if (isFinal) {
+          fb.innerHTML = `<span class="font-bold">🎤 ${bestScore}%</span> — 「${transcript}」 (Coba ucapkan lagi)`;
+          return false;
+        } else {
+          fb.innerHTML = `<span class="text-[var(--muted-foreground)]">🎙️ Mendengar: 「${transcript}」...</span>`;
+          return false;
+        }
+      });
     }
 
     function rateSrsCard(rating) {
