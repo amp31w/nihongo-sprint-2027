@@ -114,15 +114,48 @@
           <span id="overall-progress-label" class="text-xs text-[var(--muted-foreground)] shrink-0">0%</span>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <button onclick="toggleAppTheme()" id="theme-toggle-btn" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90">
-            ☀️/🌙
+          <button onclick="toggleMicSettingsDrawer()" id="mic-settings-btn" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 font-semibold">
+            🎙️ Pilih Mic
           </button>
           <button onclick="testJapaneseVoice()" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90">
             🔊 Tes Audio
           </button>
+          <button onclick="toggleAppTheme()" id="theme-toggle-btn" class="text-xs px-2.5 py-1 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90">
+            ☀️/🌙
+          </button>
           <button onclick="resetAllProgress()" class="text-xs px-2 py-1 rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
             Reset
           </button>
+        </div>
+      </div>
+
+      <!-- COLLAPSIBLE MICROPHONE SELECTOR & LIVE VOLUME TESTER -->
+      <div id="mic-settings-drawer" class="hidden mt-3 pt-3 border-t border-[var(--border)] bg-[var(--background)] rounded-xl p-3 space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="text-xs font-bold text-[var(--foreground)]">🎙️ Pilih Perangkat & Cek Sinyal Mikrofon</div>
+          <button onclick="toggleMicSettingsDrawer()" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)]">✕ Tutup</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
+          <div class="md:col-span-6 flex gap-1.5">
+            <select id="mic-device-select" onchange="onSelectMicDevice()" class="flex-1 text-xs px-2.5 py-1.5 rounded-lg bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)]">
+              <option value="default">Default Browser Mic</option>
+            </select>
+            <button onclick="refreshMicDevices(true)" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] shrink-0">
+              🔄 Scan Mic
+            </button>
+          </div>
+          <div class="md:col-span-6 flex items-center gap-2">
+            <button onclick="toggleMicVolumeTest()" id="mic-test-btn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">
+              🎙️ Tes Suara Masuk
+            </button>
+            <div class="flex-1 h-3 bg-[var(--card)] rounded-full overflow-hidden border border-[var(--border)]">
+              <div id="mic-volume-bar" class="h-full bg-emerald-500 transition-all duration-75" style="width: 0%"></div>
+            </div>
+            <span id="mic-volume-pct" class="text-xs font-mono text-[var(--muted-foreground)] w-9 text-right">0%</span>
+          </div>
+        </div>
+        <div id="mic-test-status" class="text-xs text-[var(--muted-foreground)]">
+          Klik <strong>"🔄 Scan Mic"</strong> untuk memilih perangkat mic Anda, lalu klik <strong>"🎙️ Tes Suara Masuk"</strong> untuk mengecek apakah bar hijau bergerak saat Anda bicara.
         </div>
       </div>
     </header>
@@ -752,60 +785,338 @@
       return Math.min(100, Math.round((2 * matches * 100) / (tBg.length + sBg.length)));
     }
 
-    function runSpeechRecognition(onResultCallback, buttonEl) {
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRec) {
-        const manual = prompt('Browser ini belum mengizinkan Web Speech API mikrofon secara langsung. Ketik kalimat yang baru saja Anda ucapkan untuk dicek:');
-        if (manual) onResultCallback(manual, true);
+    // =====================================================
+    // MICROPHONE DEVICE SELECTOR, VOLUME METER & SPEECH REC
+    // =====================================================
+    let activeSpeechRec = null;
+    let micTestRunning = false;
+    let micTestStream = null;
+    let micTestAnimFrame = null;
+    let micTestAudioCtx = null;
+
+    function toggleMicSettingsDrawer() {
+      const drawer = document.getElementById('mic-settings-drawer');
+      if (!drawer) return;
+      const isHidden = drawer.classList.toggle('hidden');
+      if (!isHidden) {
+        refreshMicDevices(false);
+      } else if (micTestRunning) {
+        stopMicVolumeTest();
+      }
+    }
+
+    async function refreshMicDevices(requestPermission = false) {
+      const sel = document.getElementById('mic-device-select');
+      const statusEl = document.getElementById('mic-test-status');
+      if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        if (statusEl) statusEl.textContent = '⚠️ Browser ini tidak mendukung pemilihan perangkat mikrofon.';
         return;
       }
 
-      const rec = new SpeechRec();
-      rec.lang = 'ja-JP';
-      rec.interimResults = false;
-      rec.maxAlternatives = 1;
+      try {
+        if (requestPermission) {
+          const tempStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          tempStream.getTracks().forEach(t => t.stop());
+        }
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const mics = devices.filter(d => d.kind === 'audioinput');
+
+        if (mics.length === 0) {
+          sel.innerHTML = `<option value="default">Tidak ada mikrofon terdeteksi</option>`;
+          return;
+        }
+
+        const savedId = appState.selectedMicDeviceId || 'default';
+        sel.innerHTML = mics.map((m, idx) => {
+          const label = m.label || `Mikrofon #${idx + 1} (Klik "Scan Mic" untuk lihat nama)`;
+          const val = m.deviceId || 'default';
+          return `<option value="${val}" ${val === savedId ? 'selected' : ''}>${label}</option>`;
+        }).join('');
+
+        if (requestPermission && statusEl) {
+          statusEl.innerHTML = `✅ Ditemukan <strong>${mics.length} perangkat mikrofon</strong>. Pilih mic yang Anda pakai di dropdown, lalu klik <strong>"🎙️ Tes Suara Masuk"</strong>.`;
+        }
+      } catch (err) {
+        if (statusEl) {
+          statusEl.innerHTML = `❌ Izin mikrofon ditolak oleh browser (<code>${err.name}</code>). Klik ikon gembok/kamera di sebelah kiri alamat URL browser lalu izinkan Microphone.`;
+        }
+      }
+    }
+
+    function onSelectMicDevice() {
+      const sel = document.getElementById('mic-device-select');
+      if (!sel) return;
+      appState.selectedMicDeviceId = sel.value;
+      saveState();
+      const statusEl = document.getElementById('mic-test-status');
+      const selectedText = sel.options[sel.selectedIndex]?.text || 'Default';
+      if (statusEl) {
+        statusEl.innerHTML = `✅ Mikrofon dipilih: <strong>${selectedText}</strong>. Klik <strong>"🎙️ Tes Suara Masuk"</strong> untuk mencoba berbicara.`;
+      }
+      if (micTestRunning) {
+        stopMicVolumeTest();
+        startMicVolumeTest();
+      }
+    }
+
+    function toggleMicVolumeTest() {
+      if (micTestRunning) {
+        stopMicVolumeTest();
+      } else {
+        startMicVolumeTest();
+      }
+    }
+
+    async function startMicVolumeTest() {
+      const btn = document.getElementById('mic-test-btn');
+      const bar = document.getElementById('mic-volume-bar');
+      const pctEl = document.getElementById('mic-volume-pct');
+      const statusEl = document.getElementById('mic-test-status');
+
+      try {
+        await refreshMicDevices(true);
+        const devId = appState.selectedMicDeviceId;
+        const constraints = devId && devId !== 'default'
+          ? { audio: { deviceId: { exact: devId } } }
+          : { audio: true };
+
+        micTestStream = await navigator.mediaDevices.getUserMedia(constraints);
+        micTestRunning = true;
+        if (btn) btn.textContent = '⏹️ Hentikan Tes';
+
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        micTestAudioCtx = new AudioCtx();
+        const source = micTestAudioCtx.createMediaStreamSource(micTestStream);
+        const analyser = micTestAudioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+        const dataArr = new Uint8Array(analyser.frequencyBinCount);
+
+        let maxSeenVol = 0;
+        const updateMeter = () => {
+          if (!micTestRunning) return;
+          analyser.getByteFrequencyData(dataArr);
+          let sum = 0;
+          for (let i = 0; i < dataArr.length; i++) sum += dataArr[i];
+          const avg = sum / dataArr.length;
+          const volPct = Math.min(100, Math.round((avg / 65) * 100));
+          if (volPct > maxSeenVol) maxSeenVol = volPct;
+
+          if (bar) bar.style.width = `${volPct}%`;
+          if (pctEl) pctEl.textContent = `${volPct}%`;
+          micTestAnimFrame = requestAnimationFrame(updateMeter);
+        };
+        updateMeter();
+
+        if (statusEl) {
+          statusEl.innerHTML = `🎙️ <strong>Silakan bicara sekarang...</strong> Perhatikan apakah bar hijau bergerak. Kami juga sedang mengetes deteksi bahasa Jepang...`;
+        }
+
+        // Also run a quick speech recognition test simultaneously
+        runSpeechRecognition((transcript) => {
+          if (statusEl) {
+            statusEl.innerHTML = `🎉 <strong>Berhasil! Suara & Speech-to-Text Terhubung!</strong> Terdeteksi: <strong>「${transcript}」</strong> (Volume Puncak: ${maxSeenVol}%). Sekarang Anda bisa memakai mic di semua tab!`;
+          }
+          stopMicVolumeTest();
+        }, null, true);
+
+      } catch (err) {
+        micTestRunning = false;
+        if (btn) btn.textContent = '🎙️ Tes Suara Masuk';
+        if (statusEl) {
+          statusEl.innerHTML = `❌ Gagal membuka mikrofon (<code>${err.message || err.name}</code>). Coba pilih mikrofon lain di dropdown atas.`;
+        }
+      }
+    }
+
+    function stopMicVolumeTest() {
+      micTestRunning = false;
+      if (micTestAnimFrame) cancelAnimationFrame(micTestAnimFrame);
+      if (micTestStream) {
+        micTestStream.getTracks().forEach(t => t.stop());
+        micTestStream = null;
+      }
+      if (micTestAudioCtx) {
+        try { micTestAudioCtx.close(); } catch (e) {}
+        micTestAudioCtx = null;
+      }
+      const btn = document.getElementById('mic-test-btn');
+      const bar = document.getElementById('mic-volume-bar');
+      const pctEl = document.getElementById('mic-volume-pct');
+      if (btn) btn.textContent = '🎙️ Tes Suara Masuk';
+      if (bar) bar.style.width = '0%';
+      if (pctEl) pctEl.textContent = '0%';
+    }
+
+    async function runSpeechRecognition(onResultCallback, buttonEl, isDiagnosticTest = false) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) {
+        const manual = prompt('Browser ini belum mendukung Web Speech API mikrofon secara langsung (gunakan Google Chrome / Microsoft Edge untuk fitur suara). Ketik kalimat Jepang untuk dicek:');
+        if (manual) onResultCallback(manual, true, [manual]);
+        return;
+      }
+
+      // Stop any previous active recognition instance
+      if (activeSpeechRec) {
+        try { activeSpeechRec.abort(); } catch (e) {}
+        activeSpeechRec = null;
+      }
 
       const origText = buttonEl ? buttonEl.textContent : '';
+      let monitorStream = null;
+      let monitorCtx = null;
+      let monitorFrame = null;
+      let peakVolume = 0;
+
+      const cleanupMicMonitor = () => {
+        if (monitorFrame) cancelAnimationFrame(monitorFrame);
+        if (monitorStream) {
+          monitorStream.getTracks().forEach(t => t.stop());
+          monitorStream = null;
+        }
+        if (monitorCtx) {
+          try { monitorCtx.close(); } catch (e) {}
+          monitorCtx = null;
+        }
+        if (buttonEl) {
+          buttonEl.classList.remove('mic-recording');
+          buttonEl.textContent = origText;
+        }
+      };
+
+      // Open the user's selected microphone stream & monitor live input volume
+      let selectedAudioTrack = null;
+      if (!isDiagnosticTest && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        try {
+          const devId = appState.selectedMicDeviceId;
+          const constraints = devId && devId !== 'default'
+            ? { audio: { deviceId: { exact: devId } } }
+            : { audio: true };
+          monitorStream = await navigator.mediaDevices.getUserMedia(constraints);
+          selectedAudioTrack = monitorStream.getAudioTracks()[0] || null;
+
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          monitorCtx = new AudioCtx();
+          const src = monitorCtx.createMediaStreamSource(monitorStream);
+          const analyser = monitorCtx.createAnalyser();
+          analyser.fftSize = 256;
+          src.connect(analyser);
+          const freqData = new Uint8Array(analyser.frequencyBinCount);
+
+          const tickVol = () => {
+            if (!monitorStream) return;
+            analyser.getByteFrequencyData(freqData);
+            let sum = 0;
+            for (let i = 0; i < freqData.length; i++) sum += freqData[i];
+            const v = Math.min(100, Math.round(((sum / freqData.length) / 65) * 100));
+            if (v > peakVolume) peakVolume = v;
+            if (buttonEl && !lastInterimText) {
+              buttonEl.textContent = `🎙️ Bicara... (Vol: ${v}%)`;
+            }
+            monitorFrame = requestAnimationFrame(tickVol);
+          };
+          tickVol();
+        } catch (gumErr) {
+          // Proceed to SpeechRecognition even if getUserMedia monitor fails
+        }
+      }
+
+      const rec = new SpeechRec();
+      activeSpeechRec = rec;
+      rec.lang = 'ja-JP';
+      rec.continuous = false;
+      rec.interimResults = true;
+      rec.maxAlternatives = 5;
+
+      let resolved = false;
+      let lastInterimText = '';
+      let bestFinalList = [];
+
       if (buttonEl) {
         buttonEl.classList.add('mic-recording');
-        buttonEl.textContent = '🎙️ Mendengarkan (Bicara Jepang)...';
+        buttonEl.textContent = '🎙️ Bicara...';
       }
 
       rec.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        if (buttonEl) {
-          buttonEl.classList.remove('mic-recording');
-          buttonEl.textContent = origText;
+        let interim = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const res = event.results[i];
+          if (res.isFinal) {
+            const alts = [];
+            for (let j = 0; j < res.length; j++) {
+              if (res[j].transcript) alts.push(res[j].transcript.trim());
+            }
+            bestFinalList = alts;
+            const primary = alts[0] || '';
+            if (primary && !resolved) {
+              resolved = true;
+              cleanupMicMonitor();
+              onResultCallback(primary, false, alts);
+            }
+          } else {
+            interim += res[0].transcript;
+          }
         }
-        onResultCallback(transcript, false);
+        if (interim) {
+          lastInterimText = interim.trim();
+          if (buttonEl && !resolved) {
+            buttonEl.textContent = `🎙️ "${lastInterimText}"`;
+          }
+        }
       };
 
       rec.onerror = (err) => {
-        if (buttonEl) {
-          buttonEl.classList.remove('mic-recording');
-          buttonEl.textContent = origText;
+        if (resolved) return;
+        // If user spoke a quick syllable captured in interim results before error/end, use it!
+        if (lastInterimText) {
+          resolved = true;
+          cleanupMicMonitor();
+          onResultCallback(lastInterimText, false, [lastInterimText]);
+          return;
         }
+
+        cleanupMicMonitor();
         if (err.error === 'not-allowed' || err.error === 'service-not-allowed') {
-          const manual = prompt('Izin mikrofon diblokir oleh iframe/browser. Ucapkan kalimatnya keras-keras, lalu ketik/paste di sini untuk cek skor:');
-          if (manual) onResultCallback(manual, true);
-        } else {
-          alert('Tidak terdengar suara (' + err.error + '). Pastikan Anda berbicara dalam bahasa Jepang dekat mikrofon.');
+          const manual = prompt('Izin mikrofon diblokir oleh browser. Izinkan akses mikrofon di ikon sebelah kiri URL bar, atau ketik kalimat Jepang di sini:');
+          if (manual) onResultCallback(manual, true, [manual]);
+        } else if (err.error === 'no-speech') {
+          const statusMsg = peakVolume < 4
+            ? '⚠️ Sinyal Mic 0% (Suara tidak masuk). Pilih perangkat mic Anda di panel "🎙️ Pilih Mic" di bagian atas!'
+            : '⚠️ Suara masuk (Vol ' + peakVolume + '%), tetapi browser belum mengenali kata Jepangnya. Coba ucapkan sedikit lebih panjang/jelas, atau cek pilihan mic di atas.';
+          const kanaMsg = document.getElementById('kana-feedback-msg');
+          if (kanaMsg && !document.getElementById('tab-kana').classList.contains('hidden')) {
+            kanaMsg.textContent = statusMsg;
+          }
+          if (peakVolume < 4) {
+            const drawer = document.getElementById('mic-settings-drawer');
+            if (drawer && drawer.classList.contains('hidden')) toggleMicSettingsDrawer();
+          }
         }
       };
 
       rec.onend = () => {
-        if (buttonEl) {
-          buttonEl.classList.remove('mic-recording');
-          buttonEl.textContent = origText;
+        activeSpeechRec = null;
+        if (!resolved && lastInterimText) {
+          resolved = true;
+          cleanupMicMonitor();
+          onResultCallback(lastInterimText, false, [lastInterimText]);
+          return;
         }
+        cleanupMicMonitor();
       };
 
       try {
-        rec.start();
+        // Chrome 124+ supports passing MediaStreamTrack to rec.start(track) to force the chosen microphone
+        if (selectedAudioTrack && rec.start.length >= 1) {
+          rec.start(selectedAudioTrack);
+        } else {
+          rec.start();
+        }
       } catch (e) {
-        if (buttonEl) {
-          buttonEl.classList.remove('mic-recording');
-          buttonEl.textContent = origText;
+        try {
+          rec.start();
+        } catch (e2) {
+          cleanupMicMonitor();
         }
       }
     }
@@ -2226,20 +2537,26 @@
       if (currentKanaTarget) speakJapanese(currentKanaTarget.char);
     }
 
-    function evaluateKanaSpeechMatch(target, transcript) {
-      const cleanSpoken = (transcript || '').trim();
-      if (!cleanSpoken) return false;
+    function evaluateKanaSpeechMatch(target, transcript, allTranscripts = []) {
+      const candidates = allTranscripts && allTranscripts.length
+        ? allTranscripts
+        : [transcript];
 
-      const s1 = calcJpSimilarity(target.char, cleanSpoken);
-      const s2 = target.kanji ? calcJpSimilarity(target.kanji, cleanSpoken) : 0;
-      const s3 = calcJpSimilarity(target.romaji, cleanSpoken.toLowerCase());
-      if (Math.max(s1, s2, s3) >= 70) return true;
+      for (const cand of candidates) {
+        const cleanSpoken = (cand || '').trim();
+        if (!cleanSpoken) continue;
 
-      // Single character homophone / example word check
-      const homophones = singleKanaHomophones[target.romaji] || [];
-      for (const h of homophones) {
-        if (cleanSpoken.includes(h) || calcJpSimilarity(h, cleanSpoken) >= 70) {
-          return true;
+        const s1 = calcJpSimilarity(target.char, cleanSpoken);
+        const s2 = target.kanji ? calcJpSimilarity(target.kanji, cleanSpoken) : 0;
+        const s3 = calcJpSimilarity(target.romaji, cleanSpoken.toLowerCase());
+        if (Math.max(s1, s2, s3) >= 70) return true;
+
+        // Single character homophone / example word check
+        const homophones = singleKanaHomophones[target.romaji] || [];
+        for (const h of homophones) {
+          if (cleanSpoken.includes(h) || calcJpSimilarity(h, cleanSpoken) >= 70) {
+            return true;
+          }
         }
       }
       return false;
@@ -2252,9 +2569,9 @@
         : document.getElementById('kana-mic-btn');
       const msgEl = document.getElementById('kana-feedback-msg');
 
-      runSpeechRecognition((transcript) => {
+      runSpeechRecognition((transcript, isManual, allTranscripts) => {
         kanaTotalAttempts++;
-        const isMatched = evaluateKanaSpeechMatch(currentKanaTarget, transcript);
+        const isMatched = evaluateKanaSpeechMatch(currentKanaTarget, transcript, allTranscripts);
         const isWordOrSent = currentKanaMode === 'words' || currentKanaMode === 'sentences';
         const xpGain = currentKanaMode === 'sentences' ? 20 : (currentKanaMode === 'words' ? 15 : 10);
 
